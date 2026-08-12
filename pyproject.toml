@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eukcontigminer"
+version = "0.1.0"
+description = "Eukaryotic contig probability inference"
+requires-python = ">=3.10,<3.13"
+license = "MIT"
+authors = [{name = "WeStrainGroup"}]
+dependencies = ["biopython>=1.83,<2", "torch>=2.2,<3"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+]
+
+[project.scripts]
+eukcontigminer = "eukcontigminer.cli:main"
+
+[project.urls]
+Repository = "https://github.com/WeStrainGroup/EukContigMiner"
+
+[tool.setuptools.packages.find]
+include = ["eukcontigminer*"]
+
+[tool.setuptools.package-data]
+eukcontigminer = ["model_data/*.pt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
