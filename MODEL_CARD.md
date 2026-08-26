@@ -28,19 +28,27 @@ contains 503,608 fragments at 21 lengths: 1-10 kb every 500 bp, 50 kb, and 100
 kb. Its manifest SHA-256 is
 `e1c81b0a0d96d9ae55b27eaeae0be727f79bc32a2fed4b22e155d6cf2471ba9e`.
 
-## Branch comparison at the frozen deployment threshold
+## Branch comparison
 
-| Model / panel | Full F1 at 1% | Fungi+bacteria F1 at 1% |
-| --- | ---: | ---: |
-| DNA-only, Continuous | 0.953508 | 0.932117 |
-| DNA+ESM, Continuous | 0.975819 | 0.973985 |
-| DNA-only, Formal | 0.959114 | 0.949030 |
-| DNA+ESM, Formal | 0.970069 | 0.968441 |
+Each branch independently froze one threshold on Continuous Full at 1% Euk
+prevalence, then reused that threshold unchanged for all Continuous subsets
+and the Formal panel. Thresholds are 0.9792097770 (DNA-only), 0.9787574018
+(ESM-only), and 0.9626515924 (DNA+ESM).
 
-The retained ESM probe was trained as residual evidence around DNA, so a
-standalone ESM-only score is not yet a separately frozen production model.
-Its same-panel standalone benchmark will be reported separately and must not
-be inferred from the fusion row.
+| Validation panel / scenario | DNA-only | ESM-only | DNA+ESM |
+| --- | ---: | ---: | ---: |
+| Continuous Full | 0.953508 | 0.905854 | 0.975819 |
+| Continuous 1-2 kb | 0.907673 | 0.841277 | 0.949244 |
+| Continuous fungi+bacteria | 0.932117 | 0.891844 | 0.973985 |
+| Formal Full | 0.959114 | 0.906982 | 0.970069 |
+| Formal 1-2 kb | 0.839050 | 0.728895 | 0.860534 |
+| Formal fungi+bacteria | 0.949030 | 0.901088 | 0.968441 |
+
+The ESM probe was supervised directly with binary BCE, so
+`sigmoid(probe_logit)` is a valid protein-only diagnostic score. It is much
+weaker than DNA alone, especially at 1-2 kb, but the fusion gain shows that its
+errors are complementary. ESM-only is diagnostic and is not a separately
+packaged production model.
 
 ## Limitations
 
