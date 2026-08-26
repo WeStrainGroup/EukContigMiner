@@ -1,0 +1,94 @@
+{
+  "schema": "eukcontigminer.release_model.v1",
+  "status": "released",
+  "release_version": "0.2.0",
+  "model_id": "esm2_650m_orf2_no_tiara_asymmetric_v3_all_genomes_gbfix_pos380_neg320_v1",
+  "binary_target": {
+    "positive": "Euk-derived sequence, including nuclear and organelle DNA",
+    "negative": "non-Euk-derived sequence",
+    "unknown_class": false
+  },
+  "prediction_rule": {
+    "score": "p_euk",
+    "score_range": [0.0, 1.0],
+    "comparison": "strict_greater_than",
+    "threshold": 0.9626515924384612,
+    "equal_threshold_label": "Other",
+    "threshold_selection": "frozen Continuous Validation Full optimum at 1% Euk prevalence"
+  },
+  "model": {
+    "formula": "sigmoid(base_logit + positive_alpha * max(probe_z, 0) + negative_alpha * min(probe_z, 0))",
+    "base_model_id": "frozen_logit_ensemble_h64_080_h32_020_v3_all_genomes_v1",
+    "positive_alpha": 3.8,
+    "negative_alpha": 3.2,
+    "probe_logit_center": 1.0586479849057664,
+    "probe_logit_scale": 5.781797484457051,
+    "dna": {
+      "base_weights_sha256": "f97dc3713803dc3568b27e716b9be19e28522e81a4b7c5d5536f2f7c54e76b1d",
+      "ensemble_weights": [0.8, 0.2],
+      "unfreeze_scope": "heads-only",
+      "heads": [
+        {
+          "asset": "dna_head_h64.pt",
+          "sha256": "7d2374f2ea77fa5f8fde82d0d48c06e4ccbd731e1208e13b727a2a14a4157ba3",
+          "hidden_dimension": 64
+        },
+        {
+          "asset": "dna_head_h32.pt",
+          "sha256": "b1592d54c144760e88bd055faf5910a119d310e7f0209918866389bf4b920782",
+          "hidden_dimension": 32
+        }
+      ]
+    },
+    "probe": {
+      "asset": "esm2_probe.pt",
+      "sha256": "d24040d255b55bd9f88c0859ea9a9be6e17e8098104078cf1ba1c1c0b848cc70"
+    },
+    "esm2": {
+      "name": "esm2_t33_650M_UR50D",
+      "release_package": "fair-esm 2.0.0",
+      "embedding_dimension": 1280,
+      "cache_filename": "esm2_t33_650M_UR50D.pt",
+      "sha256": "ea9d0522b335a8778dea6535a65301f10208dece28cd5865482b0b1fc446168c"
+    },
+    "feature_definition": {
+      "translation": "complete standard-code six-frame translation",
+      "orfs_per_contig": 2,
+      "minimum_orf_aa": 20,
+      "maximum_orf_aa": 1000,
+      "ordering": "length descending then amino-acid lexicographic",
+      "aggregation": "mean and elementwise maximum of mean-pooled ORF embeddings",
+      "feature_dimension": 2560,
+      "reverse_complement_invariant": true
+    },
+    "single_gpu_cost": {
+      "tested_gpu": "NVIDIA GeForce RTX 4090 24 GB",
+      "esm2_peak_reserved_gib": 3.0625,
+      "esm2_contigs_per_second": 46.05951423866709,
+      "deployment_requirement": "one CUDA GPU with at least 24 GB memory"
+    }
+  },
+  "training": {
+    "eligible_genomes": 10646,
+    "fragments": 650262,
+    "bases": 2127354814,
+    "positive_fragments": 381740,
+    "negative_fragments": 268522,
+    "organelle_fragments": 12631,
+    "final_test_rows_read": 0
+  },
+  "benchmark": {
+    "continuous_validation_rows": 39807,
+    "continuous_distinct_lengths": 10780,
+    "continuous_length_range_bp": [1001, 99992],
+    "formal_validation_rows": 503608,
+    "formal_lengths_bp": [1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000, 50000, 100000],
+    "formal_manifest_sha256": "e1c81b0a0d96d9ae55b27eaeae0be727f79bc32a2fed4b22e155d6cf2471ba9e",
+    "continuous_full_f1_at_1pct": 0.975819,
+    "continuous_1000_2000_f1_at_1pct": 0.949244,
+    "continuous_fungi_bacteria_f1_at_1pct": 0.973985,
+    "formal_full_f1_at_1pct": 0.970069,
+    "formal_fungi_bacteria_f1_at_1pct": 0.968441,
+    "final_test_used_for_model_selection": false
+  }
+}
