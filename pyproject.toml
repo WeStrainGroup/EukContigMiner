@@ -4,12 +4,17 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eukcontigminer"
-version = "0.1.0"
-description = "Eukaryotic contig probability inference"
+version = "0.2.0"
+description = "One-GPU DNA and protein-language-model screening of eukaryotic contigs"
+readme = "README.md"
 requires-python = ">=3.10,<3.13"
 license = "MIT"
 authors = [{name = "WeStrainGroup"}]
-dependencies = ["biopython>=1.83,<2", "torch>=2.2,<3"]
+dependencies = [
+  "fair-esm==2.0.0",
+  "numpy>=1.26,<3",
+  "torch>=2.2,<3",
+]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Operating System :: OS Independent",
@@ -20,12 +25,13 @@ eukcontigminer = "eukcontigminer.cli:main"
 
 [project.urls]
 Repository = "https://github.com/WeStrainGroup/EukContigMiner"
+Model-card = "https://github.com/WeStrainGroup/EukContigMiner/blob/main/MODEL_CARD.md"
 
 [tool.setuptools.packages.find]
 include = ["eukcontigminer*"]
 
 [tool.setuptools.package-data]
-eukcontigminer = ["model_data/*.pt"]
+eukcontigminer = ["model_data/*.json", "model_data/*.pt"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
