@@ -26,10 +26,14 @@ from .dna_ensemble import ENSEMBLE_WEIGHTS, TrainableDNAEnsemble, load_frozen_he
 from .esm_inference import (
     ESM2ORFInferenceConfig,
     esm2_features_from_orfs,
+    optimize_esm2_feature_inference,
     select_orfs_from_contig,
 )
 from .fasta import fasta_records
-from .joint_inference import direct_joint_probability
+from .joint_inference import (
+    direct_joint_probability,
+    dual_probe_piecewise_probability,
+)
 
 
 PREDICTION_HEADER = ("contig_id", "length_bp", "p_euk", "label")
@@ -48,11 +52,24 @@ def sha256_file(path: str | Path) -> str:
 class DeploymentParameters:
     model_id: str
     threshold: float
+    early_exit_other_max_score: float
     positive_alpha: float
     negative_alpha: float
     probe_center: float
     probe_scale: float
+    secondary_probe_center: float
+    secondary_probe_scale: float
+    secondary_source_alpha: float
+    short_alpha: float
+    long_alpha: float
+    piecewise_boundary_bp: int
     config: dict[str, Any]
+
+
+DUAL_PROBE_FORMULA = (
+    "sigmoid(reference_logit + alpha(length) * secondary_source_alpha * "
+    "secondary_probe_z)"
+)
 
 
 class ESM2Probe(nn.Module):
@@ -104,7 +121,7 @@ def load_deployment_parameters(
     dna = model.get("dna") if isinstance(model, dict) else None
     esm2 = model.get("esm2") if isinstance(model, dict) else None
     if (
-        config.get("schema") != "eukcontigminer.release_model.v1"
+        config.get("schema") != "eukcontigminer.release_model.v2"
         or config.get("status") != "released"
         or not isinstance(prediction, dict)
         or prediction.get("comparison") != "strict_greater_than"
@@ -112,8 +129,7 @@ def load_deployment_parameters(
         or not isinstance(model, dict)
         or not isinstance(dna, dict)
         or not isinstance(esm2, dict)
-        or model.get("formula")
-        != "sigmoid(base_logit + positive_alpha * max(probe_z, 0) + negative_alpha * min(probe_z, 0))"
+        or model.get("formula") != DUAL_PROBE_FORMULA
         or dna.get("ensemble_weights") != list(ENSEMBLE_WEIGHTS)
         or dna.get("unfreeze_scope") != "heads-only"
         or len(dna.get("heads", [])) != 2
@@ -124,20 +140,57 @@ def load_deployment_parameters(
         or config.get("binary_target", {}).get("unknown_class") is not False
         or config.get("benchmark", {}).get("final_test_used_for_model_selection")
         is not False
+        or not isinstance(model.get("secondary_probe"), dict)
+        or model.get("piecewise_secondary_fusion", {}).get("comparison")
+        != "length_less_than_or_equal"
     ):
         raise ValueError("deployment config violates the frozen model contract")
     values = {
         "threshold": float(prediction.get("threshold", math.nan)),
+        "early_exit_other_max_score": float(
+            model.get("dna_other_early_exit", {}).get(
+                "maximum_dna_p_euk", math.nan
+            )
+        ),
         "positive_alpha": float(model.get("positive_alpha", math.nan)),
         "negative_alpha": float(model.get("negative_alpha", math.nan)),
         "probe_center": float(model.get("probe_logit_center", math.nan)),
         "probe_scale": float(model.get("probe_logit_scale", math.nan)),
+        "secondary_probe_center": float(
+            model.get("secondary_probe_logit_center", math.nan)
+        ),
+        "secondary_probe_scale": float(
+            model.get("secondary_probe_logit_scale", math.nan)
+        ),
+        "secondary_source_alpha": float(
+            model.get("secondary_source_alpha", math.nan)
+        ),
+        "short_alpha": float(
+            model.get("piecewise_secondary_fusion", {}).get(
+                "short_alpha", math.nan
+            )
+        ),
+        "long_alpha": float(
+            model.get("piecewise_secondary_fusion", {}).get(
+                "long_alpha", math.nan
+            )
+        ),
+        "piecewise_boundary_bp": int(
+            model.get("piecewise_secondary_fusion", {}).get("boundary_bp", -1)
+        ),
     }
     if (
         not all(math.isfinite(value) for value in values.values())
         or not 0.0 <= values["threshold"] <= 1.0
+        or not 0.0
+        <= values["early_exit_other_max_score"]
+        < values["threshold"]
         or min(values["positive_alpha"], values["negative_alpha"]) < 0.0
         or values["probe_scale"] <= 0.0
+        or values["secondary_probe_scale"] <= 0.0
+        or values["secondary_source_alpha"] <= 0.0
+        or min(values["short_alpha"], values["long_alpha"]) <= 0.0
+        or values["piecewise_boundary_bp"] < 1_000
     ):
         raise ValueError("deployment probabilities or fusion parameters are invalid")
     return DeploymentParameters(
@@ -148,18 +201,53 @@ def load_deployment_parameters(
 
 
 def _collate(
-    sequences: list[str], indices: np.ndarray, token_table: torch.Tensor
+    sequences: list[str | bytearray],
+    indices: np.ndarray,
+    token_table: torch.Tensor,
 ) -> tuple[torch.Tensor, torch.Tensor]:
+    selected = [sequences[int(index)] for index in indices]
+    if selected and all(isinstance(sequence, bytearray) for sequence in selected):
+        lengths_array = np.fromiter(
+            (len(sequence) for sequence in selected),
+            dtype=np.int64,
+            count=len(selected),
+        )
+        tokens_array = np.full(
+            (len(selected), int(lengths_array.max())), 5, dtype=np.uint8
+        )
+        for row_index, sequence in enumerate(selected):
+            tokens_array[row_index, : len(sequence)] = np.frombuffer(
+                sequence, dtype=np.uint8
+            )
+        return torch.from_numpy(tokens_array).long(), torch.from_numpy(lengths_array)
     encoded = []
-    for index in indices:
-        raw = bytearray(sequences[int(index)].encode("ascii", "replace"))
-        values = torch.frombuffer(raw, dtype=torch.uint8).long()
-        encoded.append(token_table[values])
+    for sequence in selected:
+        if isinstance(sequence, str):
+            raw = bytearray(sequence.encode("ascii", "replace"))
+            values = torch.frombuffer(raw, dtype=torch.uint8).long()
+            encoded.append(token_table[values])
+        elif isinstance(sequence, bytearray):
+            encoded.append(torch.frombuffer(sequence, dtype=torch.uint8).long())
+        else:
+            raise TypeError("sequence storage must be str or token bytearray")
     lengths = torch.tensor([len(row) for row in encoded], dtype=torch.long)
     tokens = torch.full((len(encoded), int(lengths.max())), 5, dtype=torch.long)
     for row_index, row in enumerate(encoded):
         tokens[row_index, : len(row)] = row
     return tokens, lengths
+
+
+def _pretokenize_sequences(
+    sequences: list[str], token_table: torch.Tensor
+) -> list[bytearray]:
+    table = token_table.detach().cpu().long()
+    if table.shape != (256,) or torch.any(table < 0) or torch.any(table > 255):
+        raise ValueError("token table cannot be represented as uint8")
+    translation = bytes(int(value) for value in table.tolist())
+    return [
+        bytearray(sequence.encode("ascii", "replace")).translate(translation)
+        for sequence in sequences
+    ]
 
 
 def _bounded_indices(
@@ -195,6 +283,68 @@ def _buffered(
         yield selected
 
 
+def _load_probe_asset(
+    binding: object,
+    *,
+    name: str,
+    expected_schema: str,
+    device: torch.device,
+    feature_definition: dict[str, Any] | None = None,
+    esm_sha256: str | None = None,
+) -> tuple[ESM2Probe, torch.Tensor, torch.Tensor]:
+    with ExitStack() as resources:
+        checkpoint = _bound_asset(binding, name, resources)
+        payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
+    if payload.get("schema") != expected_schema:
+        raise ValueError(f"{name} checkpoint schema differs")
+    if feature_definition is not None:
+        checkpoint_definition = payload.get("feature_definition")
+        selection = (
+            checkpoint_definition.get("selection")
+            if isinstance(checkpoint_definition, dict)
+            else None
+        )
+        checkpoint_model = (
+            checkpoint_definition.get("model")
+            if isinstance(checkpoint_definition, dict)
+            else None
+        )
+        if (
+            not isinstance(selection, dict)
+            or not isinstance(checkpoint_model, dict)
+            or checkpoint_definition.get("feature_dimension") != 2560
+            or selection.get("maximum_orfs")
+            != feature_definition.get("orfs_per_contig")
+            or selection.get("minimum_orf_length")
+            != feature_definition.get("minimum_orf_aa")
+            or selection.get("maximum_orf_length")
+            != feature_definition.get("maximum_orf_aa")
+            or selection.get("reverse_complement_invariant") is not True
+            or checkpoint_model.get("checkpoint_sha256") != esm_sha256
+        ):
+            raise ValueError(f"{name} feature definition differs")
+    model_config = payload.get("model_config")
+    if (
+        not isinstance(model_config, dict)
+        or int(model_config.get("feature_dimension", -1)) != 2560
+    ):
+        raise ValueError(f"{name} model configuration differs")
+    probe = ESM2Probe(**model_config)
+    probe.load_state_dict(payload["model_state_dict"], strict=True)
+    probe.requires_grad_(False).eval().to(device)
+    feature_mean = payload["feature_mean"].float().cpu()
+    feature_std = payload["feature_std"].float().cpu()
+    if (
+        feature_mean.shape != (2560,)
+        or feature_std.shape != (2560,)
+        or not torch.isfinite(feature_mean).all()
+        or not torch.isfinite(feature_std).all()
+        or torch.any(feature_std <= 0.0)
+    ):
+        raise ValueError(f"{name} feature standardization differs")
+    return probe, feature_mean, feature_std
+
+
 def _load_models(
     parameters: DeploymentParameters, device: torch.device
 ) -> tuple[
@@ -202,6 +352,9 @@ def _load_models(
     torch.Tensor,
     nn.Module,
     Any,
+    ESM2Probe,
+    torch.Tensor,
+    torch.Tensor,
     ESM2Probe,
     torch.Tensor,
     torch.Tensor,
@@ -264,30 +417,26 @@ def _load_models(
                 or sha256_file(esm_checkpoint) != expected_esm_sha
             ):
                 raise ValueError("downloaded ESM-2 checkpoint differs")
-    esm_model.requires_grad_(False).eval().to(device)
-    with ExitStack() as resources:
-        probe_checkpoint = _bound_asset(
-            model["probe"], "ESM probe", resources
-        )
-        probe_payload = torch.load(
-            probe_checkpoint, map_location="cpu", weights_only=True
-        )
-    if probe_payload.get("schema") != "eukcontigminer.esm2_probe.v1":
-        raise ValueError("ESM probe checkpoint schema differs")
-    probe = ESM2Probe(**probe_payload["model_config"])
-    probe.load_state_dict(probe_payload["model_state_dict"], strict=True)
-    probe.requires_grad_(False).eval().to(device)
-    feature_mean = probe_payload["feature_mean"].float().cpu()
-    feature_std = probe_payload["feature_std"].float().cpu()
-    if (
-        feature_mean.shape != (2560,)
-        or feature_std.shape != (2560,)
-        or not torch.isfinite(feature_mean).all()
-        or not torch.isfinite(feature_std).all()
-        or torch.any(feature_std <= 0.0)
-    ):
-        raise ValueError("ESM probe feature standardization differs")
     definition = model["feature_definition"]
+    if not isinstance(getattr(esm_model, "lm_head", None), nn.Module):
+        raise ValueError("ESM-2 language-model head is missing")
+    esm_model.lm_head = nn.Identity()
+    optimize_esm2_feature_inference(esm_model)
+    esm_model.requires_grad_(False).eval().to(device)
+    probe, feature_mean, feature_std = _load_probe_asset(
+        model["probe"],
+        name="primary ESM probe",
+        expected_schema="eukcontigminer.esm2_probe.v1",
+        device=device,
+    )
+    secondary_probe, secondary_mean, secondary_std = _load_probe_asset(
+        model["secondary_probe"],
+        name="secondary ESM probe",
+        expected_schema="eukcontigminer.esm2_probe_full.v1",
+        device=device,
+        feature_definition=definition,
+        esm_sha256=expected_esm_sha,
+    )
     orf_config = ESM2ORFInferenceConfig(
         maximum_orfs=int(definition["orfs_per_contig"]),
         minimum_orf_length=int(definition["minimum_orf_aa"]),
@@ -302,6 +451,9 @@ def _load_models(
         probe,
         feature_mean,
         feature_std,
+        secondary_probe,
+        secondary_mean,
+        secondary_std,
         orf_config,
     )
 
@@ -316,8 +468,15 @@ def predict_fasta(
     buffer_records: int = 4_096,
     dna_batch_size: int = 32,
     dna_max_padded_bases: int = 800_000,
+    use_dna_early_exit: bool = True,
+    minimum_length: int = 1_000,
 ) -> dict[str, Any]:
-    if min(buffer_records, dna_batch_size, dna_max_padded_bases) < 1:
+    if min(
+        buffer_records,
+        dna_batch_size,
+        dna_max_padded_bases,
+        minimum_length,
+    ) < 1:
         raise ValueError("prediction batch bounds must be positive")
     fasta_path = Path(fasta)
     output_path = Path(output)
@@ -348,13 +507,17 @@ def predict_fasta(
         probe,
         feature_mean,
         feature_std,
+        secondary_probe,
+        secondary_mean,
+        secondary_std,
         orf_config,
     ) = _load_models(parameters, device)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.parent.mkdir(parents=True, exist_ok=True)
     torch.cuda.reset_peak_memory_stats(device)
     started = time.perf_counter()
-    records = bases = 0
+    records = bases = early_exit_other_records = esm_records = 0
+    input_records = input_bases = skipped_records = skipped_bases = 0
     seen: set[str] = set()
     try:
         with part.open("x", newline="", encoding="utf-8") as handle:
@@ -371,8 +534,22 @@ def predict_fasta(
                         f"input FASTA identifiers are duplicated: {sorted(duplicates)[:5]}"
                     )
                 seen.update(identifiers)
+                input_records += len(buffer)
+                input_bases += sum(len(row[1]) for row in buffer)
+                retained = [
+                    row for row in buffer if len(row[1]) >= minimum_length
+                ]
+                skipped_records += len(buffer) - len(retained)
+                skipped_bases += sum(
+                    len(row[1]) for row in buffer if len(row[1]) < minimum_length
+                )
+                if not retained:
+                    continue
+                buffer = retained
+                identifiers = [row[0] for row in buffer]
                 sequences = [row[1] for row in buffer]
                 lengths = np.asarray([len(sequence) for sequence in sequences])
+                dna_sequences = _pretokenize_sequences(sequences, token_table)
                 dna_scores = np.full(len(buffer), np.nan, dtype=np.float64)
                 with torch.inference_mode():
                     for indices in _bounded_indices(
@@ -381,7 +558,7 @@ def predict_fasta(
                         max_padded_bases=dna_max_padded_bases,
                     ):
                         tokens, selected_lengths = _collate(
-                            sequences, indices, token_table
+                            dna_sequences, indices, token_table
                         )
                         logits = dna_model(
                             tokens.to(device), selected_lengths.to(device)
@@ -389,9 +566,19 @@ def predict_fasta(
                         dna_scores[indices] = (
                             torch.sigmoid(logits.double()).cpu().numpy()
                         )
-                protein_indices = np.flatnonzero(lengths >= 3)
+                early_exit_other = (
+                    dna_scores <= parameters.early_exit_other_max_score
+                    if use_dna_early_exit
+                    else np.zeros(len(buffer), dtype=bool)
+                )
+                protein_indices = np.flatnonzero(
+                    (lengths >= 3) & ~early_exit_other
+                )
                 probe_logit = np.full(
                     len(buffer), parameters.probe_center, dtype=np.float64
+                )
+                secondary_probe_logit = np.full(
+                    len(buffer), parameters.secondary_probe_center, dtype=np.float64
                 )
                 if len(protein_indices):
                     orfs = [
@@ -412,6 +599,19 @@ def predict_fasta(
                             probe(standardized.to(device)).double().cpu().numpy()
                         )
                     probe_logit[protein_indices] = selected_probe_logit
+                    secondary_standardized = (
+                        features - secondary_mean
+                    ) / secondary_std
+                    with torch.inference_mode():
+                        selected_secondary_logit = (
+                            secondary_probe(secondary_standardized.to(device))
+                            .double()
+                            .cpu()
+                            .numpy()
+                        )
+                    secondary_probe_logit[
+                        protein_indices
+                    ] = selected_secondary_logit
                 scores = direct_joint_probability(
                     dna_scores,
                     probe_logit,
@@ -420,6 +620,18 @@ def predict_fasta(
                     positive_alpha=parameters.positive_alpha,
                     negative_alpha=parameters.negative_alpha,
                 )
+                scores = dual_probe_piecewise_probability(
+                    scores,
+                    secondary_probe_logit,
+                    lengths,
+                    secondary_probe_center=parameters.secondary_probe_center,
+                    secondary_probe_scale=parameters.secondary_probe_scale,
+                    secondary_source_alpha=parameters.secondary_source_alpha,
+                    short_alpha=parameters.short_alpha,
+                    long_alpha=parameters.long_alpha,
+                    boundary_bp=parameters.piecewise_boundary_bp,
+                )
+                scores[early_exit_other] = dna_scores[early_exit_other]
                 for identifier, sequence, score in zip(
                     identifiers, sequences, scores, strict=True
                 ):
@@ -434,7 +646,9 @@ def predict_fasta(
                     )
                 records += len(buffer)
                 bases += int(lengths.sum())
-        if not records:
+                early_exit_other_records += int(early_exit_other.sum())
+                esm_records += len(protein_indices)
+        if not input_records:
             raise ValueError("input FASTA has no records")
         os.replace(part, output_path)
     except BaseException:
@@ -445,10 +659,27 @@ def predict_fasta(
         "schema": "eukcontigminer.deployment_prediction.v1",
         "status": "complete",
         "model_id": parameters.model_id,
+        "input_records": input_records,
+        "input_bases": input_bases,
         "records": records,
         "bases": bases,
+        "minimum_length_bp": minimum_length,
+        "skipped_below_minimum_length_records": skipped_records,
+        "skipped_below_minimum_length_bases": skipped_bases,
         "elapsed_seconds": elapsed,
-        "records_per_second": records / elapsed,
+        "records_per_second": records / elapsed if records else 0.0,
+        "inference_mode": (
+            "dna_early_exit" if use_dna_early_exit else "full_esm"
+        ),
+        "dna_early_exit_enabled": use_dna_early_exit,
+        "dna_other_early_exit_max_score": parameters.early_exit_other_max_score,
+        "dna_other_early_exit_records": early_exit_other_records,
+        "dna_other_early_exit_fraction": (
+            early_exit_other_records / records if records else 0.0
+        ),
+        "esm_records": esm_records,
+        "esm_fraction": esm_records / records if records else 0.0,
+        "probe_heads": 2,
         "device": str(device),
         "threshold": parameters.threshold,
         "comparison": "strict_score_greater_than_threshold",
@@ -465,12 +696,19 @@ def predict_fasta(
         "peak_cuda_memory_allocated_bytes": torch.cuda.max_memory_allocated(device),
         "peak_cuda_memory_reserved_bytes": torch.cuda.max_memory_reserved(device),
         "gates": {
-            "all_legal_fasta_records_scored_once": True,
+            "all_eligible_fasta_records_scored_once": True,
+            "records_below_minimum_length_omitted": True,
+            "default_minimum_length_bp": 1_000,
+            "no_eligible_records_is_success": True,
             "whole_contigs_scored_without_chopping": True,
             "dna_then_esm_on_one_gpu": True,
+            "one_esm_forward_shared_by_all_probe_heads": True,
             "strict_score_greater_than_threshold": True,
             "unknown_class": False,
             "model_artifacts_hash_bound": True,
+            "dna_other_early_exit_is_below_deployment_threshold": (
+                parameters.early_exit_other_max_score < parameters.threshold
+            ),
             "final_test_rows_read": 0,
         },
     }

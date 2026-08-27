@@ -21,6 +21,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--buffer-records", type=int, default=4096)
     parser.add_argument("--dna-batch-size", type=int, default=32)
     parser.add_argument("--dna-max-padded-bases", type=int, default=800000)
+    parser.add_argument(
+        "--min-length",
+        type=int,
+        default=1000,
+        help="omit contigs shorter than this many base pairs (default: 1000)",
+    )
+    parser.add_argument(
+        "--full-esm",
+        action="store_true",
+        help="disable DNA early exit and send every eligible contig through ESM",
+    )
     args = parser.parse_args(argv)
     summary = args.summary or args.output.with_name(
         args.output.name + ".summary.json"
@@ -34,6 +45,8 @@ def main(argv: list[str] | None = None) -> int:
         buffer_records=args.buffer_records,
         dna_batch_size=args.dna_batch_size,
         dna_max_padded_bases=args.dna_max_padded_bases,
+        use_dna_early_exit=not args.full_esm,
+        minimum_length=args.min_length,
     )
     print(json.dumps(payload, sort_keys=True))
     return 0

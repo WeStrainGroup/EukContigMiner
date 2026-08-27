@@ -102,8 +102,64 @@ def direct_joint_probability(
     )
 
 
+def dual_probe_piecewise_probability(
+    reference_probability: np.ndarray,
+    secondary_probe_logit: np.ndarray,
+    lengths_bp: np.ndarray,
+    *,
+    secondary_probe_center: float,
+    secondary_probe_scale: float,
+    secondary_source_alpha: float,
+    short_alpha: float,
+    long_alpha: float,
+    boundary_bp: int,
+) -> np.ndarray:
+    """Apply the frozen length-piecewise second-probe correction."""
+
+    reference = np.asarray(reference_probability, dtype=np.float64)
+    secondary = np.asarray(secondary_probe_logit, dtype=np.float64)
+    lengths = np.asarray(lengths_bp)
+    if (
+        reference.ndim != 1
+        or secondary.shape != reference.shape
+        or lengths.shape != reference.shape
+        or not len(reference)
+        or not np.all(np.isfinite(reference))
+        or np.any((reference < 0.0) | (reference > 1.0))
+        or not np.all(np.isfinite(secondary))
+        or np.any(lengths < 1)
+        or not all(
+            math.isfinite(value) and value > 0.0
+            for value in (
+                secondary_probe_scale,
+                secondary_source_alpha,
+                short_alpha,
+                long_alpha,
+            )
+        )
+        or not math.isfinite(secondary_probe_center)
+        or boundary_bp < 1_000
+    ):
+        raise ValueError("invalid dual-probe piecewise fusion inputs")
+    evidence = standardized_probe_evidence(
+        secondary,
+        center=secondary_probe_center,
+        scale=secondary_probe_scale,
+    )
+    piecewise_alpha = np.where(lengths <= boundary_bp, short_alpha, long_alpha)
+    result = _sigmoid(
+        _logit(reference) + secondary_source_alpha * piecewise_alpha * evidence
+    )
+    if not np.all(np.isfinite(result)) or np.any(
+        (result < 0.0) | (result > 1.0)
+    ):
+        raise FloatingPointError("dual-probe piecewise probability is invalid")
+    return result
+
+
 __all__ = [
     "direct_joint_probability",
+    "dual_probe_piecewise_probability",
     "fuse_dna_esm_probability",
     "standardized_probe_evidence",
 ]

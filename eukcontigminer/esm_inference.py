@@ -4,11 +4,65 @@ from __future__ import annotations
 
 from contextlib import nullcontext
 from dataclasses import dataclass
+from types import MethodType
 from typing import Callable, Sequence
 
 import torch
 
 from .esm_features import select_long_orfs_from_sequence
+
+
+def _feature_only_transformer_layer_forward(
+    self,
+    x: torch.Tensor,
+    self_attn_mask: torch.Tensor | None = None,
+    self_attn_padding_mask: torch.Tensor | None = None,
+    need_head_weights: bool = False,
+):
+    residual = x
+    x = self.self_attn_layer_norm(x)
+    x, attention = self.self_attn(
+        query=x,
+        key=x,
+        value=x,
+        key_padding_mask=self_attn_padding_mask,
+        need_weights=need_head_weights,
+        need_head_weights=need_head_weights,
+        attn_mask=self_attn_mask,
+    )
+    x = residual + x
+    residual = x
+    x = self.final_layer_norm(x)
+    from esm.modules import gelu
+
+    x = gelu(self.fc1(x))
+    x = self.fc2(x)
+    return residual + x, attention
+
+
+def optimize_esm2_feature_inference(model: torch.nn.Module) -> int:
+    """Avoid materializing unused attention weights during feature inference."""
+
+    layers = getattr(model, "layers", None)
+    if not isinstance(layers, torch.nn.ModuleList) or not layers:
+        raise ValueError("unexpected ESM-2 transformer layer container")
+    required = (
+        "self_attn",
+        "self_attn_layer_norm",
+        "final_layer_norm",
+        "fc1",
+        "fc2",
+    )
+    if any(any(not hasattr(layer, name) for name in required) for layer in layers):
+        raise ValueError("unexpected ESM-2 transformer layer architecture")
+    optimized = 0
+    for layer in layers:
+        if getattr(layer, "_eukcontigminer_feature_inference", False):
+            continue
+        layer.forward = MethodType(_feature_only_transformer_layer_forward, layer)
+        layer._eukcontigminer_feature_inference = True
+        optimized += 1
+    return optimized
 
 
 @dataclass(frozen=True)
@@ -167,12 +221,14 @@ def esm2_features_from_orfs(
                 repr_layers=[representation_layer],
                 return_contacts=False,
             )["representations"][representation_layer]
-        for row, (original, sequence) in enumerate(
-            zip(selected_indices, sequences, strict=True)
-        ):
-            peptide_features[original] = (
-                representation[row, 1 : len(sequence) + 1].float().mean(0).cpu()
-            )
+        pooled = torch.stack(
+            [
+                representation[row, 1 : len(sequence) + 1].float().mean(0)
+                for row, sequence in enumerate(sequences)
+            ]
+        ).cpu()
+        for row, original in enumerate(selected_indices):
+            peptide_features[original] = pooled[row]
     if any(value is None for value in peptide_features):
         raise RuntimeError("ESM-2 peptide feature was not filled")
     stacked = torch.stack(
@@ -199,5 +255,6 @@ __all__ = [
     "ESM2ORFInferenceConfig",
     "aggregate_orf_features",
     "esm2_features_from_orfs",
+    "optimize_esm2_feature_inference",
     "select_orfs_from_contig",
 ]
