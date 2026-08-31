@@ -1,25 +1,21 @@
-# v0.2.0
+# v0.40
 
-This release replaces the v0.1.0 DNA-only command with the current frozen
-Validation-best architecture:
+- Emits one `p_euk` in `[0, 1]` and one binary label for every retained whole
+  contig. `p_euk > threshold` is Eukaryota; equality is Other; there is no
+  Unknown class.
+- Eukaryota includes nuclear and organelle DNA. Fungal-host organelles remain
+  positive in the fungi+bacteria-only benchmark.
+- Uses the frozen no-Tiara DNA plus dual-probe ESM-2 model and its single global
+  threshold. Final Test was not read or changed for this release.
+- Keeps DNA early exit as the default and provides `--full-esm` for full protein
+  inference.
+- Adds `--device auto|cpu|cuda|cuda:N` and `--cpu-threads N`. CPU inference uses
+  FP32; CUDA inference uses FP16 ESM autocast and runs on one GPU. The generic
+  CUDA path covers common server NVIDIA V100, A40, A100, and RTX 4090 GPUs.
+- Retains the default `--min-length 1000` filter and SHA-bound bundled model
+  assets.
 
-- one `p_euk` and strict binary label per legal whole contig;
-- no Unknown class and no Tiara runtime;
-- Eukaryota truth includes nuclear and organelle DNA;
-- DNA ensemble plus frozen ESM-2 650M top-two-ORF evidence;
-- one 24 GB CUDA GPU deployment;
-- bundled configuration and learned assets are SHA-bound;
-- the 2.5 GB upstream ESM checkpoint is downloaded by `fair-esm==2.0.0` and
-  SHA-checked rather than redistributed.
-
-Frozen-threshold F1 at 1% Euk prevalence is 0.975819 on Continuous Full and
-0.970069 on Formal 21-point Full. The fungi+bacteria-only values, retaining
-fungal-host organelles, are 0.973985 and 0.968441. These are Validation
-results; the F1 >= 0.99 project target has not yet been reached.
-
-The release wheel was installed into an isolated target and scored the six
-synthetic 1-200,001 bp canary records from the installed package on one RTX
-4090. Its prediction table exactly reproduced the development candidate:
-SHA-256 `aa2c239122325e3036e88b51b39949c52125e41748ce686a00c95f444efa476c`.
-
-See `MODEL_CARD.md` for data provenance, branch comparison, and limitations.
+Frozen-threshold F1 at 1% Euk prevalence is `0.980116` on Continuous Full and
+`0.973247` on Formal 21-point Full. The corresponding fungi+bacteria-only F1
+values are `0.975311` and `0.971559`. These are Validation results; the project
+target of F1 >= 0.99 has not yet been reached.

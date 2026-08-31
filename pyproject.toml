@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eukcontigminer"
-version = "0.3.0"
-description = "One-GPU DNA and protein-language-model screening of eukaryotic contigs"
+version = "0.40"
+description = "Single-device DNA and protein-language-model screening of eukaryotic contigs"
 requires-python = ">=3.10,<3.13"
 license = "MIT"
 authors = [{name = "WeStrainGroup"}]

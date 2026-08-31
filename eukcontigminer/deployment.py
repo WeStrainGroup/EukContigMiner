@@ -1,4 +1,4 @@
-"""Hash-bound one-GPU FASTA inference for the frozen DNA plus ESM model."""
+"""Hash-bound single-device FASTA inference for the frozen DNA plus ESM model."""
 
 from __future__ import annotations
 
@@ -85,6 +85,41 @@ class ESM2Probe(nn.Module):
 
     def forward(self, values: torch.Tensor) -> torch.Tensor:
         return self.network(values).squeeze(1)
+
+
+def _resolve_device(device_name: str) -> torch.device:
+    """Resolve a portable inference device and fail clearly when unavailable."""
+
+    if device_name == "auto":
+        return torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    try:
+        device = torch.device(device_name)
+    except (RuntimeError, ValueError) as error:
+        raise ValueError(f"invalid inference device: {device_name}") from error
+    if device.type not in {"cpu", "cuda"}:
+        raise ValueError("inference device must be auto, cpu, cuda, or cuda:N")
+    if device.type == "cuda":
+        if not torch.cuda.is_available():
+            raise RuntimeError(
+                f"CUDA device {device_name!r} was requested but CUDA is unavailable"
+            )
+        index = 0 if device.index is None else device.index
+        if index < 0 or index >= torch.cuda.device_count():
+            raise RuntimeError(
+                f"CUDA device index {index} is unavailable; "
+                f"found {torch.cuda.device_count()} CUDA device(s)"
+            )
+        return torch.device("cuda", index)
+    return torch.device("cpu")
+
+
+def _cuda_memory_summary(device: torch.device) -> tuple[int, int]:
+    if device.type != "cuda":
+        return 0, 0
+    return (
+        int(torch.cuda.max_memory_allocated(device)),
+        int(torch.cuda.max_memory_reserved(device)),
+    )
 
 
 def _bound_asset(
@@ -360,9 +395,8 @@ def _load_models(
     torch.Tensor,
     ESM2ORFInferenceConfig,
 ]:
-    if device.type != "cuda" or not torch.cuda.is_available():
-        raise RuntimeError("frozen DNA+ESM prediction requires CUDA")
-    torch.cuda.set_device(device)
+    if device.type == "cuda":
+        torch.cuda.set_device(device)
     model = parameters.config["model"]
     dna = model["dna"]
     from eukcontigminer._model.motif_v20 import motif_length_gate
@@ -464,13 +498,16 @@ def predict_fasta(
     summary: str | Path,
     *,
     config: str | Path | None = None,
-    device_name: str = "cuda:0",
+    device_name: str = "auto",
+    cpu_threads: int | None = None,
     buffer_records: int = 4_096,
     dna_batch_size: int = 32,
     dna_max_padded_bases: int = 800_000,
     use_dna_early_exit: bool = True,
     minimum_length: int = 1_000,
 ) -> dict[str, Any]:
+    if cpu_threads is not None and cpu_threads < 1:
+        raise ValueError("CPU thread count must be positive")
     if min(
         buffer_records,
         dna_batch_size,
@@ -498,7 +535,10 @@ def predict_fasta(
     ):
         raise FileExistsError("prediction outputs overlap an input or already exist")
     parameters = load_deployment_parameters(config)
-    device = torch.device(device_name)
+    device = _resolve_device(device_name)
+    if device.type == "cpu" and cpu_threads is not None:
+        torch.set_num_threads(cpu_threads)
+    effective_cpu_threads = torch.get_num_threads() if device.type == "cpu" else None
     (
         dna_model,
         token_table,
@@ -514,7 +554,8 @@ def predict_fasta(
     ) = _load_models(parameters, device)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.parent.mkdir(parents=True, exist_ok=True)
-    torch.cuda.reset_peak_memory_stats(device)
+    if device.type == "cuda":
+        torch.cuda.reset_peak_memory_stats(device)
     started = time.perf_counter()
     records = bases = early_exit_other_records = esm_records = 0
     input_records = input_bases = skipped_records = skipped_bases = 0
@@ -655,6 +696,7 @@ def predict_fasta(
         part.unlink(missing_ok=True)
         raise
     elapsed = time.perf_counter() - started
+    peak_allocated, peak_reserved = _cuda_memory_summary(device)
     payload = {
         "schema": "eukcontigminer.deployment_prediction.v1",
         "status": "complete",
@@ -680,7 +722,12 @@ def predict_fasta(
         "esm_records": esm_records,
         "esm_fraction": esm_records / records if records else 0.0,
         "probe_heads": 2,
+        "device_requested": device_name,
         "device": str(device),
+        "device_type": device.type,
+        "cpu_threads_requested": cpu_threads,
+        "cpu_threads_effective": effective_cpu_threads,
+        "esm_compute_dtype": "float16" if device.type == "cuda" else "float32",
         "threshold": parameters.threshold,
         "comparison": "strict_score_greater_than_threshold",
         "classes": ["Eukaryota", "Other"],
@@ -693,15 +740,18 @@ def predict_fasta(
             ),
         },
         "output": {"path": str(output_path), "sha256": sha256_file(output_path)},
-        "peak_cuda_memory_allocated_bytes": torch.cuda.max_memory_allocated(device),
-        "peak_cuda_memory_reserved_bytes": torch.cuda.max_memory_reserved(device),
+        "peak_cuda_memory_allocated_bytes": peak_allocated,
+        "peak_cuda_memory_reserved_bytes": peak_reserved,
         "gates": {
             "all_eligible_fasta_records_scored_once": True,
             "records_below_minimum_length_omitted": True,
             "default_minimum_length_bp": 1_000,
             "no_eligible_records_is_success": True,
             "whole_contigs_scored_without_chopping": True,
-            "dna_then_esm_on_one_gpu": True,
+            "dna_then_esm_on_one_device": True,
+            "dna_then_esm_on_one_gpu": device.type == "cuda",
+            "one_gpu_deployment_supported": True,
+            "cpu_only_deployment_supported": True,
             "one_esm_forward_shared_by_all_probe_heads": True,
             "strict_score_greater_than_threshold": True,
             "unknown_class": False,

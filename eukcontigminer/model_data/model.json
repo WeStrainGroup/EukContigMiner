@@ -1,7 +1,7 @@
 {
   "schema": "eukcontigminer.release_model.v2",
   "status": "released",
-  "release_version": "0.3.0",
+  "release_version": "0.40",
   "model_id": "esm2_650m_dual_probe_fungi130_pri4_piecewise_v1",
   "binary_target": {
     "positive": "Euk-derived sequence, including nuclear and organelle DNA",
@@ -88,7 +88,7 @@
       "full_esm_contigs_per_second": 35.40491537379016,
       "early_exit_contigs_per_second": 52.911164621796836,
       "early_exit_speedup": 1.494458158229813,
-      "deployment_requirement": "one CUDA GPU with at least 24 GB memory"
+      "deployment_requirement": "one supported CUDA GPU or CPU-only inference"
     }
   },
   "training": {

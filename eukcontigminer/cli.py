@@ -17,7 +17,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--config", type=Path, help="advanced: override bundled model config"
     )
-    parser.add_argument("--device", default="cuda:0")
+    parser.add_argument(
+        "--device",
+        default="auto",
+        help="inference device: auto, cpu, cuda, or cuda:N (default: auto)",
+    )
+    parser.add_argument(
+        "--cpu-threads",
+        type=int,
+        default=None,
+        help="maximum PyTorch CPU threads (for a 32-core server, use 32)",
+    )
     parser.add_argument("--buffer-records", type=int, default=4096)
     parser.add_argument("--dna-batch-size", type=int, default=32)
     parser.add_argument("--dna-max-padded-bases", type=int, default=800000)
@@ -42,6 +52,7 @@ def main(argv: list[str] | None = None) -> int:
         summary,
         config=args.config,
         device_name=args.device,
+        cpu_threads=args.cpu_threads,
         buffer_records=args.buffer_records,
         dna_batch_size=args.dna_batch_size,
         dna_max_padded_bases=args.dna_max_padded_bases,

@@ -3,7 +3,11 @@ from importlib.resources import as_file, files
 
 from eukcontigminer import DEPLOYMENT_THRESHOLD, MODEL_ID, __version__
 from eukcontigminer.contracts import classify_score
-from eukcontigminer.deployment import load_deployment_parameters
+from eukcontigminer.deployment import (
+    _cuda_memory_summary,
+    _resolve_device,
+    load_deployment_parameters,
+)
 from eukcontigminer.esm_inference import ESM2ORFInferenceConfig, select_orfs_from_contig
 
 
@@ -17,10 +21,16 @@ def _sha256(path):
 
 def test_bundled_release_config_and_strict_threshold():
     parameters = load_deployment_parameters()
-    assert __version__ == "0.3.0"
+    assert __version__ == "0.40"
     assert parameters.model_id == MODEL_ID
     assert parameters.threshold == DEPLOYMENT_THRESHOLD
     assert classify_score(DEPLOYMENT_THRESHOLD, DEPLOYMENT_THRESHOLD) == "Other"
+
+
+def test_cpu_device_is_supported_without_cuda_calls():
+    device = _resolve_device("cpu")
+    assert str(device) == "cpu"
+    assert _cuda_memory_summary(device) == (0, 0)
 
 
 def test_small_model_assets_are_hash_bound():
