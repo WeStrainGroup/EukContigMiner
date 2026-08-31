@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eukcontigminer"
-version = "0.40"
+version = "0.50"
 description = "Single-device DNA and protein-language-model screening of eukaryotic contigs"
 requires-python = ">=3.10,<3.13"
 license = "MIT"
 authors = [{name = "WeStrainGroup"}]
 dependencies = [
-  "fair-esm==2.0.0",
+  "esm==3.2.1",
   "numpy>=1.26,<3",
-  "torch>=2.2,<3",
+  "torch>=2.2,<2.6",
 ]
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -24,7 +24,6 @@ eukcontigminer = "eukcontigminer.cli:main"
 
 [project.urls]
 Repository = "https://github.com/WeStrainGroup/EukContigMiner"
-Model-card = "https://github.com/WeStrainGroup/EukContigMiner/blob/main/MODEL_CARD.md"
 
 [tool.setuptools.packages.find]
 include = ["eukcontigminer*"]

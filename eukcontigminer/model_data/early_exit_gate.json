@@ -1,0 +1,123 @@
+{
+  "candidate_cutoff": 0.00046582122085783587,
+  "deployment_threshold": 0.9822634639258321,
+  "gates": {
+    "all_reported_prevalence_f1_values_unchanged": true,
+    "continuous_zero_deployment_label_changes": true,
+    "cutoff_selected_on_train_only": true,
+    "final_test_rows_read": 0,
+    "formal_not_used_for_cutoff_selection": true,
+    "formal_zero_deployment_label_changes": true,
+    "global_classification_threshold_unchanged": true,
+    "maximum_score_delta_at_most_0_1_both_panels": true,
+    "p99_score_delta_below_0_002_both_panels": true,
+    "route_gain_positive_both_panels": true,
+    "runtime_canary_eligible": true,
+    "strict_score_greater_than_threshold": true,
+    "zero_organelle_label_changes_both_panels": true
+  },
+  "inputs": {
+    "train_selection": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/esmc_300m_early_exit_r0001_v1/train_selection.json",
+      "sha256": "3279110762951fc1cbcd5be72c25b211d28fb0b262f8879cc899c3bee45a7695"
+    }
+  },
+  "maximum_euk_route_rate_selected_on_train": 0.0001,
+  "panels": {
+    "continuous": {
+      "candidate_routed_euk_truth_records": 0,
+      "candidate_routed_fraction": 0.17903886251161855,
+      "candidate_routed_fungal_host_organelle_records": 0,
+      "candidate_routed_organelle_records": 0,
+      "candidate_routed_records": 7127,
+      "deployment_label_changes_vs_full": 0,
+      "deployment_label_changes_vs_reference": 0,
+      "esm_records_reduction_fraction_vs_reference": 0.17903886251161855,
+      "fungal_host_organelle_label_changes_vs_full": 0,
+      "inputs": {
+        "dna_scores": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/frozen_logit_ensemble_h64_080_h32_020_v1/continuous.tsv",
+          "sha256": "436409950de4098985704af8439965a1cecdc2228e1c34314ec813637955a6c8"
+        },
+        "fragments": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/continuous_validation_v1/fragments.tsv",
+          "sha256": "92a57d81ddfcacbc16433f4b2157d4ae6a9120ca90f4ea0ddde9922eee21a58b"
+        },
+        "full_scores": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/esmc_300m_true_replacement_continuous_gate_v1/final_piecewise.tsv",
+          "sha256": "5a8f7f76326a474b21e9af20411abd7e3b73a64a60d2472e49bb179e4c4fafa4"
+        }
+      },
+      "maximum_full_score_in_candidate_routed": 0.0014848428827900703,
+      "maximum_full_score_in_newly_routed": 0.0014848428827900703,
+      "net_additional_routed_records": 7127,
+      "newly_routed_records": 7127,
+      "newly_routed_score_absolute_delta": {
+        "maximum": 0.0014126955365970496,
+        "mean": 0.00021861092833462786,
+        "median": 0.00021985442174909847,
+        "p99": 0.00046062970185753585
+      },
+      "no_longer_routed_records": 0,
+      "organelle_label_changes_vs_full": 0,
+      "reference_routed_fraction": 0.0,
+      "reference_routed_records": 0,
+      "rows": 39807,
+      "score_absolute_delta_vs_full": {
+        "maximum": 0.0014126955365970496,
+        "mean": 3.913985194164074e-05,
+        "median": 0.0,
+        "p99": 0.00043820363641274706
+      }
+    },
+    "formal": {
+      "candidate_routed_euk_truth_records": 2,
+      "candidate_routed_fraction": 0.26654461406490765,
+      "candidate_routed_fungal_host_organelle_records": 0,
+      "candidate_routed_organelle_records": 0,
+      "candidate_routed_records": 134234,
+      "deployment_label_changes_vs_full": 0,
+      "deployment_label_changes_vs_reference": 0,
+      "esm_records_reduction_fraction_vs_reference": 0.26654461406490765,
+      "fungal_host_organelle_label_changes_vs_full": 0,
+      "inputs": {
+        "dna_scores": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/frozen_logit_ensemble_h64_080_h32_020_v1/validation.tsv",
+          "sha256": "6e16c3e790cb7a955f299daafb10dcabd9b1f70eaa38907038fe5b802d911967"
+        },
+        "fragments": {
+          "path": "/data/wangxinyu2/eukcontigminer/runs/validation_panel_v2/fragments.tsv",
+          "sha256": "e1c81b0a0d96d9ae55b27eaeae0be727f79bc32a2fed4b22e155d6cf2471ba9e"
+        },
+        "full_scores": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/esmc_300m_true_replacement_formal_gate_v1/piecewise.tsv",
+          "sha256": "cf92f8d79515a37f3e04917c6ad848bf1e233a82180119fca6d89479019f6739"
+        }
+      },
+      "maximum_full_score_in_candidate_routed": 0.011718676829650538,
+      "maximum_full_score_in_newly_routed": 0.011718676829650538,
+      "net_additional_routed_records": 134234,
+      "newly_routed_records": 134234,
+      "newly_routed_score_absolute_delta": {
+        "maximum": 0.011353300326801862,
+        "mean": 0.00020719343961428757,
+        "median": 0.00020180860255244066,
+        "p99": 0.0004594673156880076
+      },
+      "no_longer_routed_records": 0,
+      "organelle_label_changes_vs_full": 0,
+      "reference_routed_fraction": 0.0,
+      "reference_routed_records": 0,
+      "rows": 503608,
+      "score_absolute_delta_vs_full": {
+        "maximum": 0.011353300326801862,
+        "mean": 5.522629539877102e-05,
+        "median": 0.0,
+        "p99": 0.00044241323091888276
+      }
+    }
+  },
+  "reference_cutoff": 0.0,
+  "schema": "eukcontigminer.global_early_exit_gate.v1",
+  "status": "accepted_for_runtime_canary"
+}

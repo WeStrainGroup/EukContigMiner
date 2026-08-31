@@ -9,7 +9,7 @@ from .deployment import predict_fasta
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Score whole contigs with the frozen DNA + ESM-2 model"
+        description="Score whole contigs with the frozen DNA + ESM-C 300M model"
     )
     parser.add_argument("fasta", type=Path, help="input FASTA or FASTA.GZ")
     parser.add_argument("-o", "--output", type=Path, required=True)
@@ -40,7 +40,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--full-esm",
         action="store_true",
-        help="disable DNA early exit and send every eligible contig through ESM",
+        help="disable DNA early exit and send every eligible contig through ESM-C",
     )
     args = parser.parse_args(argv)
     summary = args.summary or args.output.with_name(

@@ -1,7 +1,7 @@
 """EukContigMiner: low-prevalence eukaryotic contig screening."""
 
-MODEL_ID = "esm2_650m_dual_probe_fungi130_pri4_piecewise_v1"
-DEPLOYMENT_THRESHOLD = 0.9821331568384042
+MODEL_ID = "esmc_300m_true_replacement_piecewise_v1"
+DEPLOYMENT_THRESHOLD = 0.9822634639258321
 
 __all__ = ["DEPLOYMENT_THRESHOLD", "MODEL_ID"]
-__version__ = "0.40"
+__version__ = "0.50"
