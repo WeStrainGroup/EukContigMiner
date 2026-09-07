@@ -1,0 +1,26 @@
+{
+  "code_sha256": "23ee107da1c7ac16689a08cf61114bc72df10da3b6f0a6f6264724f781af4318",
+  "elapsed_seconds": 13253.28709581308,
+  "frozen_parameters_no_gradients": true,
+  "history": [
+    {
+      "epoch": 1,
+      "weighted_bce": 0.04703152429708952
+    },
+    {
+      "epoch": 2,
+      "weighted_bce": 0.04102337915780496
+    },
+    {
+      "epoch": 3,
+      "weighted_bce": 0.03769652187762053
+    }
+  ],
+  "partial_global_batch_checked": false,
+  "peak_gpu_bytes": 7535377408,
+  "plan_sha256": "405bf5b0ce88c4a3f8eb29e58da1aeae0b4d9e510eeeef1c461526478c5f32b1",
+  "records": 1633859,
+  "replica_parameters_bit_exact": true,
+  "status": "complete",
+  "world_size": 8
+}

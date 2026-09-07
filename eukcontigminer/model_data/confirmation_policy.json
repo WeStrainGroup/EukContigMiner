@@ -1,0 +1,312 @@
+{
+  "schema": "eukcontigminer.fresh_species_confirmation.v8",
+  "status": "frozen_before_taxonomy_inventory_sequences_and_scores",
+  "frozen_at": "2026-09-06T16:40:12.500872+00:00",
+  "candidate": {
+    "alpha": 0.5,
+    "checkpoint": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/training/epoch_3.pt",
+      "sha256": "b5b0fa82e900f0d3ef544b97889d7b423349c7444026834d3416c70c38f215a6"
+    },
+    "threshold": 0.9983936852318344
+  },
+  "reference": {
+    "version": "0.53",
+    "config": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v053_20260906/eukcontigminer/model_data/model.json",
+      "sha256": "daefdec472151363ff78155d3f3a1c02a64ea71f53b1fd9b211d95086c974aed"
+    },
+    "threshold": 0.9983847799558747,
+    "checkpoint": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/training/epoch_3.pt",
+      "sha256": "b6ab34f370143cc12e0fcb61a1a62458276cb2730f4912a390b83f8c92e246bd"
+    },
+    "alpha": 0.5
+  },
+  "formal_selection_evidence": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/formal_all21_v1/report.json",
+    "sha256": "decb4c2f6738d47966a6243502de373c991f5551b8ac676a7cd28e4b4acb7657"
+  },
+  "formal_independent_verification": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/formal_independent_verification_v1/report.json",
+    "sha256": "2d1518b3d3d26370293bc0707b2bdcdc127a0f6d8d41810cc2397f4e1845dd6d"
+  },
+  "frozen_inference_plan": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/formal_all21_v1/plan.json",
+    "sha256": "bb133c9b70de9121fc962305a22900730d6ed4724fa772210035fe46d10f2cf3"
+  },
+  "selection": {
+    "seed": 2026090701,
+    "release_date_exclusive_upper_bound": "2026-01-01",
+    "version_status": "latest",
+    "genome_rep": "Full",
+    "allowed_assembly_levels": [
+      "Complete Genome",
+      "Chromosome",
+      "Scaffold"
+    ],
+    "require_not_excluded_from_refseq": true,
+    "one_assembly_per_species": true,
+    "exclude_all_bound_species": true,
+    "target_assemblies": {
+      "Archaea": 12,
+      "Bacteria": 3072,
+      "Fungi": 128,
+      "Metazoa": 128,
+      "Viridiplantae": 128,
+      "Other_Eukaryota": 6
+    },
+    "maximum_genome_size_bp": {
+      "Archaea": 15000000,
+      "Bacteria": 20000000,
+      "Fungi": 100000000,
+      "Metazoa": 500000000,
+      "Viridiplantae": 750000000,
+      "Other_Eukaryota": 300000000
+    },
+    "source_to_label": {
+      "Archaea": "Archaea",
+      "Bacteria": "Bacteria",
+      "Fungi": "Fungi",
+      "Invertebrate": "Metazoa",
+      "Vertebrate_mammalian": "Metazoa",
+      "Vertebrate_other": "Metazoa",
+      "Viridiplantae": "Viridiplantae",
+      "Other_Eukaryota": "Other_Eukaryota"
+    },
+    "within_species_preference": "reference_then_representative_then_other; complete_then_chromosome_then_scaffold; deterministic_hash",
+    "across_species_selection": "smallest_sha256(seed|label|canonical_species_taxid|assembly_accession)",
+    "exclude_explicit_environmental_markers": [
+      "metagenom",
+      "uncultured",
+      "environmental sample"
+    ],
+    "taxonomy_species_representative": "canonical species ancestor of assembly taxid must match canonical species ancestor of summary species_taxid; one representative per canonical species"
+  },
+  "source_summaries": {
+    "Archaea": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_inventory_v3/archaea_assembly_summary.txt",
+      "sha256": "13ed0d4a1b9168b0862fc3881ae60ff8c529884767b99305e8d4f5101e902830"
+    },
+    "Bacteria": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_inventory_v1/bacteria_assembly_summary.txt",
+      "sha256": "4f58c172e36dc72ecac4f7d1297f93d1891c3d1017ddd092c92b9888ee56b0cf"
+    },
+    "Fungi": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_inventory_v3/fungi_assembly_summary.txt",
+      "sha256": "ca870ce46f0970537e5ab1b218c91dc0eb340b538cbf2cf21eda0688bc223229"
+    },
+    "Invertebrate": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_inventory_v3/invertebrate_assembly_summary.txt",
+      "sha256": "1cb961d83373471dcf626298d11033f429abdf104e585cfcc1d547df6909f415"
+    },
+    "Other_Eukaryota": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_inventory_v3/protozoa_assembly_summary.txt",
+      "sha256": "76e09189390e12d8dc1e00ce387fcde2e10d1a5e8504c295b3be89bf15dcdbae"
+    },
+    "Vertebrate_mammalian": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_inventory_v3/vertebrate_mammalian_assembly_summary.txt",
+      "sha256": "5a2b3e016c478166dbb7968f2c2b9de00e42f9dd24c6b1033a21a582aac73ae1"
+    },
+    "Vertebrate_other": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_inventory_v3/vertebrate_other_assembly_summary.txt",
+      "sha256": "d87f968b99212dcda8e3056ab7803b6176e2debb1be9581531310e90532e28ef"
+    },
+    "Viridiplantae": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_inventory_v3/plant_assembly_summary.txt",
+      "sha256": "e752f4c46258a779b33a1ca4e2a1fd1712d9b4640b8c98af1c195392d6b60cd8"
+    }
+  },
+  "exclusions": {
+    "first_fresh_species": {
+      "column": "species_taxid",
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_selection_v1/selected_assemblies.tsv",
+      "rows": 224,
+      "sha256": "17381be29dbdca36b304decc231284b4a17fd48130a275151bbb7d1f39a57e67"
+    },
+    "fourth_fresh_species": {
+      "column": "species_taxid",
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_selection_v4/selected_assemblies.tsv",
+      "rows": 224,
+      "sha256": "4927adc8b5b19495216113a6cbdc8b9f42167b340db3d65e28d3ae95585bc0dc"
+    },
+    "frozen_genome_set_metadata": {
+      "column": "species_taxid",
+      "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/manifests/genome_manifest.tsv",
+      "rows": 16940,
+      "sha256": "411fbcc3d7f600f13559c9364db041cf2e2607333c37008bd93eef972dce8f09"
+    },
+    "second_fresh_species": {
+      "column": "species_taxid",
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_selection_v2/selected_assemblies.tsv",
+      "rows": 224,
+      "sha256": "5b684873f803c5fb94fe0d158355353c0e3f5e66bc4596b2ee130676c50546cf"
+    },
+    "third_fresh_species": {
+      "column": "species_taxid",
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_selection_v3/selected_assemblies.tsv",
+      "rows": 224,
+      "sha256": "191c1af685ff436baa46a3a1e111bf11bfc37993b7921014196cd82df90dbc1c"
+    },
+    "train_species": {
+      "column": "species_id",
+      "path": "/ssd/wangxinyu2/eukcontigminer/train_genus_map_v1/species_to_genus.tsv",
+      "rows": 10646,
+      "sha256": "a667a183cb2570ae64bdb33b56b9ea0960be389d8b972bca80fa9f0b33b9c826"
+    },
+    "fifth_fresh_species": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_holdout_selection_v5/selected_assemblies.tsv",
+      "sha256": "9f8f3033adf767a3c338e103171b59ce05495de1324ff305edd34d036a56669e",
+      "column": "species_taxid",
+      "rows": 224
+    },
+    "sixth_fresh_species": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v6_20260906/selected_assemblies.tsv",
+      "sha256": "d04a589648012c2b1b07a359d141a47edde90deab5f13f03ad3d43cf152bcc10",
+      "column": "species_taxid",
+      "rows": 3648
+    },
+    "seventh_fresh_species": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v7_ntcoverage_20260906/selected_assemblies.tsv",
+      "sha256": "a6e78fd3fe98aea1deaa1e4538e233d5529fcaf1be111fb939abf5e7996340d8",
+      "column": "species_taxid",
+      "rows": 3648
+    }
+  },
+  "supervised_training": {
+    "metadata": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/metadata.npz",
+      "sha256": "d390b523382e1b0dbf5285d97a951870f9228c0bce458bbc67910438c5bdd4b2"
+    },
+    "species_array": "species",
+    "expected_unique_species": 12197,
+    "role_revision": {
+      "path": "/data/wangxinyu2/eukcontigminer/runs/dataset_role_revision_20260906_v1/policy.json",
+      "sha256": "a266ffba21873dc50df8416dff7ff411ea8a47c91553355ec604004200d6b5fd"
+    }
+  },
+  "taxonomy": {
+    "url": "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz",
+    "checksum_url": "https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz.md5",
+    "snapshot_rule": "Fetch one archive and supplier MD5; freeze retrieval UTC, bytes, MD5 and SHA256 receipt before reading any new assembly inventory. Never refresh this snapshot during v8.",
+    "module": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/class_conditional_dual_dev197/scripts/ncbi_taxonomy_lineage_v1.py",
+      "sha256": "3b616ca37cba5818ba56001201b46249731c020a1ec6ceddd1eb874db562a353"
+    },
+    "species_isolation": "Resolve merged IDs and species ancestors for every exclusion and supervised training species. Missing species, deleted/unknown IDs or inconsistent domains must stop selection with a diagnostic; never classify unresolved IDs as independent.",
+    "query_taxid_rule": "Annotate both assembly taxid and summary species_taxid; require agreement in canonical species and correct cellular domain.",
+    "genus_family_role": "Separate prespecified diagnostics; never choose genomes from score outcomes. All cellular domains handled independently; unseen rank requires complete training rank mapping in the same domain. Missing ranks are unresolved/indeterminate, never unseen.",
+    "rank_names": [
+      "genus",
+      "family"
+    ],
+    "expected_domains": {
+      "Archaea": 2157,
+      "Bacteria": 2,
+      "Fungi": 2759,
+      "Metazoa": 2759,
+      "Viridiplantae": 2759,
+      "Other_Eukaryota": 2759
+    },
+    "low_coverage_reporting": "Report all stratum counts. Report F1 only with both classes. Unseen-rank generalization remains unproven when sample counts or both-class coverage are insufficient.",
+    "runtime_taxonomy": false
+  },
+  "sampling": {
+    "seed": 2026090701,
+    "fixed_lengths": [
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      4000,
+      4500,
+      5000,
+      5500,
+      6000,
+      6500,
+      7000,
+      7500,
+      8000,
+      8500,
+      9000,
+      9500,
+      10000,
+      50000,
+      100000
+    ],
+    "continuous_length_bands": [
+      {
+        "min_bp": 1000,
+        "max_bp": 2000,
+        "count": 16
+      },
+      {
+        "min_bp": 2001,
+        "max_bp": 10000,
+        "count": 8
+      },
+      {
+        "min_bp": 10001,
+        "max_bp": 100000,
+        "count": 3
+      }
+    ],
+    "continuous_rule": "Sample without replacement per genome; exclude all21 grid lengths; SHA256(2026090701-v8|accession) seeds Python Random.",
+    "maximum_replicates_per_length": 8,
+    "maximum_overlap_fraction": 0.1,
+    "maximum_n_fraction": 0.05,
+    "candidate_record_cap_per_length": 64,
+    "capacity_rule": "Use all valid low-overlap positions allowed by this frozen sampler; never copy fragments to fill a quota.",
+    "organs": "All Euk-derived organelles positive; fungal-host organelles included in fungal scope. Recognize mitochondrial, kinetoplast, chloroplast, plastid and apicoplast header markers; unknown Euk organelles still positive."
+  },
+  "acceptance": {
+    "primary": "Pooled Full F1@1% must strictly exceed frozen v0.53 using all fixed and continuous rows.",
+    "constraints": [
+      "No short1000\u20132000bp or Fungi+Bacteria F1@1% decline.",
+      "No fixed-length F1@1% decline greater0.005.",
+      "Continuous-only Full and short F1@1% must not decline."
+    ],
+    "uncertainty": "2000 paired species-bootstrap replicates, seed2026090702. Report95% intervals for Full,1kb,short,fungal,continuous and continuous-short. Statistical superiority requires lowerFullCI>0; point gate alone does not establish it.",
+    "diagnostics": "Every fixed length and continuous panel at prevalences0.001,0.01,0.1; precision/recall/FPR and raw confusion counts. Genus and family strata separately. No confirmation-best threshold search.",
+    "duplicates": "Primary cohort unchanged. Canonical sequence/RC duplicate sensitivity must retain one deterministic representative per sequence and preserve the acceptance direction; mixed-truth duplicates separately reported.",
+    "failed_gate": "Reject this candidate; retain this cohort and all results. Do not replace the cohort or modify thresholds/filters after outcomes."
+  },
+  "resources": {
+    "download_workers": 8,
+    "sampling_workers": 12,
+    "scoring_gpus_max": 8,
+    "per_gpu_peak_bytes_max": 24000000000,
+    "minimum_free_bytes_before_acquisition": 500000000000
+  },
+  "confirmation_rule": "Exactly one selected epoch3,alpha0.5,threshold0.9983936852318344 versus frozen deployedv0.53. No fitting, calibration, candidate choice or outcome-based sampling on v8.",
+  "inference": "Reuse common offline DNA/ESM-C/tree components; evaluate both NT adapters on identical windows and production precision. Strict score>threshold, all legal contigs scored, no Unknown.",
+  "limitations": [
+    "Reference genome fragments; real metagenomic assembly generalization unproven.",
+    "Frozen seq_rel_date before2026-01-01 is required; verify downloaded accession and assembly size provenance.",
+    "Excluding explicit environmental markers does not establish isolate origin.",
+    "Foundation-model pretraining exposure unknown.",
+    "No virus-negative stratum in this inherited cohort; viral generalization unproven.",
+    "Only12 Archaea and6 Other Eukaryota species remain. This changes the class-conditional taxonomic mixture; report source-group counts and recall/FPR. No broad claim for these sparse groups or direct across-cohort F1 comparison."
+  ],
+  "code": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/freeze_fresh_v8_short_coverage.py",
+    "sha256": "b49d34952f2c15c41c45c34fea2d1adab32315991d25d36e502b7157938d0043"
+  },
+  "training_on_confirmation": false,
+  "model_or_threshold_selection_on_confirmation": false,
+  "broad_goal_complete": false,
+  "candidate_inventory": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/candidate_inventory_before_confirmation.json",
+    "sha256": "feef33bce9e5b1aebf18a472aa45e11410e557763ad84f49313e773841c931b1"
+  },
+  "availability_amendment": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/availability_amendment.json",
+    "sha256": "70883c7455b1ec04de0b5e949a198d9cfe4f760332ec3c684fdcfa82805e9435"
+  },
+  "original_policy": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/policy.json",
+    "sha256": "40e3014fc89ccb2341f462d4915620eb94e81dcd01423471d32460a5cd4cbdd3"
+  }
+}

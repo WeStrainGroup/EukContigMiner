@@ -1,0 +1,131 @@
+{
+  "assembly_metadata_resolution": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/assembly_metadata_resolution_addendum_v2.json",
+    "sha256": "164be8295716ecfdf0de60eb66e69d3d0d79f628e67a9b1d00131a451d727b64"
+  },
+  "status": "frozen_before_v8_scoring",
+  "candidate": {
+    "alpha": 0.5,
+    "checkpoint": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/training/epoch_3.pt",
+      "sha256": "b5b0fa82e900f0d3ef544b97889d7b423349c7444026834d3416c70c38f215a6"
+    },
+    "threshold": 0.9983936852318344
+  },
+  "reference": {
+    "version": "0.53",
+    "config": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v053_20260906/eukcontigminer/model_data/model.json",
+      "sha256": "daefdec472151363ff78155d3f3a1c02a64ea71f53b1fd9b211d95086c974aed"
+    },
+    "threshold": 0.9983847799558747,
+    "checkpoint": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/training/epoch_3.pt",
+      "sha256": "b6ab34f370143cc12e0fcb61a1a62458276cb2730f4912a390b83f8c92e246bd"
+    },
+    "alpha": 0.5
+  },
+  "records": 1090186,
+  "shards": 8,
+  "lengths": [
+    1000,
+    1500,
+    2000,
+    2500,
+    3000,
+    3500,
+    4000,
+    4500,
+    5000,
+    5500,
+    6000,
+    6500,
+    7000,
+    7500,
+    8000,
+    8500,
+    9000,
+    9500,
+    10000,
+    50000,
+    100000
+  ],
+  "inputs": {
+    "manifest": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/fragments/fragments.tsv",
+      "sha256": "13a41d02a2f603193efc1d957b87243c8cb87dc92f32ce463e46d3ce6d89a552"
+    },
+    "fasta": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/fragments/fragments.fna.gz",
+      "sha256": "5bdd28d7fbc571e0fb6d7f37d6b65a80e6e4d1502773327d951858182812ae73"
+    }
+  },
+  "cohort_policy": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/policy_effective.json",
+    "sha256": "97d9103fe82af93649084dd64e487ee9ec10f6334c3d9f52788d8a728bc7a8ef"
+  },
+  "sampling_summary": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/fragments/summary.json",
+    "sha256": "f1bcff67fa7154db9d04f1d3f85693d8833154901c035a1e0eac37cf780063a5"
+  },
+  "inventory": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/selected_assemblies.tsv",
+    "sha256": "da5f9d111d6398841517fb8aef96af1c252e29e5f24eab2bbe971ecdff4c5c11"
+  },
+  "taxonomy": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/selected_taxonomy.tsv",
+    "sha256": "b75d53e0d43298711b1492fedcec003082892d6f4327cd35fe56698c302561dd"
+  },
+  "taxonomy_audit": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/taxonomy/bound_species_audit_with_quarantine.json",
+    "sha256": "4e242ccd0aa34b4773149164fe46145e5f6b0bf3c4e1535cf5827ea1fd9c6e4a"
+  },
+  "resolution_addendum": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/taxonomy_resolution_addendum.json",
+    "sha256": "854f89763c21a8faf71069c3f60e6a14b2894810c3f803c276b2a049fa82ecc6"
+  },
+  "quarantined_family_taxids": [
+    4479
+  ],
+  "species_isolation": {
+    "species": 3474,
+    "excluded_canonical_species": 25327,
+    "overlap": 0,
+    "unresolved_prior_taxid147272_covered_by_family_quarantine": true
+  },
+  "v050_config_sha256": "99fdf5af46ba4a9e00c66711703351d692df1a96a8fd5a5cc6aa64e9d32bba9a",
+  "v051_head": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/head_adaptation_20260906_v1/shrinkage_v1/fraction050/checkpoint.pt",
+    "sha256": "2bf12d0b4655db5554314d3d8ef3d137cc621d2bb083bc05e9c202f42bb363bd"
+  },
+  "v052_tree": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/embedding_boost_20260906_v1/direct_d8/model_400.ubj",
+    "sha256": "162a9dca513aab43832fba1b4cdfbf08387c76fc115511967f62918565e1fb2a"
+  },
+  "thresholds": {
+    "v050": 0.9822634639258321,
+    "v051": 0.9870434571645712,
+    "v052": 0.9851810777625722,
+    "v053": 0.9983847799558747,
+    "candidate": 0.9983936852318344
+  },
+  "scoring_code_sha256": "c73ccf4c1c67e3e5d4d813bf15481bcc80c55304e9c2cdee832e6c57860b7880",
+  "preparation_code": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/prepare_fresh_v8_scores.py",
+    "sha256": "dfe98fe1b309a25a3c16deeea439e632e7d0365ba3603d0e91085fff2e1ccf88"
+  },
+  "inference": "Shared production DNA, ESM-C, adapted head and v052 tree; both NT adapters see identical windows. No cached confirmation scores. Strict score>threshold.",
+  "acceptance": {
+    "primary": "Pooled Full F1@1% must strictly exceed frozen v0.53 using all fixed and continuous rows.",
+    "constraints": [
+      "No short1000\u20132000bp or Fungi+Bacteria F1@1% decline.",
+      "No fixed-length F1@1% decline greater0.005.",
+      "Continuous-only Full and short F1@1% must not decline."
+    ],
+    "uncertainty": "2000 paired species-bootstrap replicates, seed2026090702. Report95% intervals for Full,1kb,short,fungal,continuous and continuous-short. Statistical superiority requires lowerFullCI>0; point gate alone does not establish it.",
+    "diagnostics": "Every fixed length and continuous panel at prevalences0.001,0.01,0.1; precision/recall/FPR and raw confusion counts. Genus and family strata separately. No confirmation-best threshold search.",
+    "duplicates": "Primary cohort unchanged. Canonical sequence/RC duplicate sensitivity must retain one deterministic representative per sequence and preserve the acceptance direction; mixed-truth duplicates separately reported.",
+    "failed_gate": "Reject this candidate; retain this cohort and all results. Do not replace the cohort or modify thresholds/filters after outcomes."
+  },
+  "scientific_role": "Frozen v8 independent species confirmation; no fitting, threshold search or candidate selection. Genus/family mapping incompleteness is reported explicitly."
+}

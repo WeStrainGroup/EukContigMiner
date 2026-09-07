@@ -12,6 +12,7 @@ import os
 import time
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import ExitStack
 from importlib.resources import files
 from dataclasses import dataclass, replace
 from itertools import islice
@@ -36,12 +37,22 @@ from .esm_inference import (
 )
 from .fasta import fasta_records
 from .joint_inference import (
+    _logit,
+    _sigmoid,
     direct_joint_probability,
     dual_probe_piecewise_probability,
 )
 
 
 PREDICTION_HEADER = ("contig_id", "length_bp", "p_euk", "label")
+COMPONENT_HEADER = (
+    "contig_id",
+    "length_bp",
+    "dna_p_euk",
+    "esm_probe_logit",
+    "esm_probe_z",
+    "p_euk",
+)
 DEFAULT_CONFIG_RESOURCE = "model.json"
 
 
@@ -84,6 +95,45 @@ DUAL_PROBE_FORMULA = (
 ESMC_PIECEWISE_FORMULA = (
     "sigmoid(reference_logit + alpha(length) * protein_probe_z)"
 )
+
+
+TREE_FORMULA = "DNA_if_routed_else_sigmoid(tree(standardized_ESMC,DNA_logit,log10_length,protein_logit))"
+TREE_FEATURE_ORDER = ["standardized_ESMC_1920", "DNA_logit", "log10_length_bp", "protein_probe_logit"]
+
+
+def _load_fusion_tree(parameters: DeploymentParameters, device: torch.device, threads: int):
+    binding = parameters.config["model"].get("fusion_tree")
+    if binding is None:
+        return None
+    import xgboost as xgb
+
+    if xgb.__version__ != binding["xgboost_version"]:
+        raise ValueError("tree deployment requires frozen xgboost 3.2.0")
+    tree = xgb.Booster(model_file=_bound_path(binding, "fusion tree"))
+    tree.set_param({"device": str(device), "nthread": threads})
+    settings = json.loads(tree.save_config())["learner"]
+    if (tree.num_features() != 1923 or tree.num_boosted_rounds() != 400
+            or settings["objective"]["name"] != "binary:logistic"):
+        raise ValueError("fusion tree architecture differs")
+    return tree
+
+
+def _tree_probability(tree, standardized, dna_scores, lengths, probe_logits, threads):
+    import xgboost as xgb
+
+    values = np.column_stack((standardized, _logit(dna_scores),
+                              np.log10(lengths), probe_logits)).astype(np.float32)
+    if values.shape != (len(dna_scores), 1923) or not np.isfinite(values).all():
+        raise ValueError("fusion tree features are invalid")
+    # Always use the complete freshly loaded saved model; no incremental cache.
+    margin = tree.predict(xgb.DMatrix(values, nthread=threads), output_margin=True)
+    return _sigmoid(margin.astype(np.float64))
+
+
+def _apply_tree_routing(scores, dna_scores, lengths, cutoff):
+    routed = (dna_scores <= cutoff) | (lengths < 3)
+    scores[routed] = dna_scores[routed]
+    return scores
 
 
 class ESM2Probe(nn.Module):
@@ -174,16 +224,22 @@ def load_deployment_parameters(
     dna = model.get("dna") if isinstance(model, dict) else None
     schema = config.get("schema")
     dual_probe = schema == "eukcontigminer.validation_candidate.v3"
+    nt_fusion = schema == "eukcontigminer.release_model.v5"
+    tree_fusion = schema in {"eukcontigminer.release_model.v4", "eukcontigminer.release_model.v5"}
     esmc_piecewise = schema in {
         "eukcontigminer.validation_candidate.v4",
         "eukcontigminer.release_model.v3",
+        "eukcontigminer.release_model.v4",
+        "eukcontigminer.release_model.v5",
     }
     protein_family = "esmc" if esmc_piecewise else "esm2"
     encoder = (
         model.get("esmc") if esmc_piecewise else model.get("esm2")
     ) if isinstance(model, dict) else None
+    from .nt_runtime import FORMULA as NT_FORMULA, validate_binding as validate_nt_binding
     expected_formula = (
-        ESMC_PIECEWISE_FORMULA
+        NT_FORMULA if nt_fusion else
+        TREE_FORMULA if tree_fusion else ESMC_PIECEWISE_FORMULA
         if esmc_piecewise
         else DUAL_PROBE_FORMULA if dual_probe else SINGLE_PROBE_FORMULA
     )
@@ -193,6 +249,7 @@ def load_deployment_parameters(
         if esmc_piecewise and isinstance(definition, dict)
         else definition
     )
+    inference_contract = config.get("inference_contract")
     expected_feature_dimension = 1920 if esmc_piecewise else 2560
     if (
         schema not in {
@@ -200,9 +257,11 @@ def load_deployment_parameters(
             "eukcontigminer.validation_candidate.v3",
             "eukcontigminer.validation_candidate.v4",
             "eukcontigminer.release_model.v3",
+            "eukcontigminer.release_model.v4",
+        "eukcontigminer.release_model.v5",
         }
         or config.get("status")
-        not in {"validation_only_final_test_unchanged", "released"}
+        not in {"validation_only_final_test_unchanged", "released", "frozen_confirmation_candidate"}
         or not isinstance(prediction, dict)
         or prediction.get("comparison") != "strict_greater_than"
         or prediction.get("equal_threshold_label") != "Other"
@@ -222,8 +281,28 @@ def load_deployment_parameters(
         ) != 2
         or definition.get("feature_dimension") != expected_feature_dimension
         or config.get("binary_target", {}).get("unknown_class") is not False
-        or config.get("final_test", {}).get("read_or_changed_for_this_candidate")
-        is not False
+        # Audited experiments may reassign former Final genomes. This field
+        # records provenance; either boolean is valid for reference-free inference.
+        or not isinstance(
+            config.get("final_test", {}).get("read_or_changed_for_this_candidate"),
+            bool,
+        )
+        or (
+            schema in {"eukcontigminer.release_model.v3", "eukcontigminer.release_model.v4", "eukcontigminer.release_model.v5"}
+            and (
+                not isinstance(inference_contract, dict)
+                or inference_contract.get("reference_free") is not True
+                or inference_contract.get("reference_database") is not None
+                or inference_contract.get("external_similarity_search") is not False
+                or inference_contract.get("runtime_inputs")
+                != [
+                    "contig_sequence",
+                    "DNA_model_weights",
+                    "ESM-C_300M_weights",
+                    "learned_head_weights",
+                ] + (["fusion_tree_weights"] if tree_fusion else []) + (["NT500M_weights", "NT_adapter_weights"] if nt_fusion else [])
+            )
+        )
         or (
             dual_probe
             and (
@@ -247,6 +326,25 @@ def load_deployment_parameters(
         )
     ):
         raise ValueError("deployment config violates the frozen model contract")
+    if nt_fusion:
+        validate_nt_binding(model.get("nt_adapter", {}))
+    elif "nt_adapter" in model:
+        raise ValueError("NT adapter requires release_model.v5")
+    if tree_fusion:
+        tree = model.get("fusion_tree", {})
+        route = model.get("dna_other_early_exit", {})
+        if (tree.get("feature_dimension") != 1923
+                or tree.get("feature_order") != TREE_FEATURE_ORDER
+                or tree.get("objective") != "binary:logistic"
+                or tree.get("rounds") != 400
+                or tree.get("xgboost_version") != "3.2.0"
+                or route.get("status") != "frozen_model_routing"
+                or route.get("comparison") != "dna_p_euk_less_than_or_equal"
+                or route.get("short_sequence_fallback_below_bp") != 3
+                or route.get("full_esm_preserves_routing") is not True):
+            raise ValueError("tree feature or routing contract differs")
+    elif "fusion_tree" in model:
+        raise ValueError("fusion tree requires release_model.v4")
     values = {
         "threshold": float(prediction.get("threshold", math.nan)),
         "early_exit_other_max_score": float(
@@ -333,7 +431,7 @@ def load_deployment_parameters(
     ):
         raise ValueError("deployment probabilities or fusion parameters are invalid")
     early_exit_parity_validated = protein_family == "esm2"
-    if esmc_piecewise and values["early_exit_other_max_score"] > 0.0:
+    if esmc_piecewise and not tree_fusion and values["early_exit_other_max_score"] > 0.0:
         early_exit = model.get("dna_other_early_exit", {})
         gate_path = _bound_path(
             early_exit.get("independent_gate"), "ESM-C early-exit gate"
@@ -720,14 +818,15 @@ def predict_fasta(
     config: str | Path | None = None,
     device_name: str = "auto",
     cpu_threads: int | None = None,
-    buffer_records: int = 4_096,
+    buffer_records: int = 1_024,
     dna_batch_size: int = 32,
     dna_max_padded_bases: int = 800_000,
     esm_token_budget: int = 16_384,
     esm_attention_budget: int = 2_000_000,
     use_dna_early_exit: bool = True,
-    minimum_length: int = 1_000,
+    minimum_length: int = 1,
     use_esm_sdpa: bool = False,
+    component_output: str | Path | None = None,
 ) -> dict[str, Any]:
     if cpu_threads is not None and cpu_threads < 1:
         raise ValueError("cpu_threads must be positive when specified")
@@ -743,8 +842,14 @@ def predict_fasta(
     fasta_path = Path(fasta)
     output_path = Path(output)
     summary_path = Path(summary)
+    component_path = Path(component_output) if component_output is not None else None
     part = output_path.with_name(output_path.name + ".part")
     summary_part = summary_path.with_name(summary_path.name + ".part")
+    component_part = (
+        component_path.with_name(component_path.name + ".part")
+        if component_path is not None
+        else None
+    )
     if (
         output_path.resolve()
         in ({fasta_path.resolve()} | ({Path(config).resolve()} if config else set()))
@@ -757,6 +862,20 @@ def predict_fasta(
             path.exists()
             for path in (output_path, summary_path, part, summary_part)
         )
+        or (
+            component_path is not None
+            and (
+                component_path.resolve()
+                in {
+                    fasta_path.resolve(),
+                    output_path.resolve(),
+                    summary_path.resolve(),
+                }
+                | ({Path(config).resolve()} if config else set())
+                or component_path.exists()
+                or component_part.exists()
+            )
+        )
     ):
         raise FileExistsError("prediction outputs overlap an input or already exist")
     parameters = load_deployment_parameters(config)
@@ -764,6 +883,10 @@ def predict_fasta(
     if cpu_threads is not None:
         torch.set_num_threads(cpu_threads)
     effective_cpu_threads = int(torch.get_num_threads())
+    fusion_tree = _load_fusion_tree(parameters, device, effective_cpu_threads)
+    from .nt_runtime import NTAdapter
+    nt_binding = parameters.config["model"].get("nt_adapter")
+    nt_adapter = NTAdapter(nt_binding, device, _bound_path, sha256_file) if nt_binding else None
     (
         dna_model,
         token_table,
@@ -792,6 +915,8 @@ def predict_fasta(
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     summary_path.parent.mkdir(parents=True, exist_ok=True)
+    if component_path is not None:
+        component_path.parent.mkdir(parents=True, exist_ok=True)
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(device)
     started = time.perf_counter()
@@ -799,9 +924,21 @@ def predict_fasta(
     input_records = input_bases = skipped_records = skipped_bases = 0
     seen: set[str] = set()
     try:
-        with part.open("x", newline="", encoding="utf-8") as handle:
+        with ExitStack() as stack:
+            handle = stack.enter_context(
+                part.open("x", newline="", encoding="utf-8")
+            )
             writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
             writer.writerow(PREDICTION_HEADER)
+            component_writer = None
+            if component_part is not None:
+                component_handle = stack.enter_context(
+                    component_part.open("x", newline="", encoding="utf-8")
+                )
+                component_writer = csv.writer(
+                    component_handle, delimiter="\t", lineterminator="\n"
+                )
+                component_writer.writerow(COMPONENT_HEADER)
             for buffer in _buffered(iter(fasta_records(fasta_path)), buffer_records):
                 identifiers = [row[0] for row in buffer]
                 counts = Counter(identifiers)
@@ -865,6 +1002,7 @@ def predict_fasta(
                     if parameters.secondary_probe_center is not None
                     else None
                 )
+                tree_scores = dna_scores.copy() if fusion_tree is not None else None
                 if len(protein_indices):
                     orfs = [
                         select_orfs_from_contig(sequences[int(index)], orf_config)
@@ -893,6 +1031,11 @@ def predict_fasta(
                             probe(standardized.to(device)).double().cpu().numpy()
                         )
                     probe_logit[protein_indices] = selected_probe_logit
+                    if fusion_tree is not None:
+                        tree_scores[protein_indices] = _tree_probability(
+                            fusion_tree, standardized.cpu().numpy(), dna_scores[protein_indices],
+                            lengths[protein_indices], selected_probe_logit, effective_cpu_threads)
+
                     if secondary_probe is not None:
                         if secondary_mean is None or secondary_std is None:
                             raise RuntimeError(
@@ -912,7 +1055,10 @@ def predict_fasta(
                         secondary_probe_logit[
                             protein_indices
                         ] = selected_secondary_logit
-                if parameters.protein_family == "esmc":
+                if fusion_tree is not None:
+                    scores = _apply_tree_routing(tree_scores, dna_scores, lengths,
+                                                parameters.early_exit_other_max_score)
+                elif parameters.protein_family == "esmc":
                     if any(
                         value is None
                         for value in (
@@ -977,14 +1123,21 @@ def predict_fasta(
                         long_alpha=float(parameters.long_alpha),
                         boundary_bp=int(parameters.piecewise_boundary_bp),
                     )
-                # The Train-frozen cutoff lies strictly below the deployment
-                # threshold.  Validation gates established that these easy
-                # negatives never cross the final decision boundary, so their
-                # calibrated DNA probability is a valid Other score and the
-                # expensive ESM encoder can be skipped entirely.
+                if nt_adapter is not None:
+                    routed = (dna_scores <= parameters.early_exit_other_max_score) | (lengths < 3)
+                    nt_logits = nt_adapter.contig_logits(sequences, np.flatnonzero(~routed))
+                    scores = _sigmoid(_logit(scores) + nt_binding["alpha"] * nt_logits)
+                    scores[routed] = dna_scores[routed]
+                # Legacy scalar models use a validated optimization. Tree models
+                # retain their frozen DNA route even when --full-esm is enabled.
                 scores[early_exit_other] = dna_scores[early_exit_other]
-                for identifier, sequence, score in zip(
-                    identifiers, sequences, scores, strict=True
+                for identifier, sequence, dna_score, esm_logit, score in zip(
+                    identifiers,
+                    sequences,
+                    dna_scores,
+                    probe_logit,
+                    scores,
+                    strict=True,
                 ):
                     value = validate_probability(float(score))
                     writer.writerow(
@@ -995,6 +1148,21 @@ def predict_fasta(
                             classify_score(value, parameters.threshold),
                         )
                     )
+                    if component_writer is not None:
+                        component_writer.writerow(
+                            (
+                                identifier,
+                                len(sequence),
+                                format(float(dna_score), ".17g"),
+                                format(float(esm_logit), ".17g"),
+                                format(
+                                    (float(esm_logit) - parameters.probe_center)
+                                    / parameters.probe_scale,
+                                    ".17g",
+                                ),
+                                format(value, ".17g"),
+                            )
+                        )
                 records += len(buffer)
                 bases += int(lengths.sum())
                 early_exit_other_records += int(early_exit_other.sum())
@@ -1002,8 +1170,12 @@ def predict_fasta(
         if not input_records:
             raise ValueError("input FASTA has no records")
         os.replace(part, output_path)
+        if component_path is not None and component_part is not None:
+            os.replace(component_part, component_path)
     except BaseException:
         part.unlink(missing_ok=True)
+        if component_part is not None:
+            component_part.unlink(missing_ok=True)
         raise
     elapsed = time.perf_counter() - started
     peak_allocated, peak_reserved = _cuda_memory_summary(device)
@@ -1028,6 +1200,7 @@ def predict_fasta(
         "inference_mode": (
             "dna_early_exit" if use_dna_early_exit else "full_esm"
         ),
+        "nt_adapter": None if nt_adapter is None else {"precision": "bfloat16" if nt_adapter.bf16 else "float32", "windows": nt_adapter.windows, "license": nt_binding["license"], "checkpoint_sha256": nt_binding["checkpoint"]["sha256"]},
         "dna_early_exit_enabled": use_dna_early_exit,
         "dna_other_early_exit_max_score": (
             parameters.early_exit_other_max_score
@@ -1041,6 +1214,14 @@ def predict_fasta(
         "esm_token_budget": orf_config.token_budget,
         "esm_attention_budget": orf_config.attention_budget,
         "protein_encoder_family": parameters.protein_family,
+        "model_resolution": {
+            "hf_hub_offline": os.environ.get("HF_HUB_OFFLINE", "").lower()
+            in {"1", "true", "yes"},
+            "transformers_offline": os.environ.get(
+                "TRANSFORMERS_OFFLINE", ""
+            ).lower()
+            in {"1", "true", "yes"},
+        },
         "esm_attention_backend": (
             "esmc_released_no_flash"
             if parameters.protein_family == "esmc"
@@ -1102,14 +1283,24 @@ def predict_fasta(
             ),
         },
         "output": {"path": str(output_path), "sha256": sha256_file(output_path)},
+        "component_output": (
+            {
+                "path": str(component_path),
+                "sha256": sha256_file(component_path),
+                "diagnostic_only": True,
+            }
+            if component_path is not None
+            else None
+        ),
         "peak_cuda_memory_allocated_bytes": peak_allocated,
         "peak_cuda_memory_reserved_bytes": peak_reserved,
         "gates": {
             "all_eligible_fasta_records_scored_once": True,
             "records_below_minimum_length_omitted": True,
-            "default_minimum_length_bp": 1_000,
+            "default_minimum_length_bp": 1,
             "no_eligible_records_is_success": True,
-            "whole_contigs_scored_without_chopping": True,
+            "whole_contigs_scored_without_chopping": nt_adapter is None,
+            "one_output_per_contig_with_nt_feature_windows": nt_adapter is not None,
             "dna_then_esm_on_one_device": True,
             "dna_then_esm_on_one_gpu": device.type == "cuda",
             "one_gpu_deployment_supported": True,
@@ -1120,6 +1311,10 @@ def predict_fasta(
             "strict_score_greater_than_threshold": True,
             "unknown_class": False,
             "model_artifacts_hash_bound": True,
+            "model_resolution_hf_hub_offline": os.environ.get(
+                "HF_HUB_OFFLINE", ""
+            ).lower()
+            in {"1", "true", "yes"},
             "dna_other_early_exit_is_below_deployment_threshold": (
                 parameters.early_exit_other_max_score < parameters.threshold
             ),
@@ -1127,9 +1322,11 @@ def predict_fasta(
                 parameters.early_exit_parity_validated
             ),
             "dna_other_early_exit_efficiency_only_calibration": (
-                parameters.early_exit_other_max_score > 0.0
+                fusion_tree is None and parameters.early_exit_other_max_score > 0.0
             ),
-            "final_test_rows_read": 0,
+            "dna_routing_is_part_of_classifier": fusion_tree is not None,
+            "input_dataset_role": "user_supplied_not_inferred",
+            "model_training_former_final_reused": parameters.config["final_test"]["read_or_changed_for_this_candidate"],
         },
     }
     summary_part.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")

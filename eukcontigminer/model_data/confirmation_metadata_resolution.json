@@ -1,0 +1,137 @@
+{
+  "status": "frozen_before_fragment_sampling_and_scores",
+  "frozen_at": "2026-09-06T18:41:30.126784+00:00",
+  "cases": {
+    "GCF_043497005.1": {
+      "kind": "current_catalog_taxid_precedence",
+      "assembly_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/downloads/GCF_043497005.1/GCF_043497005.1_ASM4349700v1_assembly_report.txt",
+        "sha256": "bf9120570fb98eee3ad4a149ce49a9c1857ee7328d68a332baa7fe055b4ae12b"
+      },
+      "assembly_report_supplier_md5": "abbc4277466d2649312d1fea8d361c3b",
+      "current_datasets": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/assembly_metadata_resolution_sources/GCF_043497005.1.datasets.json",
+        "sha256": "8a9e32687aa6356d351b80aee3e4156dcf0f771cdf379889183722340ee92ae2"
+      },
+      "original_report_taxid": 2880263,
+      "effective_taxid": 3459514,
+      "additional_reserved_species_taxid": 2880263,
+      "justification": "Frozen assembly summary and current NCBI Datasets and BioSample agree on exact accession version, taxid, release date and size. Preserve original report taxid without claiming a taxonomic merge. Both alternative IDs excluded from all prior/current cohorts."
+    },
+    "GCF_043496975.1": {
+      "kind": "current_catalog_taxid_precedence",
+      "assembly_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/downloads/GCF_043496975.1/GCF_043496975.1_ASM4349697v1_assembly_report.txt",
+        "sha256": "766d47c822f40e3bef158eab91a3dee34899c12d8aa72685acdfc6bad0dd558a"
+      },
+      "assembly_report_supplier_md5": "8f1e5c0aed81e90c468f9b499ecf59bb",
+      "current_datasets": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/assembly_metadata_resolution_sources/GCF_043496975.1.datasets.json",
+        "sha256": "75e5377eba56fde483137be88997ddd23c1450fa37bfbaf180515b2fed4d6ca1"
+      },
+      "original_report_taxid": 2587849,
+      "effective_taxid": 3459515,
+      "additional_reserved_species_taxid": 2587849,
+      "justification": "Frozen assembly summary and current NCBI Datasets and BioSample agree on exact accession version, taxid, release date and size. Preserve original report taxid without claiming a taxonomic merge. Both alternative IDs excluded from all prior/current cohorts."
+    },
+    "GCF_048585405.1": {
+      "kind": "single_missing_record_length",
+      "assembly_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/downloads/GCF_048585405.1/GCF_048585405.1_ASM4858540v1_assembly_report.txt",
+        "sha256": "1082362adb626ca03c1e792d84fb9ae2ab1cc9b50ae7034026c27f8756926bc3"
+      },
+      "assembly_report_supplier_md5": "e1d636ef05f42188c023aa328558eff1",
+      "fasta": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/downloads/GCF_048585405.1/GCF_048585405.1_ASM4858540v1_genomic.fna.gz",
+        "sha256": "22ce12fee97eaed009c86591199abcafd9c22e8d6a445215e602e9b676a7c928"
+      },
+      "fasta_supplier_md5": "70d0c8cb48d2bbdd532684d81d878dcb",
+      "missing_record": "NZ_CP183921.1",
+      "resolved_length": 8860717,
+      "declared_genome_size": 9038499,
+      "sum_other_report_records": 177782,
+      "justification": "Exactly one missing record length. Infer frozen assembly total minus all other declared record lengths; independently equals supplier-MD5-verified FASTA record length. All original files remain unchanged."
+    },
+    "GCF_049177075.1": {
+      "kind": "single_missing_record_length",
+      "assembly_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/downloads/GCF_049177075.1/GCF_049177075.1_ASM4917707v1_assembly_report.txt",
+        "sha256": "8e5df011a259100ff8c827c5f3a24c420ad28b26f19cb4026fff2bc535d0dfe2"
+      },
+      "assembly_report_supplier_md5": "925c53bc42f164e36da9957909a2fe43",
+      "fasta": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/downloads/GCF_049177075.1/GCF_049177075.1_ASM4917707v1_genomic.fna.gz",
+        "sha256": "1ff293898bb5e09279744a1b6d18f49ba58cf114bfe197139b15b79eb9371a5d"
+      },
+      "fasta_supplier_md5": "c3ab38126c02f7c922653f2e500ed5ee",
+      "missing_record": "NZ_CP185377.1",
+      "resolved_length": 4443543,
+      "declared_genome_size": 4457573,
+      "sum_other_report_records": 14030,
+      "justification": "Exactly one missing record length. Infer frozen assembly total minus all other declared record lengths; independently equals supplier-MD5-verified FASTA record length. All original files remain unchanged."
+    },
+    "GCA_001661425.1": {
+      "kind": "current_catalog_taxid_precedence",
+      "assembly_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/downloads/GCA_001661425.1/GCA_001661425.1_Canar1_assembly_report.txt",
+        "sha256": "d147c782158dba926c3f708ee901664628b60b3244a8984201062175780b5b6c"
+      },
+      "assembly_report_supplier_md5": "5c8b654820e0d5fdfe0fffb71f5ef7e3",
+      "current_datasets": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/assembly_metadata_resolution_sources/GCA_001661425.1.datasets.json",
+        "sha256": "e1bb79427afb6f0bc6a24c7eade517cd21b4d9f4becc008b34284f7ddb09661f"
+      },
+      "original_report_taxid": 983967,
+      "effective_taxid": 130810,
+      "frozen_taxonomy_report_annotation": {
+        "input_taxid": 983967,
+        "canonical_taxid": 130810,
+        "species_taxid": 130810,
+        "genus_taxid": 461281,
+        "family_taxid": 1156497,
+        "cellular_domain_taxid": 2759
+      },
+      "frozen_taxonomy_current_annotation": {
+        "input_taxid": 130810,
+        "canonical_taxid": 130810,
+        "species_taxid": 130810,
+        "genus_taxid": 461281,
+        "family_taxid": 1156497,
+        "cellular_domain_taxid": 2759
+      },
+      "frozen_species_equivalent": true,
+      "justification": "Original strain taxid983967 and current taxid130810 map to the same species130810 in the frozen taxonomy. Current Datasets and BioSample agree with frozen summary, accession version, date and size; original report remains unchanged."
+    }
+  },
+  "inventory": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/selected_assemblies.tsv",
+    "sha256": "da5f9d111d6398841517fb8aef96af1c252e29e5f24eab2bbe971ecdff4c5c11"
+  },
+  "taxonomy": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/selected_taxonomy.tsv",
+    "sha256": "b75d53e0d43298711b1492fedcec003082892d6f4327cd35fe56698c302561dd"
+  },
+  "effective_policy": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/policy_effective.json",
+    "sha256": "97d9103fe82af93649084dd64e487ee9ec10f6334c3d9f52788d8a728bc7a8ef"
+  },
+  "taxonomy_snapshot": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/taxonomy/snapshot.json",
+    "sha256": "ea22ba93baf641fd71f8e5a15345aeaa742250b60ab7d3aed4337a2b7a18c2bd"
+  },
+  "additional_reserved_species_taxids": [
+    2880263,
+    2587849
+  ],
+  "additional_ids_prior_and_current_species_overlap": 0,
+  "confirmation_scores_read": 0,
+  "cohort_rows_removed": 0,
+  "cohort_rows_replaced": 0,
+  "candidate_thresholds_and_sampling_unchanged": true,
+  "limitation": "Two official report headers disagree with current accession-level catalog and BioSample annotations. This is an explicit provenance resolution, not an inferred synonym/merge or proof of homology-disjoint species.",
+  "previous_addendum": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/assembly_metadata_resolution_addendum.json",
+    "sha256": "dd2f4702641abff83131d9e002877dba9841f348991dc61d65cc8c670b190a6e"
+  },
+  "transport_recovery": "Resume existing partial files for curl timeout exit28, using original frozen URLs, same accessions and supplier checksums. No replacement genomes and no threshold changes."
+}

@@ -652,6 +652,7 @@ def esmc_features_from_orfs(
     device: torch.device,
     config: ESM2ORFInferenceConfig = ESM2ORFInferenceConfig(),
     representation_layer: int | None = None,
+    peptide_pooling: str = "mean",
     quantize_float16: bool = True,
 ) -> torch.Tensor:
     """Return final or one selected hidden-layer ESM-C ORF features.
@@ -662,6 +663,9 @@ def esmc_features_from_orfs(
     Hidden layers use the official one-based block order and raw pre-final-norm
     state; the default remains the released final normalized embedding.
     """
+
+    if peptide_pooling not in {"mean", "mean_std_max"}:
+        raise ValueError("unknown ESM-C peptide pooling mode")
 
     config.validate()
     if representation_layer is not None and (
@@ -733,12 +737,19 @@ def esmc_features_from_orfs(
             or representation.shape[:2] != tokens.shape
         ):
             raise ValueError("ESM-C output differs from the embedding contract")
-        pooled = torch.stack(
-            [
-                representation[row, 1 : len(sequence) + 1].float().mean(0)
-                for row, sequence in enumerate(sequences)
-            ]
-        ).cpu()
+        pooled_rows: list[torch.Tensor] = []
+        for row, sequence in enumerate(sequences):
+            residues = representation[row, 1 : len(sequence) + 1].float()
+            mean = residues.mean(0)
+            if peptide_pooling == "mean":
+                pooled_rows.append(mean)
+            else:
+                pooled_rows.append(
+                    torch.cat(
+                        (mean, residues.std(0, unbiased=False), residues.amax(0))
+                    )
+                )
+        pooled = torch.stack(pooled_rows).cpu()
         for row, original in enumerate(selected_indices):
             peptide_features[original] = pooled[row]
     if any(value is None for value in peptide_features):

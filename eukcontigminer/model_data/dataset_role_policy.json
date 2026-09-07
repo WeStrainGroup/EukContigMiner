@@ -1,0 +1,68 @@
+{
+  "algorithm": "Within each source subclass, sort SHA256(seed|subclass|species_taxid); first floor(n/2) development, remainder independent confirmation.",
+  "artifacts": {
+    "confirmation": {
+      "by_label": {
+        "Archaea": 46,
+        "Bacteria": 891,
+        "Fungi": 140,
+        "Metazoa": 301,
+        "Other_Eukaryota": 28,
+        "Viridiplantae": 147
+      },
+      "genomes": 1553,
+      "path": "/data/wangxinyu2/eukcontigminer/runs/dataset_role_revision_20260906_v1/confirmation_genomes.tsv",
+      "sha256": "1884959cdecc108a3a2ffb3d8bc272362f811dde5f20c114a3760d64d47dc1b9",
+      "species": 1553
+    },
+    "development": {
+      "by_label": {
+        "Archaea": 46,
+        "Bacteria": 891,
+        "Fungi": 140,
+        "Metazoa": 300,
+        "Other_Eukaryota": 28,
+        "Viridiplantae": 146
+      },
+      "genomes": 1551,
+      "path": "/data/wangxinyu2/eukcontigminer/runs/dataset_role_revision_20260906_v1/development_genomes.tsv",
+      "sha256": "c38903b9614b40c15ecc1a8869b5d6b5e4b7b5b75f3d1608ed9f5d4403de81b0",
+      "species": 1551
+    }
+  },
+  "authorization": "User on 2026-09-06 explicitly requested utilization of original Final Test and a better replacement for v0.50 within 12 hours.",
+  "created_at_utc": "2026-09-05T17:20:10.173463+00:00",
+  "deadline_local": "2026-09-06T13:11:20+08:00",
+  "gates": {
+    "all_release_dates_before_cutoff": true,
+    "candidate_score_rows_read": 0,
+    "development_confirmation_species_overlap": 0,
+    "genome_fasta_files_opened": 0,
+    "label_semantics": "All Euk nuclear and organelle positive; Bacteria/Archaea negative.",
+    "metadata_only": true,
+    "original_manifests_unchanged": true,
+    "prior_train_validation_species_overlap": 0
+  },
+  "inputs": {
+    "genome_manifest": {
+      "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/manifests/genome_manifest.tsv",
+      "sha256": "411fbcc3d7f600f13559c9364db041cf2e2607333c37008bd93eef972dce8f09"
+    },
+    "split_manifest": {
+      "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/qc/split_manifest.tsv",
+      "sha256": "af0dedf54909c0d3f7782e32b8bae87e5ebb280c79d73ee9ac7081f62bc8310d"
+    }
+  },
+  "limitations": [
+    "Species-disjoint does not imply genus-disjoint or sequence-homology-disjoint.",
+    "Original genome-set alignment QC was deferred.",
+    "Any prior exposure of the original Final to model development must be audited before calling confirmation untouched."
+  ],
+  "roles": {
+    "confirmation": "Must not be used for training, tuning or candidate selection. Open sequence/score evaluation only after candidate and threshold freeze; compare the candidate and v0.50 on the same samples. Do not iterate against confirmation results.",
+    "development": "May be used for training, tuning, error analysis and candidate selection; permanently loses independent-test status once used."
+  },
+  "schema": "eukcontigminer.dataset_role_revision.v1",
+  "seed": "20260906-ecm-final-role-v1",
+  "status": "frozen_before_new_scores"
+}

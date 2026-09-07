@@ -1,0 +1,73 @@
+{
+  "artifacts": {
+    "metadata.npz": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/metadata.npz",
+      "sha256": "d390b523382e1b0dbf5285d97a951870f9228c0bce458bbc67910438c5bdd4b2"
+    },
+    "offsets.npy": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/offsets.npy",
+      "sha256": "baef697cdd338487bf41dbdee39b50c59cef87f60160b7c825046ede76e281cc"
+    },
+    "train.tsv": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/train.tsv",
+      "sha256": "29c88eb5bd20444f16b683700f7120e74a33971bdc40d1f665204324edf0dae6"
+    },
+    "train_bases.uint8": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_short_coverage_adaptation_20260906_v3/train_bases.uint8",
+      "sha256": "d886660d5dacb80fdd4f5db63339d4fcfb4dfc4e1bc46375ae1470005559737a"
+    }
+  },
+  "assemblies": 12197,
+  "confirmation_and_v6_used": false,
+  "counts": {
+    "development|Archaea": 4416,
+    "development|Bacteria": 85319,
+    "development|Fungi": 13426,
+    "development|Metazoa": 28773,
+    "development|Other_Eukaryota": 2687,
+    "development|Viridiplantae": 14005,
+    "replay|Archaea": 14543,
+    "replay|Bacteria": 277551,
+    "replay|Fungi": 73449,
+    "replay|Metazoa": 114574,
+    "replay|Organelle": 10525,
+    "replay|Other_Eukaryota": 18784,
+    "replay|Viridiplantae": 69983,
+    "train_v3|Archaea": 4297,
+    "train_v3|Bacteria": 52354,
+    "train_v3|Fungi": 19644,
+    "train_v3|Metazoa": 27853,
+    "train_v3|Organelle": 4797,
+    "train_v3|Other_Eukaryota": 4978,
+    "train_v3|Viridiplantae": 17578,
+    "train_v5|Archaea": 6372,
+    "train_v5|Bacteria": 342823,
+    "train_v5|Fungi": 113471,
+    "train_v5|Metazoa": 172183,
+    "train_v5|Organelle": 1404,
+    "train_v5|Other_Eukaryota": 29857,
+    "train_v5|Viridiplantae": 108213
+  },
+  "eligible_assemblies": 12197,
+  "eligible_rows": {
+    "development": 297061,
+    "train_v3": 650262,
+    "train_v5": 4695422
+  },
+  "eligible_species": 12197,
+  "excluded_assemblies": [],
+  "excluded_species": [],
+  "exclusions": {
+    "acgt_below_90_percent": 871,
+    "canonical_duplicate": 142
+  },
+  "fresh_records": 1054450,
+  "overlap_excluded": 228633,
+  "plan_sha256": "405bf5b0ce88c4a3f8eb29e58da1aeae0b4d9e510eeeef1c461526478c5f32b1",
+  "positive": 846184,
+  "records": 1633859,
+  "replay_records": 579409,
+  "species": 12197,
+  "status": "complete",
+  "validation_species_overlap": 0
+}

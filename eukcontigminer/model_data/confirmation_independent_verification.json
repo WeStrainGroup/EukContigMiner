@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "records": 1090186,
+  "species": 3474,
+  "all_five_raw_score_arrays_recounted": true,
+  "strict_labels_checked": true,
+  "fusion_reconstruction_max_tolerance": 5e-15,
+  "all_scopes_lengths_prevalences_and_duplicate_gates_verified": true,
+  "taxonomy_strata_and_source_rates_verified": true,
+  "paired_species_bootstrap_independently_reproduced": true,
+  "paired_intervals": {
+    "full": [
+      0.001643502516369444,
+      0.0027310781111337945
+    ],
+    "short": [
+      0.0038141053312954975,
+      0.006567501499196159
+    ],
+    "one_kb": [
+      -0.002343405393423867,
+      0.006939384056640332
+    ],
+    "fungi_bacteria": [
+      0.002479034805864755,
+      0.0038317408240699288
+    ],
+    "continuous": [
+      0.002572784487904384,
+      0.004476864610889038
+    ],
+    "continuous_short": [
+      0.004227289723970712,
+      0.007463897990233034
+    ]
+  },
+  "decision": "confirmation_point_gate_passed_pending_runtime",
+  "gate_checks": {
+    "primary": true,
+    "canonical_duplicate_sensitivity": true
+  },
+  "all21_point_estimates_at_least_0p99": false,
+  "statistically_supported_full_improvement": true,
+  "report": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/paired_production_v1/report.json",
+    "sha256": "273025a2f123a48ffc20b6928cdf9a08ef77b262a332e6d8693eeebaab165f89"
+  },
+  "input_audit": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/input_metadata_independent_verification_v1/report.json",
+    "sha256": "21448a6bb07def1d5d92aa2d7be9829e9e997a2a3e8d961178200f82fd5d515a"
+  },
+  "code": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/verify_v8_confirmation_v1.py",
+    "sha256": "ab6d7f3415c7afcb8b3a9a5070b0173f98a6b503e8e46a4ae30ba536de81015b"
+  },
+  "threshold_search_performed": false,
+  "release_approved": false,
+  "broad_goal_complete": false
+}

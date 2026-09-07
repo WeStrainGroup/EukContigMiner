@@ -1,18 +1,21 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "eukcontigminer"
-version = "0.50"
+version = "0.54"
 description = "Single-device DNA and protein-language-model screening of eukaryotic contigs"
 requires-python = ">=3.10,<3.13"
-license = "MIT"
+license = "MIT AND CC-BY-NC-SA-4.0"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 authors = [{name = "WeStrainGroup"}]
 dependencies = [
   "esm==3.2.1",
   "numpy>=1.26,<3",
-  "torch>=2.2,<2.6",
+  "torch>=2.2,<3",
+  "xgboost==3.2.0",
+  "transformers==4.48.1",
 ]
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -29,7 +32,7 @@ Repository = "https://github.com/WeStrainGroup/EukContigMiner"
 include = ["eukcontigminer*"]
 
 [tool.setuptools.package-data]
-eukcontigminer = ["model_data/*.json", "model_data/*.pt"]
+eukcontigminer = ["model_data/*.json", "model_data/*.pt", "model_data/*.ubj"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -9,7 +9,7 @@ from .deployment import predict_fasta
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Score whole contigs with the frozen DNA + ESM-C 300M model"
+        description="Score whole contigs with the frozen DNA + ESM-C + NT500M model"
     )
     parser.add_argument("fasta", type=Path, help="input FASTA or FASTA.GZ")
     parser.add_argument("-o", "--output", type=Path, required=True)
@@ -28,19 +28,19 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="maximum PyTorch CPU threads (for a 32-core server, use 32)",
     )
-    parser.add_argument("--buffer-records", type=int, default=4096)
+    parser.add_argument("--buffer-records", type=int, default=1024)
     parser.add_argument("--dna-batch-size", type=int, default=32)
     parser.add_argument("--dna-max-padded-bases", type=int, default=800000)
     parser.add_argument(
         "--min-length",
         type=int,
-        default=1000,
-        help="omit contigs shorter than this many base pairs (default: 1000)",
+        default=1,
+        help="omit contigs shorter than this many base pairs (default: 1; score every nonempty contig)",
     )
     parser.add_argument(
         "--full-esm",
         action="store_true",
-        help="disable DNA early exit and send every eligible contig through ESM-C",
+        help="compute ESM-C for every eligible contig; the model keeps its frozen DNA output routing",
     )
     args = parser.parse_args(argv)
     summary = args.summary or args.output.with_name(

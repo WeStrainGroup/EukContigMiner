@@ -1,0 +1,18 @@
+{
+  "status": "complete_before_scoring",
+  "records": 1090186,
+  "unique_canonical_sequences": 1090173,
+  "duplicate_rows": 13,
+  "mixed_truth_pairs": 0,
+  "mask": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/paired_production_v1/canonical_unique_mask.npy",
+    "sha256": "01c3be3a906964934c62e2550f128f81e8eddd8f1fb55d0b1c49cf8879d6302b"
+  },
+  "pairs": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/paired_production_v1/canonical_duplicate_pairs.tsv",
+    "sha256": "44f3c4abf6c88210f77c3efbdd206ca0317e061c3727a0ca8c569278f4d63050"
+  },
+  "representative_rule": "First row in frozen manifest order; all original rows retained in primary analysis",
+  "required_sensitivity": "Recount frozen gate using this mask; preserve acceptance direction. Report mixed-truth duplicates separately.",
+  "confirmation_scores_read": 0
+}

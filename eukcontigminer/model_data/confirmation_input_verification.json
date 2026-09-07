@@ -1,0 +1,161 @@
+{
+  "status": "passed",
+  "records": 1090186,
+  "species": 3474,
+  "species_isolation_overlap": 0,
+  "all_eight_shards_match_original_manifest": true,
+  "source_release_dates_before_2026": true,
+  "genomes_by_label": {
+    "Archaea": 12,
+    "Bacteria": 3072,
+    "Fungi": 128,
+    "Metazoa": 128,
+    "Other_Eukaryota": 6,
+    "Viridiplantae": 128
+  },
+  "counts": [
+    {
+      "panel": "continuous",
+      "source_label": "Archaea",
+      "truth": 0,
+      "records": 1112
+    },
+    {
+      "panel": "continuous",
+      "source_label": "Bacteria",
+      "truth": 0,
+      "records": 518783
+    },
+    {
+      "panel": "continuous",
+      "source_label": "Fungi",
+      "truth": 1,
+      "records": 27449
+    },
+    {
+      "panel": "continuous",
+      "source_label": "Metazoa",
+      "truth": 1,
+      "records": 27291
+    },
+    {
+      "panel": "continuous",
+      "source_label": "Organelle",
+      "truth": 1,
+      "records": 224
+    },
+    {
+      "panel": "continuous",
+      "source_label": "Other_Eukaryota",
+      "truth": 1,
+      "records": 1270
+    },
+    {
+      "panel": "continuous",
+      "source_label": "Viridiplantae",
+      "truth": 1,
+      "records": 27121
+    },
+    {
+      "panel": "fixed",
+      "source_label": "Archaea",
+      "truth": 0,
+      "records": 943
+    },
+    {
+      "panel": "fixed",
+      "source_label": "Bacteria",
+      "truth": 0,
+      "records": 421219
+    },
+    {
+      "panel": "fixed",
+      "source_label": "Fungi",
+      "truth": 1,
+      "records": 21328
+    },
+    {
+      "panel": "fixed",
+      "source_label": "Metazoa",
+      "truth": 1,
+      "records": 21176
+    },
+    {
+      "panel": "fixed",
+      "source_label": "Organelle",
+      "truth": 1,
+      "records": 202
+    },
+    {
+      "panel": "fixed",
+      "source_label": "Other_Eukaryota",
+      "truth": 1,
+      "records": 991
+    },
+    {
+      "panel": "fixed",
+      "source_label": "Viridiplantae",
+      "truth": 1,
+      "records": 21077
+    }
+  ],
+  "fixed_lengths": [
+    1000,
+    1500,
+    2000,
+    2500,
+    3000,
+    3500,
+    4000,
+    4500,
+    5000,
+    5500,
+    6000,
+    6500,
+    7000,
+    7500,
+    8000,
+    8500,
+    9000,
+    9500,
+    10000,
+    50000,
+    100000
+  ],
+  "distinct_continuous_lengths": 18279,
+  "overlap_pairs": 72931,
+  "maximum_overlap_fraction": 0.1,
+  "duplicate_rows": 13,
+  "mixed_truth_pairs": 0,
+  "sequence_integrity_scope": "Existing pre-scoring FASTA/sequence-SHA/canonical-RC audit retained by hash; this independent pass checks metadata, intervals, mask/pair consistency and shard alignment without rescanning sequence FASTAs or rehashing downloaded genomes.",
+  "inputs": {
+    "plan": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/paired_production_v1/plan.json",
+      "sha256": "de119176fcd536d7023613edfd83892064d6fe1e15bdb6e70d780c0c0a8d5598"
+    },
+    "data": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/paired_production_v1/data_summary.json",
+      "sha256": "bd148b40e8bb0f78cdc38f71cb155c3ec31433add168f9299a8fdd9efa30545e"
+    },
+    "sampling": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/fragments/summary.json",
+      "sha256": "f1bcff67fa7154db9d04f1d3f85693d8833154901c035a1e0eac37cf780063a5"
+    },
+    "downloads": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/downloads/downloads.tsv",
+      "sha256": "21353a6696bca723f2eea263f9e0a0975a7bba911b6a7360c2e8d73b5bf26604"
+    },
+    "duplicate_audit": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/paired_production_v1/duplicate_audit.json",
+      "sha256": "30b46608177a7889936be055ebe11163b6ed4af8c3b8adc582c73e8cb382334f"
+    }
+  },
+  "code": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/fresh_species_confirmation_v8_short_coverage_20260907/verify_v8_input_metadata_v1.py",
+    "sha256": "6cfffac086d5075d344d03689a1a517daf1e85ebab68b3bef266276c02302b87"
+  },
+  "confirmation_scores_read": 0,
+  "training_or_selection_on_confirmation": false,
+  "elapsed_seconds": 15.072578028775752,
+  "max_rss_kib": 447344
+}
