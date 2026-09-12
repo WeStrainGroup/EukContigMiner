@@ -1,0 +1,47 @@
+{
+  "status": "final_installed_wheel_matches_native_gpu_and_prior_cpu",
+  "wheel": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/release_v055_native_20260912/dist/eukcontigminer-0.55-py3-none-any.whl",
+    "sha256": "de764605f7de74bcbc5a1cae2825a0721e3b4007909d15f591bfa6fb6ee353e7"
+  },
+  "config": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/release_v055_native_20260912/eukcontigminer/model_data/model.json",
+    "sha256": "d74c8956ec336a917078ad158cc3f62c62f3640320e6c88c2d57fcb356901e5f"
+  },
+  "checks": {
+    "cpu": {
+      "records": 30,
+      "input": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v055_raw32768_20260912/verification/cpu_v2/legal_and_spire.fna",
+        "sha256": "bae4256019799b6c5c152fc8b683525d152fdf295cd60b2790848602948fd94c"
+      },
+      "expected": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v055_raw32768_20260912/verification/cpu_v2/predictions.tsv",
+        "sha256": "915c6f3f1d21888c6799c15405c871d6316acb0abcbae9d5206e8a73e4bec15a"
+      },
+      "actual": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/release_v055_native_20260912/verification/final_installed/cpu.tsv",
+        "sha256": "915c6f3f1d21888c6799c15405c871d6316acb0abcbae9d5206e8a73e4bec15a"
+      },
+      "all_rows_identical": true
+    },
+    "gpu": {
+      "records": 4096,
+      "input": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/canary4096.fna",
+        "sha256": "3d40eb395d5d81fc19a88758248d5f5f3ead114b87a3a1ab09e07746c9bc5628"
+      },
+      "expected": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/canary/00_raw100/predictions.tsv",
+        "sha256": "2f7032435d1ff8ca892537a78d42d6eb41a135a5d658ba00efcc9fd3ab418a30"
+      },
+      "actual": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/release_v055_native_20260912/verification/final_installed/gpu.tsv",
+        "sha256": "2f7032435d1ff8ca892537a78d42d6eb41a135a5d658ba00efcc9fd3ab418a30"
+      },
+      "all_rows_identical": true
+    }
+  },
+  "limits": "Version/artifact parity on matched hardware/settings. Does not assert CPU equals GPU or invariance to batching.",
+  "original_final_whole_genome_fasta_reads": 0
+}

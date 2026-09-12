@@ -1,0 +1,1138 @@
+{
+  "status": "verified_report_census_not_a_release_decision",
+  "at": 1789202303.1763334,
+  "sources": {
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete22_report_v1/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete22_report_v1/report.json",
+      "sha256": "447e7af5d9d0417870f76c0e83989f956950260ae3b54cca66baa2ac8e54e688"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete22_report_v1/sources.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete22_report_v1/sources.json",
+      "sha256": "5c5fec21f07a2d19fd40ef8ba6e9775a3a4eee46984c55e88cf8d0752d65e4d7"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete18_report_v1/sources.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete18_report_v1/sources.json",
+      "sha256": "e060f3c62f2c53015b98b508a4673fc36d70aa5b55854f68affe9e8c7e131dee"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/v050.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/v050.json",
+      "sha256": "9d03c6b7c4b1c9bf7bc153330c25fd3dc1ea1e7c579dd5f7f07f98f9ea2934ea"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/v054.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/v054.json",
+      "sha256": "5711cd7a088f15b20dfffeca8022107582df82e5a162f96eb84d88508667faef"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/full100.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/full100.json",
+      "sha256": "b1e612086633b0475fb342b74d212fd11ed95ea4cf8a1359ed3fdbf7439f66f8"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/full100_smooth.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/full100_smooth.json",
+      "sha256": "3fb6429ce8cb644178748affff61767003a09acfbde95e1c242964b2e2858306"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/agreement.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/agreement.json",
+      "sha256": "5f7f9f7a86575c1240f9306b100fdf720d0e0a0fd791da9da5415879b982d583"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/two_lm.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/two_lm.json",
+      "sha256": "eff889e77fe26cfaeae2023a8172effa399bd3cc46a8354b98b32a3869311eda"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/two_lm_length_gc.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/two_lm_length_gc.json",
+      "sha256": "ce613118072f1746ae098efb5a353037bea56b51833b00e53dd97f5dfa662e9d"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/two_lm_smooth.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/two_lm_smooth.json",
+      "sha256": "1ad24ab98026b41bc5387f3f816810cf2b701a39b4943003b21e70e8d3ab70eb"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/pure_dna100.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/pure_dna100.json",
+      "sha256": "12b984642257b7e062a6f3ea3512d4a9252a7c3257fe1408bbebaff49741b144"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/protein.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/protein.json",
+      "sha256": "f7ceea642ef410128068f07eec1f91d2ec76775d4f1c0a8f6df8ee933c12fa52"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/expanded8_dna.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/expanded8_dna.json",
+      "sha256": "4e937100178296eac551ba5fb63e5f9bc6cc2064ea4def678d33c3f46bdd5329"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/expanded8_ecm.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/expanded8_ecm.json",
+      "sha256": "be8c3ee975292bf7cc96270a1bc45320697af36bce5c7a1805843e807ac10d54"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/expanded8_two_lm.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/expanded8_two_lm.json",
+      "sha256": "e8fbc617d800ae373c55cceebbc8f9b36efa8e50dfff877bcf78c22dd3db7572"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/expanded8_two_lm_length_gc.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/expanded8_two_lm_length_gc.json",
+      "sha256": "0ccfdeda7a22af5df136c4d46ebfde9d70a1698af4f6b42628473e1d32fae27f"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/tiara.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete15_report_v1/source_reports/tiara.json",
+      "sha256": "2024f417a0aa0b876300165d64cc65824c8ddc927b354bb5e6e2eaaf238a328a"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_8m_metrics_independent_review_v1/pure_dna8_report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_8m_metrics_independent_review_v1/pure_dna8_report.json",
+      "sha256": "2015b1e8da8044b8b9c798bcec54f4b2083cf91516237116a5850cef46928fd6"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_8m_metrics_independent_review_v1/two_lm8_report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_8m_metrics_independent_review_v1/two_lm8_report.json",
+      "sha256": "971b4915214cb650665f02c444649f3e85e469a447ef4b75bcf17e55dd080668"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_8m_metrics_independent_review_v1/two_lm8_length_gc_report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_8m_metrics_independent_review_v1/two_lm8_length_gc_report.json",
+      "sha256": "490cc63a630b8a7e789c2c13c0aab968f19965da31e32876279a965990dfce63"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_coverage_evaluation_v1/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_coverage_evaluation_v1/report.json",
+      "sha256": "cf357287fe472cad3b9c8cbe23c72935119846bcd4f63b94e4307d27e87bdc70"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_coverage_evaluation_v1/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_coverage_evaluation_v1/independent_readback.json",
+      "sha256": "e40c1d2e1ee3eae57447c40f1be95b2cf6df3f0ac6483ef4183f96fec6e9ae6f"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete22_report_v1/metrics.csv": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_complete22_report_v1/metrics.csv",
+      "sha256": "f077fa725499565d9a7a8ae9239c04d99f04a0426c3b21ef76b4d74c2b842931"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/all_euk_supplementary_evaluation_v1/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/all_euk_supplementary_evaluation_v1/report.json",
+      "sha256": "eb408b46868f2e9b7e22caf90d52d66d5962a90284120d8c3e083099c101c245"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/all_euk_supplementary_independent_v1/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/all_euk_supplementary_independent_v1/report.json",
+      "sha256": "8fcdc0455b890eb381bd3ed347a1cd98dd598af7e234242db8841cdf4d544b93"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/length_calibration_replacement_v1/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/length_calibration_replacement_v1/report.json",
+      "sha256": "abe6b657f7dc969cf10dc96037917f41926dc5315ad5f833c2c94e0243ed2a68"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/length_calibration_replacement_v1/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/length_calibration_replacement_v1/independent_readback.json",
+      "sha256": "d144415951f6d0522d342431b01b2107823462c2aca9d34798ac015340c21c40"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/length_calibration_replacement_v1/refit_policy_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/length_calibration_replacement_v1/refit_policy_readback.json",
+      "sha256": "6ce798e039fd935fa48a9cea86845292a8f486be0383524c1b424e08d29e75c7"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/length_calibration_replacement_v1/recipes.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/length_calibration_replacement_v1/recipes.json",
+      "sha256": "782b6fdde6252e800ff682a76e2a6b3b1ae20adaed5bff2820358f6ecb5ef26d"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/replacement_challengers_frozen_20260910.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/replacement_challengers_frozen_20260910.json",
+      "sha256": "a12d2ef0e7c66152604c119446480876d904dfc9d4e21f370350d80e506aa312"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/main500/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/main500/report.json",
+      "sha256": "e2d9743e3e46b0c136cd717990ec263b7ee45d1eb375472652f0ab8894b2f1c4"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/main500/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/main500/independent_readback.json",
+      "sha256": "4d99c4d6f48289fdccb0119c0e4fd017e5062a40d98a8f3fec3a2f96cd075a4b"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/calibration/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/calibration/report.json",
+      "sha256": "eef498663c67be718b7f61991c2a3a81315b897241bf7b07518e0d6dbe8e7677"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/calibration/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/calibration/independent_readback.json",
+      "sha256": "faefb7e94123ebd09c164dedb894dd64d42a630e8c6ffe4cb5c743ddc31048bc"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/main500/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/main500/report.json",
+      "sha256": "a88bddc0132abdb8b61926600759c8dad28d857f66d915707ad62a1994d667c5"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/main500/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/main500/independent_readback.json",
+      "sha256": "8d797b7a6853bfa8f92fa56e3234759c312a160b5609f50fcca69c672648bb81"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/calibration/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/calibration/report.json",
+      "sha256": "8a75480ccddfd3a98ef29cd8d3952afa5c7890995fbad5715b56b20b1f4cbb9c"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/calibration/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/calibration/independent_readback.json",
+      "sha256": "8d4dc52ec7a939f522d44c1df09945045d80558d8426f1be44b10f7fafb4c31c"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/main500/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/main500/report.json",
+      "sha256": "21e4625566bfe788592e144cfca7c8fa0f0d61e8b37dc7ffd4cd4a256697a93f"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/main500/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/main500/independent_readback.json",
+      "sha256": "5b949dd1af00fcd4572b4d61bfbe89eee99d38ba152626f8be84f0df268d3df0"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/calibration/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/calibration/report.json",
+      "sha256": "9f7d531380cfaca0ca21cbaba59b236951ab35286d100e91952bbb6e6c78726e"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/calibration/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/calibration/independent_readback.json",
+      "sha256": "1131c7e7575dc29457a35256e5188de2c9c4abf411e19e23c7951e38b71e7352"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/main500/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/main500/report.json",
+      "sha256": "e8f2f948b1c076dd5cabc533293ed20ec215052010b903551271381574df08fd"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/main500/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/main500/independent_readback.json",
+      "sha256": "3bbf2e30e1ac7c9d7b040adee1740e9fd48515a8187336fd330129dca5a0f070"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/calibration/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/calibration/report.json",
+      "sha256": "f85fbb450d92ef2bb216357710dbb09e98cbddb3df0dcb29bf4011776170e640"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/calibration/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/calibration/independent_readback.json",
+      "sha256": "dbd3cedd762d84259d46b78cb54e0b8b9768edcfe6876b113eae06c4f5931e13"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/main500/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/main500/report.json",
+      "sha256": "6c4987509af3129a2b184890ed0fb619789f194cd4109abbc01265becc886e9b"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/main500/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/main500/independent_readback.json",
+      "sha256": "b131b35989e9ed97081c448067c558dab305265dfe4056b5f2708b550af11d61"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/calibration/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/calibration/report.json",
+      "sha256": "446e3f96bd88c1f04c97d2ab1e61c42e4b5b60ae34d8db4ef41ae7b240f2383f"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/calibration/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/calibration/independent_readback.json",
+      "sha256": "194b931922aa58ff7472039128ff660509c72183ba68e5075a1cdf9e49d6ed28"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/formal21/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/formal21/report.json",
+      "sha256": "f6a9b4ec0eaeb9d20daaea09fffee9f6de2bb0fe256504003cfa8477423e6a6a"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/formal21/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/formal21/independent_readback.json",
+      "sha256": "6fca9940385580d322194a553e9fbbb4c893d2969106dd6c78fc4247e18fd3cb"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_supp_cpu_v1/replacement_lr2/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_supp_cpu_v1/replacement_lr2/report.json",
+      "sha256": "40d18bcda1eb9a1d74551d7ffd4b94075263e4376a4b19acee1619918e2f5a3c"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_supp_cpu_v1/replacement_lr2/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_supp_cpu_v1/replacement_lr2/independent_readback.json",
+      "sha256": "3a04ab3a344a0d785124cb1a23c09ec7c546f121765efd582c978772657f4a26"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/main500/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/main500/report.json",
+      "sha256": "fddb61454f5cdfc97c016a7d6effec7fd75aa41e98fc8b5d4994722f73ea726f"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/main500/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/main500/independent_readback.json",
+      "sha256": "fd1647e77963aed4920b5f6fc38e38349ae5981dd413110c56eeac14c35c0668"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/recipes.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/recipes.json",
+      "sha256": "e239f5d0bf12277fb867702362d5d1fbe7320ef7048de77063d5dfc8ee23d6b9"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/formal21/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/formal21/report.json",
+      "sha256": "a7892451e239cf677e2faff919b289922471377cf9e8c7886a93105772495fff"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/formal21/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/replacement_lr2/formal21/independent_readback.json",
+      "sha256": "741a174e0f37e8372736447c37a8f2b38581de999859ca5dd77d951bf6616a2b"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement32768_v1/replacement_lr2/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement32768_v1/replacement_lr2/report.json",
+      "sha256": "fcee78eb46430f6fd9923698e3513ffe10bafde4694f8ec415274215bf431dd8"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement32768_v1/replacement_lr2/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement32768_v1/replacement_lr2/independent_readback.json",
+      "sha256": "a8e25ca57726511c9c27269991c3ad9ec7b8b2544f2db7ff0da875cc302f111c"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/main500/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/main500/report.json",
+      "sha256": "d7bfba41465173846027211298261927acf049cb165b08d7eeeaef9585e9f139"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/main500/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/main500/independent_readback.json",
+      "sha256": "8bdf42b5d08bbfc3a0dc9284d7b24067969373571dce7b1e273d399778d00fa7"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/calibration/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/calibration/report.json",
+      "sha256": "3384eef9e1f6fd8a6d09aef55d598d1672c35987813edd3d2aa852679ca8e3dd"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/calibration/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/calibration/independent_readback.json",
+      "sha256": "078a541824203eabc041113f38c7354e13447641983be919bf4a3ffa3e71a13c"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/formal21/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/formal21/report.json",
+      "sha256": "74752d40f3b971c21d88eb26a3b2527b06a24b35674e2d97428ffa84d898fd5e"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/formal21/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/coverage_lr2/formal21/independent_readback.json",
+      "sha256": "d0968347dac6d4f6e8395e3f3294ee499bd2a0e1075ba3b3c7e59e5f7928c2e6"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_supp_cpu_v1/coverage_lr2/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_supp_cpu_v1/coverage_lr2/report.json",
+      "sha256": "014aab78e32df7be77bbf3953d3b5b878927dc91b828ca354575102fc68e29ad"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_supp_cpu_v1/coverage_lr2/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_supp_cpu_v1/coverage_lr2/independent_readback.json",
+      "sha256": "11cda7be54cede84ee0e0442f5ef11b86ad26006adbe2c8ca1a68730ca16584d"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/main500/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/main500/report.json",
+      "sha256": "e464a5635bc179c10fa78288118c133b06730d175a29e6387acd6e5f4165d412"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/main500/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/main500/independent_readback.json",
+      "sha256": "a5ba01ffc5e22f261d4595d8b41e1a6098086d73a2fe67eff4113eedcb8ca618"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/recipes.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/recipes.json",
+      "sha256": "17d0fa703cdda16cda2e33dfe71adb72f931e81a8c4de1944f7b2bcf2ac84bb8"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/formal21/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/formal21/report.json",
+      "sha256": "dc4b25ff6f962dd1ab36a926a4af56189dbc4ef4b3802f7691bd8cf2be07497b"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/formal21/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth32768_v1/coverage_lr2/formal21/independent_readback.json",
+      "sha256": "869c06233b0a69f5856143568cb7f4b1e5b291a78c2c19502c498b6e1508f190"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement32768_v1/coverage_lr2/report.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement32768_v1/coverage_lr2/report.json",
+      "sha256": "ed64f2929d6911c3ef6a8c0b6be36ac0d2d1789d72605dee843254f92ec8760f"
+    },
+    "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement32768_v1/coverage_lr2/independent_readback.json": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement32768_v1/coverage_lr2/independent_readback.json",
+      "sha256": "0678e813f03acc61cbd9c1ccef0d545bee482732854a08ad7c7f49dc98d4b76e"
+    }
+  },
+  "checkpoints": {
+    "replacement_lr2_step16384": "0aa681572c2e2f3ce396b032dca5eb3c7aea1bbc0d39ff73af2eda1fb9e7ae71",
+    "coverage_lr2_step16384": "58f77f483e5e3c5146a0be67a0c591ba2fcf5ad2fa22d015d948b21d541df31f",
+    "replacement_lr05_step16384": "a12305322cbc00d9eca53c8e4ed414052b5c81fa2d67accfa444a5e786bae3c7",
+    "coverage_lr05_step16384": "cf4b8b9db821ba57c6d2a232ba6552124f3b97df1db474e1e0fe4f40500d39d4",
+    "replacement_lr2_step32768": "6721e6dc411b159f9cab40d1e587389c71c1055e56b62fef1031af0e61dbc71d",
+    "coverage_lr2_step32768": "44218cd702b7eb217f37bb693ad491bd7de8523b6ac156390e6f68db07c472e0"
+  },
+  "pending": [
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr2/formal21/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_supplement16384_cpu_v1/replacement_lr2/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth16384_v1/replacement_lr2/main500/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth16384_v1/replacement_lr2/formal21/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement16384_v1/replacement_lr2/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr2/formal21/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_supplement16384_cpu_v1/coverage_lr2/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth16384_v1/coverage_lr2/main500/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth16384_v1/coverage_lr2/formal21/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement16384_v1/coverage_lr2/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/replacement_lr05/formal21/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_supplement16384_cpu_v1/replacement_lr05/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth16384_v1/replacement_lr05/main500/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth16384_v1/replacement_lr05/formal21/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement16384_v1/replacement_lr05/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_benchmark16384_cpu_v1/coverage_lr05/formal21/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_supplement16384_cpu_v1/coverage_lr05/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth16384_v1/coverage_lr05/main500/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth16384_v1/coverage_lr05/formal21/report.json",
+      "status": "awaiting_complete_independent_readback"
+    },
+    {
+      "report": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_smooth_supplement16384_v1/coverage_lr05/report.json",
+      "status": "awaiting_complete_independent_readback"
+    }
+  ],
+  "models": [
+    {
+      "model": "replacement_lr2_step32768_raw",
+      "main500": {
+        "f1": 0.9887591163456462,
+        "short_f1": 0.950310110087186,
+        "fp": 65,
+        "fn": 574,
+        "records": 592861,
+        "passing_bins": 13
+      },
+      "supplement": {
+        "f1": 0.9747905774120218,
+        "short_f1": 0.9064767382448613,
+        "fp": 119,
+        "fn": 5242,
+        "records": 664491,
+        "passing_bins": 3
+      },
+      "formal21": {
+        "f1": 0.9870843520786599,
+        "short_f1": 0.9266157388030589,
+        "fp": 64,
+        "fn": 1090,
+        "records": 503608,
+        "passing_bins": 16
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "full100_smooth",
+      "main500": {
+        "f1": 0.9887294536666348,
+        "short_f1": 0.9524140158815422,
+        "fp": 78,
+        "fn": 450,
+        "records": 592861,
+        "passing_bins": 14
+      },
+      "supplement": {
+        "f1": 0.9711324349782222,
+        "short_f1": 0.9114796631180636,
+        "fp": 168,
+        "fn": 4565,
+        "records": 664491,
+        "passing_bins": 0
+      },
+      "formal21": {
+        "f1": 0.9880170561364642,
+        "short_f1": 0.9310510920372217,
+        "fp": 64,
+        "fn": 883,
+        "records": 503608,
+        "passing_bins": 16
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_lr2_step16384_raw",
+      "main500": {
+        "f1": 0.9885806710321302,
+        "short_f1": 0.948266450245752,
+        "fp": 64,
+        "fn": 603,
+        "records": 592861,
+        "passing_bins": 13
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "replacement_lr2_step16384_raw",
+      "main500": {
+        "f1": 0.9884906261771085,
+        "short_f1": 0.9472111803432648,
+        "fp": 79,
+        "fn": 466,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_lr2_step32768_raw",
+      "main500": {
+        "f1": 0.9883856005010941,
+        "short_f1": 0.9485866122684685,
+        "fp": 73,
+        "fn": 536,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": {
+        "f1": 0.9744563871479053,
+        "short_f1": 0.904607091380791,
+        "fp": 126,
+        "fn": 5064,
+        "records": 664491,
+        "passing_bins": 3
+      },
+      "formal21": {
+        "f1": 0.986846195005787,
+        "short_f1": 0.9249023108384073,
+        "fp": 69,
+        "fn": 1005,
+        "records": 503608,
+        "passing_bins": 16
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "replacement_lr05_step16384_raw",
+      "main500": {
+        "f1": 0.9883331013426513,
+        "short_f1": 0.9483990731552009,
+        "fp": 79,
+        "fn": 483,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_lr05_step16384_raw",
+      "main500": {
+        "f1": 0.9882610398036119,
+        "short_f1": 0.9485673164119244,
+        "fp": 80,
+        "fn": 481,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_lr2_step32768_smooth",
+      "main500": {
+        "f1": 0.9882066373658076,
+        "short_f1": 0.9489596291256072,
+        "fp": 85,
+        "fn": 438,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": {
+        "f1": 0.9705543194583451,
+        "short_f1": 0.9088401897024402,
+        "fp": 174,
+        "fn": 4539,
+        "records": 664491,
+        "passing_bins": 3
+      },
+      "formal21": {
+        "f1": 0.9870412481834033,
+        "short_f1": 0.9290261297500345,
+        "fp": 72,
+        "fn": 879,
+        "records": 503608,
+        "passing_bins": 16
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "replacement_lr2_step32768_smooth",
+      "main500": {
+        "f1": 0.9882045444049955,
+        "short_f1": 0.9475914843246631,
+        "fp": 84,
+        "fn": 448,
+        "records": 592861,
+        "passing_bins": 13
+      },
+      "supplement": {
+        "f1": 0.9715378897889644,
+        "short_f1": 0.9102638100822634,
+        "fp": 164,
+        "fn": 4574,
+        "records": 664491,
+        "passing_bins": 2
+      },
+      "formal21": {
+        "f1": 0.9873506701052405,
+        "short_f1": 0.9307213333103258,
+        "fp": 69,
+        "fn": 893,
+        "records": 503608,
+        "passing_bins": 16
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "two_lm_smooth",
+      "main500": {
+        "f1": 0.9880933933232157,
+        "short_f1": 0.9515281103503476,
+        "fp": 84,
+        "fn": 460,
+        "records": 592861,
+        "passing_bins": 15
+      },
+      "supplement": {
+        "f1": 0.9706826212269777,
+        "short_f1": 0.9059296220222846,
+        "fp": 166,
+        "fn": 4847,
+        "records": 664491,
+        "passing_bins": 1
+      },
+      "formal21": {
+        "f1": 0.9860248576590018,
+        "short_f1": 0.921964530532545,
+        "fp": 77,
+        "fn": 967,
+        "records": 503608,
+        "passing_bins": 15
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "agreement",
+      "main500": {
+        "f1": 0.9878908758876314,
+        "short_f1": 0.9446835685643411,
+        "fp": 76,
+        "fn": 560,
+        "records": 592861,
+        "passing_bins": 13
+      },
+      "supplement": {
+        "f1": 0.9732613887573083,
+        "short_f1": 0.9025064878122279,
+        "fp": 129,
+        "fn": 5434,
+        "records": 664491,
+        "passing_bins": 3
+      },
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Agreement uses both 500M and 100M; excluded from requested 100M replacement."
+    },
+    {
+      "model": "full100",
+      "main500": {
+        "f1": 0.9878071050991455,
+        "short_f1": 0.9406082795726592,
+        "fp": 93,
+        "fn": 403,
+        "records": 592861,
+        "passing_bins": 14
+      },
+      "supplement": {
+        "f1": 0.9707336328004756,
+        "short_f1": 0.8864734637170695,
+        "fp": 176,
+        "fn": 4372,
+        "records": 664491,
+        "passing_bins": 3
+      },
+      "formal21": {
+        "f1": 0.9851885996882083,
+        "short_f1": 0.9067850466577193,
+        "fp": 93,
+        "fn": 713,
+        "records": 503608,
+        "passing_bins": 16
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "two_lm_length_gc",
+      "main500": {
+        "f1": 0.9876273296212575,
+        "short_f1": 0.9430951239926477,
+        "fp": 87,
+        "fn": 481,
+        "records": 592861,
+        "passing_bins": 14
+      },
+      "supplement": {
+        "f1": 0.969941372725322,
+        "short_f1": 0.8800372890116276,
+        "fp": 173,
+        "fn": 4845,
+        "records": 664491,
+        "passing_bins": 2
+      },
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_ecm",
+      "main500": {
+        "f1": 0.9874953498966499,
+        "short_f1": 0.9417383739750124,
+        "fp": 86,
+        "fn": 505,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "v054",
+      "main500": {
+        "f1": 0.9874077336760648,
+        "short_f1": 0.9413874814335246,
+        "fp": 80,
+        "fn": 573,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": {
+        "f1": 0.9716806838005096,
+        "short_f1": 0.8938636796353273,
+        "fp": 143,
+        "fn": 5467,
+        "records": 664491,
+        "passing_bins": 2
+      },
+      "formal21": {
+        "f1": 0.9858108576448619,
+        "short_f1": 0.9210069580936022,
+        "fp": 74,
+        "fn": 1097,
+        "records": 503608,
+        "passing_bins": 16
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "two_lm",
+      "main500": {
+        "f1": 0.9871104971167161,
+        "short_f1": 0.9428424090988001,
+        "fp": 84,
+        "fn": 566,
+        "records": 592861,
+        "passing_bins": 13
+      },
+      "supplement": {
+        "f1": 0.9710817972643243,
+        "short_f1": 0.8836915399714661,
+        "fp": 153,
+        "fn": 5267,
+        "records": 664491,
+        "passing_bins": 2
+      },
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_two_lm_length_gc",
+      "main500": {
+        "f1": 0.986729986740237,
+        "short_f1": 0.9441771770013045,
+        "fp": 88,
+        "fn": 568,
+        "records": 592861,
+        "passing_bins": 13
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_two_lm",
+      "main500": {
+        "f1": 0.9863654318397734,
+        "short_f1": 0.9436737493945306,
+        "fp": 87,
+        "fn": 617,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "expanded8_ecm",
+      "main500": {
+        "f1": 0.9850900331120607,
+        "short_f1": 0.9286461298794404,
+        "fp": 118,
+        "fn": 453,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "two_lm8",
+      "main500": {
+        "f1": 0.9838045245460137,
+        "short_f1": 0.9250900222082586,
+        "fp": 116,
+        "fn": 611,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_lr2_step32768_dna",
+      "main500": {
+        "f1": 0.9837820386001365,
+        "short_f1": 0.9346948265863122,
+        "fp": 73,
+        "fn": 1030,
+        "records": 592861,
+        "passing_bins": 9
+      },
+      "supplement": {
+        "f1": 0.9619484064695439,
+        "short_f1": 0.8606098140816352,
+        "fp": 190,
+        "fn": 7459,
+        "records": 664491,
+        "passing_bins": 0
+      },
+      "formal21": {
+        "f1": 0.981082821022186,
+        "short_f1": 0.9111498836780986,
+        "fp": 80,
+        "fn": 1977,
+        "records": 503608,
+        "passing_bins": 12
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "two_lm8_length_gc",
+      "main500": {
+        "f1": 0.9837621437745163,
+        "short_f1": 0.9244810028185403,
+        "fp": 127,
+        "fn": 509,
+        "records": 592861,
+        "passing_bins": 12
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "replacement_lr2_step16384_dna",
+      "main500": {
+        "f1": 0.9837030994156574,
+        "short_f1": 0.9342675210635827,
+        "fp": 78,
+        "fn": 990,
+        "records": 592861,
+        "passing_bins": 9
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "expanded8_two_lm_length_gc",
+      "main500": {
+        "f1": 0.9835239845871275,
+        "short_f1": 0.9269283589498901,
+        "fp": 128,
+        "fn": 525,
+        "records": 592861,
+        "passing_bins": 11
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_lr2_step16384_dna",
+      "main500": {
+        "f1": 0.9833636028925538,
+        "short_f1": 0.9344384844013327,
+        "fp": 74,
+        "fn": 1065,
+        "records": 592861,
+        "passing_bins": 9
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "replacement_lr2_step32768_dna",
+      "main500": {
+        "f1": 0.9827418032457487,
+        "short_f1": 0.9324016270906907,
+        "fp": 79,
+        "fn": 1083,
+        "records": 592861,
+        "passing_bins": 8
+      },
+      "supplement": {
+        "f1": 0.9636125058962802,
+        "short_f1": 0.8639011115049189,
+        "fp": 171,
+        "fn": 7608,
+        "records": 664491,
+        "passing_bins": 0
+      },
+      "formal21": {
+        "f1": 0.9811452016246349,
+        "short_f1": 0.9105035744778959,
+        "fp": 73,
+        "fn": 2154,
+        "records": 503608,
+        "passing_bins": 12
+      },
+      "all_three_panels_present": true,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "replacement_lr05_step16384_dna",
+      "main500": {
+        "f1": 0.9824545328887285,
+        "short_f1": 0.9304914705268107,
+        "fp": 83,
+        "fn": 1075,
+        "records": 592861,
+        "passing_bins": 9
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "expanded8_two_lm",
+      "main500": {
+        "f1": 0.9822867908045211,
+        "short_f1": 0.9163760574502318,
+        "fp": 139,
+        "fn": 552,
+        "records": 592861,
+        "passing_bins": 11
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_lr05_step16384_dna",
+      "main500": {
+        "f1": 0.9820620933518058,
+        "short_f1": 0.9351801953997088,
+        "fp": 66,
+        "fn": 1281,
+        "records": 592861,
+        "passing_bins": 6
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "pure_dna100",
+      "main500": {
+        "f1": 0.9812523471739455,
+        "short_f1": 0.9297429840597915,
+        "fp": 77,
+        "fn": 1261,
+        "records": 592861,
+        "passing_bins": 6
+      },
+      "supplement": {
+        "f1": 0.9647162491124055,
+        "short_f1": 0.8753344791332437,
+        "fp": 146,
+        "fn": 8264,
+        "records": 664491,
+        "passing_bins": 0
+      },
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "v050",
+      "main500": {
+        "f1": 0.9802670889408931,
+        "short_f1": 0.9088134998889488,
+        "fp": 162,
+        "fn": 548,
+        "records": 592861,
+        "passing_bins": 11
+      },
+      "supplement": {
+        "f1": 0.9572593333884846,
+        "short_f1": 0.8350878954065211,
+        "fp": 284,
+        "fn": 5272,
+        "records": 664491,
+        "passing_bins": 2
+      },
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "coverage_pure_dna",
+      "main500": {
+        "f1": 0.9801969662267215,
+        "short_f1": 0.9279030805246801,
+        "fp": 74,
+        "fn": 1402,
+        "records": 592861,
+        "passing_bins": 5
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "pure_dna8",
+      "main500": {
+        "f1": 0.9756812846093998,
+        "short_f1": 0.9117922673464676,
+        "fp": 104,
+        "fn": 1593,
+        "records": 592861,
+        "passing_bins": 0
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "expanded8_dna",
+      "main500": {
+        "f1": 0.9749458771515467,
+        "short_f1": 0.9122190445683822,
+        "fp": 115,
+        "fn": 1566,
+        "records": 592861,
+        "passing_bins": 0
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "protein",
+      "main500": {
+        "f1": 0.9484982403044309,
+        "short_f1": 0.8137344051636484,
+        "fp": 355,
+        "fn": 2127,
+        "records": 592861,
+        "passing_bins": 0
+      },
+      "supplement": {
+        "f1": 0.9131744851842466,
+        "short_f1": 0.701389209830887,
+        "fp": 560,
+        "fn": 12084,
+        "records": 664491,
+        "passing_bins": 0
+      },
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    },
+    {
+      "model": "tiara",
+      "main500": {
+        "f1": 0.8649957881203896,
+        "short_f1": 0.6445199240269912,
+        "fp": 606,
+        "fn": 8326,
+        "records": 592861,
+        "passing_bins": 0
+      },
+      "supplement": null,
+      "formal21": null,
+      "all_three_panels_present": false,
+      "note": "Presence of metrics does not certify runtime validation or independent-test generalization."
+    }
+  ],
+  "original_final_sequence_reads": 0,
+  "limitations": "Reused development panels; missing and unverified panels explicit. Formal smooth refit metrics are diagnostics. Publish decision additionally requires deployment validation, supplementary review, paired uncertainty and final candidate audit. No new training, threshold selection, score evaluation, or automatic release.",
+  "code": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/v055_candidate_census_publication_1637_v1/code.py",
+    "sha256": "6e9a5ad13638967fc6e30d8ae446f7a1e2c9fa1b1b0cf42146453837f5b4a64f"
+  },
+  "metrics": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/v055_candidate_census_publication_1637_v1/metrics.csv",
+    "sha256": "6709be1c102d42b154cbe3469a673cf01b08b491f766f820a9cbddd34df74d19"
+  }
+}

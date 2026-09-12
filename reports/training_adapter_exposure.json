@@ -1,0 +1,220 @@
+{
+  "status": "known_broad_input_exposures_reconstructed_from_completed_frozen_schedules",
+  "code": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/audit_confirmed_adapter_training_exposure_v1.py",
+    "sha256": "26f33cc68445bafb3f34025ed5844380b9692c2ebb8df91d6400876c2c5eeecd"
+  },
+  "training_plan": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/full100_fullcoverage_four_v1/plan.json",
+    "sha256": "38a77cb2a0049ab5f18a03c57cd4404a2d2abbfb33d284dd6bf259a0526b5c73"
+  },
+  "source_qc": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_fit_exclusions_v1/report.json",
+    "sha256": "9b9c1387180d68404f0e23ee1742d54c2e67b3ac7d7ed277c01d991296029096"
+  },
+  "sampling_proof": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/full100_fullcoverage_four_v1/sampling_proof.json",
+    "sha256": "d5d6229646de24327e676c9f2fed5bdd9742273c6910025ecd374daa53fa941a"
+  },
+  "bindings": {
+    "replacement": {
+      "training_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/full100_fullcoverage_four_v1/replacement_lr2/training/report.json",
+        "sha256": "eb53c51dfafd6df392bd8770d39d21b85a11e095bf2f8a8b23a18a456846a561"
+      },
+      "schedule": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/full100_fullcoverage_four_v1/replacement.npy",
+        "sha256": "f73030147cd6451858c0f9f19efa7a0eb22a06b9c950e333fcde9265de8f3bff"
+      }
+    },
+    "coverage": {
+      "training_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/full100_fullcoverage_four_v1/coverage_lr2/training/report.json",
+        "sha256": "300874af1da97e25c9eaf3c54967192adf1fc27bdc0b09b6b52d498fe08fac42"
+      },
+      "schedule": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/full100_fullcoverage_four_v1/coverage.npy",
+        "sha256": "dddea64a99c81f9a586d5a36bd42b440d6051d1fa92da7deac4afd3744ea1efc"
+      }
+    }
+  },
+  "packed_sequences_sha_verified": true,
+  "results": {
+    "replacement": {
+      "total_known_fragment_draws": 7,
+      "known_fragments_seen": 5,
+      "rows": [
+        {
+          "fragment_id": "ecm_train_Fungi_1795_96749b937a49b66d5457",
+          "broad_index": 631571,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 1,
+          "reverse_complement_draws": 0,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 1
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Metazoa_1743_c772a32540398debbd13",
+          "broad_index": 744760,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 0,
+          "reverse_complement_draws": 1,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 1
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Metazoa_1588_4acb6fab4e7420ef63a9",
+          "broad_index": 835161,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 0,
+          "reverse_complement_draws": 1,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 1
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Metazoa_1816_dc7c70e041da37da6b2b",
+          "broad_index": 835198,
+          "total_draws": 3,
+          "unique_optimizer_steps": 3,
+          "forward_draws": 2,
+          "reverse_complement_draws": 1,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 3
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Viridiplantae_1222_1443c75d4d3ef16629a9",
+          "broad_index": 1203126,
+          "total_draws": 0,
+          "unique_optimizer_steps": 0,
+          "forward_draws": 0,
+          "reverse_complement_draws": 0,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 0
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Viridiplantae_1576_eb59db0183d2e4cdaff7",
+          "broad_index": 1203188,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 1,
+          "reverse_complement_draws": 0,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 1,
+            "32768": 1
+          }
+        }
+      ]
+    },
+    "coverage": {
+      "total_known_fragment_draws": 6,
+      "known_fragments_seen": 6,
+      "rows": [
+        {
+          "fragment_id": "ecm_train_Fungi_1795_96749b937a49b66d5457",
+          "broad_index": 631571,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 1,
+          "reverse_complement_draws": 0,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 1
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Metazoa_1743_c772a32540398debbd13",
+          "broad_index": 744760,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 0,
+          "reverse_complement_draws": 1,
+          "draws_by_checkpoint": {
+            "4096": 1,
+            "16384": 1,
+            "32768": 1
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Metazoa_1588_4acb6fab4e7420ef63a9",
+          "broad_index": 835161,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 0,
+          "reverse_complement_draws": 1,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 1,
+            "32768": 1
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Metazoa_1816_dc7c70e041da37da6b2b",
+          "broad_index": 835198,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 0,
+          "reverse_complement_draws": 1,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 1
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Viridiplantae_1222_1443c75d4d3ef16629a9",
+          "broad_index": 1203126,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 1,
+          "reverse_complement_draws": 0,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 1
+          }
+        },
+        {
+          "fragment_id": "ecm_train_Viridiplantae_1576_eb59db0183d2e4cdaff7",
+          "broad_index": 1203188,
+          "total_draws": 1,
+          "unique_optimizer_steps": 1,
+          "forward_draws": 1,
+          "reverse_complement_draws": 0,
+          "draws_by_checkpoint": {
+            "4096": 0,
+            "16384": 0,
+            "32768": 1
+          }
+        }
+      ]
+    }
+  },
+  "events": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_training_exposure_v1/exposure_events.tsv",
+    "sha256": "b92e7b7fdf635aa7715db8c8f43b9bfadd5c5530df9924c36a09f0dd96823404"
+  },
+  "scope": "Counts cover the six exact broad-pool sequences during this completed 32768-step continuation only. They do not exhaust replay inputs, donor training, protein/tree training, homologous sequences, or upstream pretraining. Exposure counts do not measure causal performance impact or establish contamination-free weights.",
+  "model_score_reads": 0,
+  "original_final_sequence_reads": 0,
+  "training_modified": false
+}

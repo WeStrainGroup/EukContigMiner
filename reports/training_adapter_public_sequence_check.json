@@ -1,0 +1,59 @@
+{
+  "status": "exact_public_accession_check_completed",
+  "plan": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/public_accession_records_v1/plan.json",
+    "sha256": "5937025c0e6d88aecb05d692fc5c7cfbc5fbfed9ac85147f303e0c37dad192a6"
+  },
+  "future_exclusions": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/public_accession_records_v1/future_fit_exclusions.tsv",
+    "sha256": "3919ec7fd58bd977aad36d7e4cec7376d54790e0fa11e8b175faeab25fa94d2d"
+  },
+  "results": [
+    {
+      "record_id": "CDRTSN010000162.1",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CDRTSN010000162.1&rettype=fasta&retmode=text",
+      "status": "public_record_downloaded",
+      "fasta": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/public_accession_records_v1/CDRTSN010000162.1.fna",
+        "sha256": "5e5f4a20fc14eb8349c44911aa323ea0cf4a2a7a4f05e6baf8b61204663348b1"
+      },
+      "header": ">CDRTSN010000162.1 Sordariomycetes sp. MK-2025a genome assembly, contig: NODE_162_length_70729_cov_160.961517, whole genome shotgun sequence",
+      "length": 70729,
+      "sequence_sha256": "1deef64cd0c637a1a0c38eb9083ed867ed93ecc71a59b021df8ac3ad09ac315e",
+      "historical_record_sha256": "1deef64cd0c637a1a0c38eb9083ed867ed93ecc71a59b021df8ac3ad09ac315e",
+      "sequence_matches_training_record": true
+    },
+    {
+      "record_id": "CAJFDF010001150.1",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CAJFDF010001150.1&rettype=fasta&retmode=text",
+      "status": "public_record_downloaded",
+      "fasta": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/public_accession_records_v1/CAJFDF010001150.1.fna",
+        "sha256": "9175bd1e8a67aa748a665bbb4119c5ed8c1c613968148100aae465b4fa37fb76"
+      },
+      "header": ">CAJFDF010001150.1 Aegilops sharonensis genome assembly, contig: scaffold_10x_v2_1547567, whole genome shotgun sequence",
+      "length": 45557,
+      "sequence_sha256": "61338a9a427a23a8b5fcc50d30ecd0b5c6ac34adc0c0fd5fc89cc2855e118c8d",
+      "historical_record_sha256": "61338a9a427a23a8b5fcc50d30ecd0b5c6ac34adc0c0fd5fc89cc2855e118c8d",
+      "sequence_matches_training_record": true
+    },
+    {
+      "record_id": "CAJFDF010012202.1",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CAJFDF010012202.1&rettype=fasta&retmode=text",
+      "status": "public_record_downloaded",
+      "fasta": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/public_accession_records_v1/CAJFDF010012202.1.fna",
+        "sha256": "807d370464b6ab2f24c5e81a4f350d3954219bf5c4582277e5ef52ae00faec78"
+      },
+      "header": ">CAJFDF010012202.1 Aegilops sharonensis genome assembly, contig: scaffold_10x_v2_1119, whole genome shotgun sequence",
+      "length": 9453,
+      "sequence_sha256": "82703a19be84fa107830d04c54f31be46f41386dfda5d2611ea0c0f549590c83",
+      "historical_record_sha256": "82703a19be84fa107830d04c54f31be46f41386dfda5d2611ea0c0f549590c83",
+      "sequence_matches_training_record": true
+    }
+  ],
+  "training_changed": false,
+  "benchmark_changed": false,
+  "original_final_sequence_reads": 0,
+  "model_score_reads": 0
+}

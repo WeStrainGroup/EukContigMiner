@@ -1,0 +1,148 @@
+{
+  "status": "actual_three_training_fragments_and_record_lengths_checked",
+  "plan": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/plan.json",
+    "sha256": "9e71ef329ae25f3f003a80abca6e11bd39b06d028193dd0448ef6c5ff82e3ddc"
+  },
+  "results": [
+    {
+      "fragment_id": "ecm_train_Fungi_1795_96749b937a49b66d5457",
+      "assembly": "GCA_977058945.1",
+      "record_id": "CDRTSN010000162.1",
+      "actual_header": "CDRTSN010000162.1 Sordariomycetes sp. MK-2025a genome assembly, contig: NODE_162_length_70729_cov_160.961517, whole genome shotgun sequence",
+      "actual_record_length": 70729,
+      "record_sha256": "1deef64cd0c637a1a0c38eb9083ed867ed93ecc71a59b021df8ac3ad09ac315e",
+      "fragment_start": 68934,
+      "fragment_end": 70729,
+      "fragment_sha256_verified": "9edf812a06758a69ad2a82ad90359718967ad70c9396d4480ab025b5280586f4",
+      "source": {
+        "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/objects/sha256/ef/ef78a7c49a12f6bb2998d9bfb832a033deb8b88a7b60b0e0e9cbc4c74a221f4e.fna.gz",
+        "sha256": "ef78a7c49a12f6bb2998d9bfb832a033deb8b88a7b60b0e0e9cbc4c74a221f4e"
+      },
+      "fcs_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/broad_train_public_fcs_v1/reports/GCA_977058945.1_wilhelmomyces_CCF6802_fcs_report.txt",
+        "sha256": "307ccc8f0fe6d9973f12ab0e3e3ba33de89abecaccd7483713d07f9f3a368a90"
+      },
+      "fcs_matches": [
+        {
+          "sequence_id": "CDRTSN010000162.1",
+          "start_1based": 70564,
+          "end_inclusive": 70598,
+          "reported_record_length": 70729,
+          "action": "FIX",
+          "taxonomic_division": "adaptor:NGB01093.1",
+          "coverage": "0",
+          "top_tax_name": "-"
+        }
+      ],
+      "reported_lengths_match_actual": true
+    },
+    {
+      "fragment_id": "ecm_train_Viridiplantae_1222_1443c75d4d3ef16629a9",
+      "assembly": "GCA_904067115.1",
+      "record_id": "CAJFDF010001150.1",
+      "actual_header": "CAJFDF010001150.1 Aegilops sharonensis genome assembly, contig: scaffold_10x_v2_1547567, whole genome shotgun sequence",
+      "actual_record_length": 45557,
+      "record_sha256": "61338a9a427a23a8b5fcc50d30ecd0b5c6ac34adc0c0fd5fc89cc2855e118c8d",
+      "fragment_start": 0,
+      "fragment_end": 1222,
+      "fragment_sha256_verified": "f564e8468b4bc338784684caa069168274aeee47dea4b9a79bcd75b0d75a3334",
+      "source": {
+        "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/objects/sha256/61/613900f26ffe60c8f95069ea472fb2918bba0da795dd693905732f9b933f78d9.fna.gz",
+        "sha256": "613900f26ffe60c8f95069ea472fb2918bba0da795dd693905732f9b933f78d9"
+      },
+      "fcs_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/broad_train_public_fcs_v1/reports/GCA_904067115.1_aegilops_sharonensis_1644_assembly_fcs_report.txt",
+        "sha256": "417fda7e26d6478c25bb28241cadb8d780fee2b246880b31918bf29e4a353edd"
+      },
+      "fcs_matches": [
+        {
+          "sequence_id": "CAJFDF010001150.1",
+          "start_1based": 450,
+          "end_inclusive": 493,
+          "reported_record_length": 45557,
+          "action": "FIX",
+          "taxonomic_division": "adaptor:NGB00360.1",
+          "coverage": "0",
+          "top_tax_name": "-"
+        }
+      ],
+      "reported_lengths_match_actual": true
+    },
+    {
+      "fragment_id": "ecm_train_Viridiplantae_1576_eb59db0183d2e4cdaff7",
+      "assembly": "GCA_904067115.1",
+      "record_id": "CAJFDF010012202.1",
+      "actual_header": "CAJFDF010012202.1 Aegilops sharonensis genome assembly, contig: scaffold_10x_v2_1119, whole genome shotgun sequence",
+      "actual_record_length": 9453,
+      "record_sha256": "82703a19be84fa107830d04c54f31be46f41386dfda5d2611ea0c0f549590c83",
+      "fragment_start": 0,
+      "fragment_end": 1576,
+      "fragment_sha256_verified": "257b7898ff84c9b1b7b98487208ad3fc9a401c63f2360feb4f9c905f54092240",
+      "source": {
+        "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/objects/sha256/61/613900f26ffe60c8f95069ea472fb2918bba0da795dd693905732f9b933f78d9.fna.gz",
+        "sha256": "613900f26ffe60c8f95069ea472fb2918bba0da795dd693905732f9b933f78d9"
+      },
+      "fcs_report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/broad_train_public_fcs_v1/reports/GCA_904067115.1_aegilops_sharonensis_1644_assembly_fcs_report.txt",
+        "sha256": "417fda7e26d6478c25bb28241cadb8d780fee2b246880b31918bf29e4a353edd"
+      },
+      "fcs_matches": [
+        {
+          "sequence_id": "CAJFDF010012202.1",
+          "start_1based": 561,
+          "end_inclusive": 586,
+          "reported_record_length": 9453,
+          "action": "FIX",
+          "taxonomic_division": "adaptor:NGB01083.1",
+          "coverage": "0",
+          "top_tax_name": "-"
+        },
+        {
+          "sequence_id": "CAJFDF010012202.1",
+          "start_1based": 797,
+          "end_inclusive": 822,
+          "reported_record_length": 9453,
+          "action": "FIX",
+          "taxonomic_division": "adaptor:NGB01083.1",
+          "coverage": "0",
+          "top_tax_name": "-"
+        },
+        {
+          "sequence_id": "CAJFDF010012202.1",
+          "start_1based": 1033,
+          "end_inclusive": 1058,
+          "reported_record_length": 9453,
+          "action": "FIX",
+          "taxonomic_division": "adaptor:NGB01083.1",
+          "coverage": "0",
+          "top_tax_name": "-"
+        },
+        {
+          "sequence_id": "CAJFDF010012202.1",
+          "start_1based": 1269,
+          "end_inclusive": 1294,
+          "reported_record_length": 9453,
+          "action": "FIX",
+          "taxonomic_division": "adaptor:NGB01083.1",
+          "coverage": "0",
+          "top_tax_name": "-"
+        },
+        {
+          "sequence_id": "CAJFDF010012202.1",
+          "start_1based": 1505,
+          "end_inclusive": 1530,
+          "reported_record_length": 9453,
+          "action": "FIX",
+          "taxonomic_division": "adaptor:NGB01083.1",
+          "coverage": "0",
+          "top_tax_name": "-"
+        }
+      ],
+      "reported_lengths_match_actual": true
+    }
+  ],
+  "interpretation": "The selected fragment bytes are verified against their actual training records. Matching lengths alone do not prove current public FCS coordinates match the historical source bytes. Existing screen reports no opposite Euk/prok domain among these three hard candidates. This is not genome cleanliness certification; no labels, masks, training or thresholds changed.",
+  "model_score_reads": 0,
+  "original_final_sequence_reads": 0
+}

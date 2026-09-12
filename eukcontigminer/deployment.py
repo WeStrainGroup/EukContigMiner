@@ -300,7 +300,7 @@ def load_deployment_parameters(
                     "DNA_model_weights",
                     "ESM-C_300M_weights",
                     "learned_head_weights",
-                ] + (["fusion_tree_weights"] if tree_fusion else []) + (["NT500M_weights", "NT_adapter_weights"] if nt_fusion else [])
+                ] + (["fusion_tree_weights"] if tree_fusion else []) + ([("NTv3_100M_weights" if model.get("nt_adapter", {}).get("schema") == "ecm.ntv3.runtime.ieee.v1" else "NT500M_weights"), "NT_adapter_weights"] if nt_fusion else [])
             )
         )
         or (
@@ -330,6 +330,9 @@ def load_deployment_parameters(
         validate_nt_binding(model.get("nt_adapter", {}))
     elif "nt_adapter" in model:
         raise ValueError("NT adapter requires release_model.v5")
+    if "length_calibration" in model:
+        from .length_calibration import validate_length_calibration
+        validate_length_calibration(model["length_calibration"])
     if tree_fusion:
         tree = model.get("fusion_tree", {})
         route = model.get("dna_other_early_exit", {})
@@ -1131,6 +1134,10 @@ def predict_fasta(
                 # Legacy scalar models use a validated optimization. Tree models
                 # retain their frozen DNA route even when --full-esm is enabled.
                 scores[early_exit_other] = dna_scores[early_exit_other]
+                calibration = parameters.config["model"].get("length_calibration")
+                if calibration is not None:
+                    from .length_calibration import apply_length_calibration
+                    scores = apply_length_calibration(scores, lengths, calibration)
                 for identifier, sequence, dna_score, esm_logit, score in zip(
                     identifiers,
                     sequences,

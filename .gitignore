@@ -4,3 +4,7 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+eukcontigminer/model_data/nt_adapter.pt
+
+# Distributed inside the release wheel, not as a Git blob.
+eukcontigminer/model_data/nt_adapter.pt

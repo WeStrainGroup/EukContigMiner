@@ -4,15 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eukcontigminer"
-version = "0.54"
+version = "0.55"
 description = "Single-device DNA and protein-language-model screening of eukaryotic contigs"
 requires-python = ">=3.10,<3.13"
-license = "MIT AND CC-BY-NC-SA-4.0"
-license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+license = "MIT AND LicenseRef-InstaDeep-Open-Model"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "NTV3-MODEL-LICENSE.md"]
 authors = [{name = "WeStrainGroup"}]
 dependencies = [
   "esm==3.2.1",
   "numpy>=1.26,<3",
+  "scipy>=1.11,<2",
   "torch>=2.2,<3",
   "xgboost==3.2.0",
   "transformers==4.48.1",

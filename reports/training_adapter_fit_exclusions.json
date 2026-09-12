@@ -1,0 +1,83 @@
+{
+  "status": "future_fit_index_mask_frozen_not_applied_to_current_models",
+  "code": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/freeze_confirmed_adapter_fit_exclusions_v1.py",
+    "sha256": "55ce03988aa75b3e63786a996f3517565daa6edc0a7ecd3358aafe8027b1891f"
+  },
+  "source_manifest": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/v5_broad_short_sequences_v1/fragments.tsv",
+    "sha256": "75acb82e9314ac27e3f9c79921464b685b0cf7b7af2623397b8ada73fe4504de"
+  },
+  "original_broad_records": 1234292,
+  "excluded_records": 6,
+  "eligible_records": 1234286,
+  "excluded_species": 4,
+  "excluded_assemblies": 4,
+  "reported_adapter_bp": 289,
+  "exclusions": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_fit_exclusions_v1/exclusions.tsv",
+    "sha256": "f9b0487f8a6ee97134e94a891b587558643739c5f583eab9736f54e2559d5abf"
+  },
+  "eligible_indices": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_fit_exclusions_v1/eligible_broad_indices.npy",
+    "sha256": "dabe3097d34fc2c0aa7d8ecc02b8e8ceec17d50ea346427373e61cbcf50986ae"
+  },
+  "evidence": [
+    {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/report.json",
+      "sha256": "4a5a8e07980f376c3fbd522f21841bf444c0a5a129356e33299bd9227abd2520"
+    },
+    {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/actual_fix_interval_masking.json",
+      "sha256": "9ac2a0c6807ebf0c32a873c836d8982c0ebb6cf990c79c5cabd23dd3b077dc4a"
+    },
+    {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/public_accession_records_v1/report.json",
+      "sha256": "685b51c73cd8d529e0204e4955cb486b926b788a051d63b100bbdd2c12e6d838"
+    },
+    {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_trimmed_broad_fcs_source_check_v1/report.json",
+      "sha256": "0e06d78344aebdeec6d3a6074ee282117a2f316e78fe66bb2fffa5b6b5a21b1e"
+    }
+  ],
+  "evaluation_panel_overlap": {
+    "main": {
+      "receipt": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/receipt.json",
+        "sha256": "97243375a4003e53f826a72d2b7257ae3c18a28f49f669bf35378432367fd1e6"
+      },
+      "same_fragment_ids": [],
+      "same_species": []
+    },
+    "supp_other": {
+      "receipt": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/receipt.json",
+        "sha256": "12eb47f226d626fe8607fab11e2e4214a84eddc8f761d4723051fbc8df636ec4"
+      },
+      "same_fragment_ids": [],
+      "same_species": []
+    },
+    "supp_three": {
+      "receipt": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/receipt.json",
+        "sha256": "b1c9c372d23b0b2dc1ae3dfe1b5daa4a6c7e4f767a3ebbce92996c72621b674a"
+      },
+      "same_fragment_ids": [],
+      "same_species": []
+    },
+    "formal": {
+      "receipt": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/hpc_full100_formal_allwindows_v1/panel_receipt.json",
+        "sha256": "b945ea83753e881f5141db2ff96163b8dbcfe7f75aba3fcbfac2b77025492b27"
+      },
+      "same_fragment_ids": [],
+      "same_species": []
+    }
+  },
+  "scope": "Conservative score-blind exclusion of the six source-resolved upstream adapter FIX overlaps from future broad-fit sampling only. This does not sanitize existing weights, historical shared-component training, or report-absent genomes; no all-clean claim. Existing benchmark sets and labels are unchanged.",
+  "current_training_modified": false,
+  "current_models_modified": false,
+  "benchmark_modified": false,
+  "model_score_reads": 0,
+  "original_final_sequence_reads": 0
+}

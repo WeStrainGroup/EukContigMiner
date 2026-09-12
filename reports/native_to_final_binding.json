@@ -1,0 +1,84 @@
+{
+  "status": "metadata_only_final_build_pending_tests",
+  "source_native_plan": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/plan.json",
+    "sha256": "77164830465895693171829f43b6178fb30258f01dfe7dd6e7c79038eab48fcb"
+  },
+  "source_config": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v055_raw32768_20260912/installed/eukcontigminer/model_data/model.json",
+    "sha256": "d132f4063b0672275f8bb686f1546036da85d684ef9596c2437d39be46035ff1"
+  },
+  "final_config": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/release_v055_native_20260912/eukcontigminer/model_data/model.json",
+    "sha256": "d74c8956ec336a917078ad158cc3f62c62f3640320e6c88c2d57fcb356901e5f"
+  },
+  "native_evidence": {
+    "main": {
+      "report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/main/report.json",
+        "sha256": "c2d72741d5d2c37d4b58c1fc711223b01b200ea9822b64c0c453ff710c85fe6c"
+      },
+      "readback": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/main/independent_readback.json",
+        "sha256": "ea47c4bccf5c7673309b63e291962195957d984eba251024d2af1f895398680b"
+      }
+    },
+    "supplement": {
+      "report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/supplement/report.json",
+        "sha256": "bae37cf9ad32b74cea930d400b1a25662ea24bb82ea8c1357a8ac2578a12216b"
+      },
+      "readback": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/supplement/independent_readback.json",
+        "sha256": "6dcfd4e144bb91dd7332cb9bec5efe172be4c177657411549e0fa71d4673d591"
+      }
+    },
+    "formal": {
+      "report": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/formal/report.json",
+        "sha256": "4f0165ae70877d857701acfba4621c59230178b79860643be5ee5ff34930b88a"
+      },
+      "readback": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/formal/independent_readback.json",
+        "sha256": "b49f7c700321fb01e74f1aad5584004f3e42739bcd5ccb5d2450211444a9f7d8"
+      }
+    }
+  },
+  "inference_configuration_equal": true,
+  "unchanged_runtime_files": {
+    "eukcontigminer/cli.py": "66606a8a6df54a6073172ea40dff1565fd54ea862f7266394053d96f50dc2944",
+    "eukcontigminer/contracts.py": "8162456c56fe432a5029cbcba3221faf887728eace0f6ebad0390a1c4a6640f1",
+    "eukcontigminer/data_sampling.py": "551448b69f1e2283204561a0e526eb33e0a53ea93f1b7b5af77143c8dd096c70",
+    "eukcontigminer/deployment.py": "7d027ee98845693c8053da4530e45c8006aa0af6956d1b3a336fb87ecef86a88",
+    "eukcontigminer/dna_ensemble.py": "a12954f9127ff4155efab719c881392c59f76a357ea0332059686ba8edbc5b1f",
+    "eukcontigminer/dna_inference.py": "7e48035570fb06da1e6567a96e8ce04f123d1e1612f36b18d7121efc9947aef7",
+    "eukcontigminer/esm_features.py": "351c13c21bd0b1157fdbe08e6bb772cf8f12af8aca8b8e9d2030640844064b12",
+    "eukcontigminer/esm_inference.py": "6eb784a031a7f56eb69bc1d2f604c6dbeb77c37f91375fcbbb5618187b034e2b",
+    "eukcontigminer/fasta.py": "c6448b35bcc50b7c2476028b990a42c8a52d6e2c8c365bb8dde8e38b3094b91e",
+    "eukcontigminer/frozen_head.py": "4cf09e28f035679610c7acca8c9dcfafefc5e78e3df31cd667dc70265b663070",
+    "eukcontigminer/joint_inference.py": "5f7cd8070e01fc30333a00097876fc9e4e76f8affaba86d0e6c9f4acbada0404",
+    "eukcontigminer/kmer_model.py": "19b452b915c1cd58ad310c5da6f67c9d730931a72231f25d56e8dd152c243c5b",
+    "eukcontigminer/length_calibration.py": "a02b14842d8a6645897e1bc64099e4d3266000c4efbc20fb761bbcc2fc026135",
+    "eukcontigminer/metrics.py": "0487c998f425e315a3eab8657920445c96ab0f3f6aa01c8dae20b6e3ed040ba5",
+    "eukcontigminer/nt_runtime.py": "81766f30243a7560a6d373f2458f75a1a06e60043f46c493a3fda71fcb3234e9",
+    "eukcontigminer/ntv3_runtime.py": "fe9a28f860b9e49c420691c4ba28fa4c5ee6e259a77d2afbbb2f9124e67489ee",
+    "eukcontigminer/predictor.py": "a996da55a9747eb8c54575571797572f32ea4538043dd18d6cb91ff4e4db7194",
+    "eukcontigminer/protein_model.py": "77e556430b582c9c5f7b9db03fde1822c1967fbccc18726e43a6f4cd7e3037da",
+    "eukcontigminer/prototype_head.py": "df8c8d5b9691b0f943d8627bb28a3cdb9b9ee6639375202ce454aa745a5a2df6",
+    "eukcontigminer/scores.py": "57c1ae52e53524e147c0c70bbffdb6ba622afc02ead386b695b7893d4d9c4095",
+    "eukcontigminer/training_weights.py": "aa391a8b6aef09214cf019684c0555706dc6540011b0ad7f23970c32081d8249",
+    "eukcontigminer/_model/__init__.py": "adf97a6b6f5513a1e89ad16e483af56c2e6da387129bfa8d15fa861ae33aebb3",
+    "eukcontigminer/_model/hierarchical.py": "2057acae413d96ef3150de44242ffcd654fc1895d365c1d265ee57071ec65797",
+    "eukcontigminer/_model/motif_v20.py": "af9ffa39b457b33dd80cd415a2c56a149a52f1604f93f3edc8cae0b220a812e7",
+    "eukcontigminer/_model/motif_v21.py": "f0dac2f1db928df93d143e5f342ce5295622116d6b6e305e47becd717cddb1b9",
+    "eukcontigminer/_model/motif_v22.py": "dfaacb03a0bae7d0088e94866795e08f68c477f05975ad684e515a01458ebb04",
+    "eukcontigminer/_model/sequence.py": "6fd97d5a4ade2a5103babded751c300f43ac7dfbf0e4332e6f162449ba26e7dc",
+    "eukcontigminer/_model/short_expert.py": "45f1129b13d3c53f57141f666169363d8095978b550103cf7afd8f8292ab9c6a",
+    "eukcontigminer/_model/window_plan.py": "2f7ba7ffb4522be23817e06408f876a110e26254990fabfd39982c68946f14be",
+    "eukcontigminer/model_data/__init__.py": "bb28eb1324d019d5453ef3804ee7f482acd77fa8cc13fc58b6df2e1b5799a3c6"
+  },
+  "checkpoint": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v055_raw32768_20260912/installed/eukcontigminer/model_data/nt_adapter.pt",
+    "sha256": "6721e6dc411b159f9cab40d1e587389c71c1055e56b62fef1031af0e61dbc71d"
+  }
+}

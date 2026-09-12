@@ -1,0 +1,144 @@
+{
+  "status": "trimmed_fragment_actual_public_coordinate_check_complete",
+  "plan": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_trimmed_broad_fcs_source_check_v1/plan.json",
+    "sha256": "e45a50605e4262bfadb68c661d8971e7ad3cc700e1af369b66302d30e7c202ec"
+  },
+  "results": [
+    {
+      "fragment_id": "ecm_train_Metazoa_1743_c772a32540398debbd13",
+      "assembly": "GCA_965362985.1",
+      "record_id": "OZ262821.1__fcs_clean_32_7874019",
+      "parent_record": "OZ262821.1",
+      "actual_clean_length": 7873988,
+      "declared_clean_length": 7873988,
+      "whole_clean_equals_public_slice": true,
+      "fragment_sha256": "c8b5134cb367219e9f084b5bce507cc42c5b2d605edb8dff95c5e05a86141a64",
+      "fragment_matches_declared_public_coordinates": true,
+      "unique_public_occurrence": true,
+      "declared_fragment_start": 31,
+      "verified_public_fragment_start": 31,
+      "coordinate_shift": 0,
+      "actual_overlaps": [
+        {
+          "start": 133,
+          "end": 160,
+          "action": "FIX",
+          "division": "adaptor:NGB02000.1",
+          "counts": {
+            "C": 6,
+            "T": 12,
+            "G": 5,
+            "A": 4
+          },
+          "all_N": false
+        }
+      ],
+      "verified_hard_overlap": true,
+      "public_source": {
+        "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=OZ262821.1&rettype=fasta&retmode=text",
+        "fasta": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_trimmed_broad_fcs_source_check_v1/OZ262821.1.fna",
+          "sha256": "38ba3f5cb810bae14e87b208d5c1b6e258619910b3342576baf4cc4d14d87050"
+        },
+        "sequence_sha256": "2ec3a23d8ac311587d1070b18b5bd6715105681091acb6a0cf0aa2ec820535cc",
+        "length": 7874019
+      },
+      "local_source": {
+        "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/objects/sha256/8b/8b1a05d464985c1c52fc2a38515182b355aaef8ddcf2f65f81cb114f3235f48e.fna.gz",
+        "sha256": "8b1a05d464985c1c52fc2a38515182b355aaef8ddcf2f65f81cb114f3235f48e"
+      }
+    },
+    {
+      "fragment_id": "ecm_train_Metazoa_1588_4acb6fab4e7420ef63a9",
+      "assembly": "GCA_964656895.1",
+      "record_id": "CAZZTM010000008.1__fcs_clean_43_55452",
+      "parent_record": "CAZZTM010000008.1",
+      "actual_clean_length": 55410,
+      "declared_clean_length": 55410,
+      "whole_clean_equals_public_slice": true,
+      "fragment_sha256": "f522219a0926b5a41b83fb8bd2dc5f804645e07ebabf5f30bb7c7262697c9c65",
+      "fragment_matches_declared_public_coordinates": true,
+      "unique_public_occurrence": true,
+      "declared_fragment_start": 20864,
+      "verified_public_fragment_start": 20864,
+      "coordinate_shift": 0,
+      "actual_overlaps": [
+        {
+          "start": 21438,
+          "end": 21464,
+          "action": "FIX",
+          "division": "adaptor:NGB00577.1",
+          "counts": {
+            "A": 9,
+            "G": 7,
+            "C": 5,
+            "T": 5
+          },
+          "all_N": false
+        }
+      ],
+      "verified_hard_overlap": true,
+      "public_source": {
+        "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CAZZTM010000008.1&rettype=fasta&retmode=text",
+        "fasta": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_trimmed_broad_fcs_source_check_v1/CAZZTM010000008.1.fna",
+          "sha256": "ab6b284f328c3628c63e62bd79351f79a937391a54a23aab611ea5208655880c"
+        },
+        "sequence_sha256": "6ff7d3bb21807381aaee1a6da9dd89dd86be99cdd7546803e97c076c489cd924",
+        "length": 55452
+      },
+      "local_source": {
+        "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/objects/sha256/ac/ac43018a413157180f132106d8e002e77a29004b5cf07b53b59b4eea977ea10e.fna.gz",
+        "sha256": "ac43018a413157180f132106d8e002e77a29004b5cf07b53b59b4eea977ea10e"
+      }
+    },
+    {
+      "fragment_id": "ecm_train_Metazoa_1816_dc7c70e041da37da6b2b",
+      "assembly": "GCA_964656895.1",
+      "record_id": "CAZZTM010000008.1__fcs_clean_43_55452",
+      "parent_record": "CAZZTM010000008.1",
+      "actual_clean_length": 55410,
+      "declared_clean_length": 55410,
+      "whole_clean_equals_public_slice": true,
+      "fragment_sha256": "124230f68736bcb5e7221ac4815f7a37909e11202b3b65ac3be0b1186fb152c3",
+      "fragment_matches_declared_public_coordinates": true,
+      "unique_public_occurrence": true,
+      "declared_fragment_start": 15586,
+      "verified_public_fragment_start": 15586,
+      "coordinate_shift": 0,
+      "actual_overlaps": [
+        {
+          "start": 17298,
+          "end": 17325,
+          "action": "FIX",
+          "division": "adaptor:NGB00577.1",
+          "counts": {
+            "A": 9,
+            "G": 7,
+            "C": 5,
+            "T": 6
+          },
+          "all_N": false
+        }
+      ],
+      "verified_hard_overlap": true,
+      "public_source": {
+        "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CAZZTM010000008.1&rettype=fasta&retmode=text",
+        "fasta": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_trimmed_broad_fcs_source_check_v1/CAZZTM010000008.1.fna",
+          "sha256": "ab6b284f328c3628c63e62bd79351f79a937391a54a23aab611ea5208655880c"
+        },
+        "sequence_sha256": "6ff7d3bb21807381aaee1a6da9dd89dd86be99cdd7546803e97c076c489cd924",
+        "length": 55452
+      },
+      "local_source": {
+        "path": "/data/wangxinyu2/tiara_optimization/data/eukcontigminer/genome_set_v1/objects/sha256/ac/ac43018a413157180f132106d8e002e77a29004b5cf07b53b59b4eea977ea10e.fna.gz",
+        "sha256": "ac43018a413157180f132106d8e002e77a29004b5cf07b53b59b4eea977ea10e"
+      }
+    }
+  ],
+  "interpretation": "Exact sequence matches establish coordinates for these individual fragments. Report action alone is not proof of biological cross-domain mislabeling. No labels, thresholds, training or benchmarks modified.",
+  "original_final_sequence_reads": 0,
+  "model_score_reads": 0
+}

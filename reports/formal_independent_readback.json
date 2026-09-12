@@ -1,0 +1,26 @@
+{
+  "status": "native_scores_and_integer_counts_verified_in_separate_process",
+  "report": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/formal/report.json",
+    "sha256": "4f0165ae70877d857701acfba4621c59230178b79860643be5ee5ff34930b88a"
+  },
+  "paired_species_bootstrap_raw100_minus_v054": {
+    "overall": [
+      -5.611637583511075e-05,
+      0.0013014183708532356,
+      0.0026325211045898156
+    ],
+    "short_1_2kb": [
+      -0.00496649856827171,
+      0.005686605076118845,
+      0.01697729622619838
+    ],
+    "fungi_bacteria_only": [
+      -0.0001458235719798806,
+      0.001254855737315319,
+      0.0025233430006282973
+    ]
+  },
+  "replicates": 1000,
+  "selection_correction": false
+}

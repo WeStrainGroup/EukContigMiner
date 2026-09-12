@@ -18,12 +18,12 @@
       "path": "/data/wangxinyu2/eukcontigminer/runs/dataset_role_revision_20260906_v1/policy.json",
       "sha256": "a266ffba21873dc50df8416dff7ff411ea8a47c91553355ec604004200d6b5fd"
     },
-    "scope": "Historical supervised role revision; v8 confirmation is isolated and bound below.",
+    "scope": "Historical supervised role-revision record. Isolation booleans and species counts describe that historical split, not an independent confirmation of v0.55. Current reused development evidence is described under scientific_validation.",
     "species_disjoint": true,
     "training_release_date_exclusive_cutoff": "2026-01-01"
   },
   "final_test": {
-    "explanation": "Original Final was retired and split into1551 development and1553 confirmation species with explicit user authorization. Confirmation is isolated in this round; no claim of never-exposed project history.",
+    "explanation": "Historical authorized reassignment: former Final included 1551 development and 1553 confirmation species. Shared ECM components inherit former-Final development training. Current native panels have development exposure and are not untouched confirmation; zero new original-Final whole-genome FASTA reads in this round does not imply never-exposed model lineage.",
     "read_or_changed_for_this_candidate": true
   },
   "inference_contract": {
@@ -36,7 +36,7 @@
       "ESM-C_300M_weights",
       "learned_head_weights",
       "fusion_tree_weights",
-      "NT500M_weights",
+      "NTv3_100M_weights",
       "NT_adapter_weights"
     ]
   },
@@ -126,28 +126,36 @@
       "xgboost_version": "3.2.0"
     },
     "nt_adapter": {
-      "alpha": 0.5,
-      "backbone_revision": "06615c1660c892fc199840c18123f8385b3542a8",
+      "schema": "ecm.ntv3.runtime.ieee.v1",
+      "backbone_model_id": "InstaDeepAI/NTv3_100M_pre",
+      "backbone_revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "precision": "ieee_float32",
+      "window_rule": "whole_le2000_else_first_last_center_rc_symmetric_v1",
+      "forward_reverse_complement": "mean_logits",
+      "window_aggregation": "mean_logits",
+      "rank": 0,
+      "lora_scale": 0.0,
+      "adaptation": "full",
+      "trainable_parameters": 106654897,
+      "source_files_sha256": {
+        "MODEL-LICENSE.md": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb",
+        "special_tokens_map.json": "4f98fb3de0902c87821f2e518a9f808ea1ffe3810882e4d429758a55dfbff009",
+        "tokenizer_config.json": "07019b4b8964bc28c08c23bf1e1704a2dcdf686d1b99ad211008429b34d1d0fb",
+        "vocab.json": "dafebcb0654e403cc30269f52bed31f07fd8c55a1370be63a54d82b917c61153",
+        "config.json": "c79343c3183cbb7f36ce082d8e2bf7c7bd348501204eaa44ba9f9bd5358bf43d",
+        "model.safetensors": "8504dd659224628df906d6a876a8975e284fc9f75d194f2ca2bd9e98d4000ed2",
+        "configuration_ntv3_pretrained.py": "e210b5ec18ebe626d8dd91b408a83fc20afc59bf6c5382084ee91b9b8be69df3",
+        "modeling_ntv3_pretrained.py": "bc2157369fd9c73cc24323be8c38943871a2a7f1aaa1ca92a8945c1a65c4757a",
+        "tokenization_ntv3.py": "59e507620a65cebaab59e977c8f2840ff2f208f0f1a6ec38ece6b53cb3eebda3"
+      },
       "checkpoint": {
         "asset": "nt_adapter.pt",
-        "sha256": "b5b0fa82e900f0d3ef544b97889d7b423349c7444026834d3416c70c38f215a6"
+        "sha256": "6721e6dc411b159f9cab40d1e587389c71c1055e56b62fef1031af0e61dbc71d"
       },
-      "forward_reverse_complement": "mean_logits",
-      "license": "CC-BY-NC-SA-4.0",
-      "lora_alpha": 8,
-      "rank": 8,
-      "source_files_sha256": {
-        "README.md": "16352a70466c2eac7db56fde1c18bdf24f53515c06c7d55237f3428a032286c7",
-        "config.json": "27e19a9e3fbba65b933bde793b503734744b5c6e376c74dcd1cb7317876efab8",
-        "esm_config.py": "a44e859baa08465ecdcd76b0a73f6e4fe011245a212931c403de1149ae9613ec",
-        "model.safetensors": "7a00ffaaf8f3ca627741a61e568d7e550b5c79aada70c76c8cb861192fbe7c59",
-        "modeling_esm.py": "f2b003f45d2fa4f94e92d8bbef927b719dfdd7ab7c7a95743daa2b10ab140cb3",
-        "special_tokens_map.json": "d6dc30bf018166daab248b0abf7efda6fd1b1e0a2d1bee5b31b23db2ebdaee77",
-        "tokenizer_config.json": "253d338919eba938e50b776f3243cc739462c207fe64e3d2e81cc5e681bee45b",
-        "vocab.txt": "c00e0ad166d6ab3f7540ebc92270392e581bb3106763412f29034b49323e1052"
-      },
-      "window_aggregation": "mean_logits",
-      "window_rule": "whole_le2000_else_first_last_center_rc_symmetric_v1"
+      "checkpoint_plan_sha256": "38a77cb2a0049ab5f18a03c57cd4404a2d2abbfb33d284dd6bf259a0526b5c73",
+      "alpha": 0.5,
+      "license": "InstaDeep Open Model Licence 1.0 (April 2025)",
+      "checkpoint_step": 32768
     },
     "piecewise_protein_fusion": {
       "boundary_bp": 2000,
@@ -163,7 +171,7 @@
     "probe_logit_center": 1.5310083413159512,
     "probe_logit_scale": 8.262124854196705
   },
-  "model_id": "esmc_tree_nt500m_shortcoverage_lora_qv8_epoch3_v1",
+  "model_id": "esmc_tree_ntv3_fullcoverage_replacement_lr2_step32768_v1",
   "prediction_rule": {
     "comparison": "strict_greater_than",
     "equal_threshold_label": "Other",
@@ -172,70 +180,95 @@
       0.0,
       1.0
     ],
-    "threshold": 0.9983936852318344,
-    "threshold_selection": "frozen Continuous Validation optimal-interval midpoint before independent confirmation"
+    "threshold": 0.9994805844224834,
+    "threshold_selection": "Frozen on registered 39807-record calibration by exact F1@1% search; raw score, strict global threshold, no length transform."
   },
-  "release_version": "0.54",
+  "release_version": "0.55",
   "schema": "eukcontigminer.release_model.v5",
   "scientific_validation": {
-    "claim_scope": "Aggregate F1@1% improvement over v053 on frozen v8, supported by paired species bootstrap. One-kb improvement interval crosses zero; all-length0.99, real-assembly and virus-negative generalization remain unproven.",
-    "confirmation_policy_sha256": "97d9103fe82af93649084dd64e487ee9ec10f6334c3d9f52788d8a728bc7a8ef",
-    "duplicate_sensitivity_passed": true,
-    "evidence": {
-      "confirmation_duplicate_audit.json": {
-        "asset": "confirmation_duplicate_audit.json",
-        "sha256": "30b46608177a7889936be055ebe11163b6ed4af8c3b8adc582c73e8cb382334f"
+    "status": "native_installed_development_comparison_verified",
+    "goal_achieved": false,
+    "statistically_established_superiority": false,
+    "conditional_paired_improvement_vs_v054": true,
+    "claim_scope": "Native installed inference improves overall and 1-2kb F1@1% on the three reused development panels. Main and supplementary overall paired-species intervals are positive, conditional on selected development data. No independent-confirmation or all-bin 0.99 claim.",
+    "native_evidence": {
+      "main": {
+        "report": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/main/report.json",
+          "sha256": "c2d72741d5d2c37d4b58c1fc711223b01b200ea9822b64c0c453ff710c85fe6c"
+        },
+        "readback": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/main/independent_readback.json",
+          "sha256": "ea47c4bccf5c7673309b63e291962195957d984eba251024d2af1f895398680b"
+        }
       },
-      "confirmation_independent_verification.json": {
-        "asset": "confirmation_independent_verification.json",
-        "sha256": "0a760a4815fb3cb879fdf6223a549f7baee5c4e9aa52ee88af4528bbbd199d9f"
+      "supplement": {
+        "report": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/supplement/report.json",
+          "sha256": "bae37cf9ad32b74cea930d400b1a25662ea24bb82ea8c1357a8ac2578a12216b"
+        },
+        "readback": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/supplement/independent_readback.json",
+          "sha256": "6dcfd4e144bb91dd7332cb9bec5efe172be4c177657411549e0fa71d4673d591"
+        }
       },
-      "confirmation_input_verification.json": {
-        "asset": "confirmation_input_verification.json",
-        "sha256": "21448a6bb07def1d5d92aa2d7be9829e9e997a2a3e8d961178200f82fd5d515a"
-      },
-      "confirmation_metadata_resolution.json": {
-        "asset": "confirmation_metadata_resolution.json",
-        "sha256": "164be8295716ecfdf0de60eb66e69d3d0d79f628e67a9b1d00131a451d727b64"
-      },
-      "confirmation_plan.json": {
-        "asset": "confirmation_plan.json",
-        "sha256": "de119176fcd536d7023613edfd83892064d6fe1e15bdb6e70d780c0c0a8d5598"
-      },
-      "confirmation_policy.json": {
-        "asset": "confirmation_policy.json",
-        "sha256": "97d9103fe82af93649084dd64e487ee9ec10f6334c3d9f52788d8a728bc7a8ef"
-      },
-      "confirmation_report.json": {
-        "asset": "confirmation_report.json",
-        "sha256": "273025a2f123a48ffc20b6928cdf9a08ef77b262a332e6d8693eeebaab165f89"
-      },
-      "formal_validation_report.json": {
-        "asset": "formal_validation_report.json",
-        "sha256": "decb4c2f6738d47966a6243502de373c991f5551b8ac676a7cd28e4b4acb7657"
-      },
-      "training_data_summary.json": {
-        "asset": "training_data_summary.json",
-        "sha256": "02083e5c3a21fcf75f76738da300ca6107746a9015c4627e6ae131f99df00827"
-      },
-      "training_summary.json": {
-        "asset": "training_summary.json",
-        "sha256": "906aa8242393452f5c98418c490f29f7c2c579166735fed33e59b1f083e2e492"
-      },
-      "validation_report.json": {
-        "asset": "validation_report.json",
-        "sha256": "055bc8a4276b0762977938e36ac95dd99aadcfbd978c931b642ad53ed8dbbc47"
+      "formal": {
+        "report": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/formal/report.json",
+          "sha256": "4f0165ae70877d857701acfba4621c59230178b79860643be5ee5ff34930b88a"
+        },
+        "readback": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/formal/independent_readback.json",
+          "sha256": "b49f7c700321fb01e74f1aad5584004f3e42739bcd5ccb5d2450211444a9f7d8"
+        }
       }
     },
-    "formal_report_sha256": "decb4c2f6738d47966a6243502de373c991f5551b8ac676a7cd28e4b4acb7657",
-    "goal_achieved": false,
-    "paired_full_delta_ci95": [
-      0.0016435025163695522,
-      0.002731078111133797
-    ],
-    "runtime_verification_pending": false,
-    "statistically_established_superiority": true,
-    "status": "independent_confirmation_passed_point_estimate_gate"
+    "original_final_whole_genome_fasta_reads_in_this_round": 0,
+    "calibration": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/calibration/report.json",
+      "sha256": "446e3f96bd88c1f04c97d2ab1e61c42e4b5b60ae34d8db4ef41ae7b240f2383f"
+    },
+    "contamination_screening": "Partial similarity/contamination audit; not an exhaustive clean-genome certification.",
+    "cached_gpu_parity": "Earlier rc2 differed from research feature caches. Native paired installed evaluation supersedes cached performance for this release. No relaxed cached-score tolerance was used.",
+    "cross_hardware": "CPU legal-input support tested separately. Exact CPU/GPU score and label equality is not guaranteed near the threshold.",
+    "known_training_adapter_overlaps": {
+      "fragments": 6,
+      "broad_fit_fragments": 1234292,
+      "source_check": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/report.json",
+        "sha256": "4a5a8e07980f376c3fbd522f21841bf444c0a5a129356e33299bd9227abd2520"
+      },
+      "actual_mask_check": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/actual_fix_interval_masking.json",
+        "sha256": "9ac2a0c6807ebf0c32a873c836d8982c0ebb6cf990c79c5cabd23dd3b077dc4a"
+      },
+      "public_sequence_check": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/public_accession_records_v1/report.json",
+        "sha256": "685b51c73cd8d529e0204e4955cb486b926b788a051d63b100bbdd2c12e6d838"
+      },
+      "trimmed_source_check": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_trimmed_broad_fcs_source_check_v1/report.json",
+        "sha256": "0e06d78344aebdeec6d3a6074ee282117a2f316e78fe66bb2fffa5b6b5a21b1e"
+      },
+      "consolidated_fit_qc": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_fit_exclusions_v1/report.json",
+        "sha256": "9b9c1387180d68404f0e23ee1742d54c2e67b3ac7d7ed277c01d991296029096"
+      },
+      "future_exclusions": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_fit_exclusions_v1/exclusions.tsv",
+        "sha256": "f9b0487f8a6ee97134e94a891b587558643739c5f583eab9736f54e2559d5abf"
+      },
+      "actual_continuation_exposure": {
+        "report": {
+          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_training_exposure_v1/report.json",
+          "sha256": "9e39fcfc54c8bd0d7fffda5a2c712af59912052b2286bc2a321bbf1665f2fe00"
+        },
+        "fragments_seen": 5,
+        "total_draws": 7,
+        "scope": "Counts cover the six exact broad-pool sequences during this completed 32768-step continuation only. They do not exhaust replay inputs, donor training, protein/tree training, homologous sequences, or upstream pretraining. Exposure counts do not measure causal performance impact or establish contamination-free weights."
+      },
+      "interpretation": "Six broad-fit fragments overlap upstream FCS adapter FIX intervals that remain A/C/G/T. Public accession.version sequences resolve the corresponding training fragment coordinates. The four affected species and six fragment IDs do not occur in these evaluation panels; this does not establish absence of homologous sequence or learned artifact effects. Current weights predate this audit and retain their historical exposure. A future-fit exclusion list is not a correction of already-trained weights. No fully decontaminated training claim."
+    }
   },
-  "status": "released"
+  "status": "validation_only_final_test_unchanged"
 }

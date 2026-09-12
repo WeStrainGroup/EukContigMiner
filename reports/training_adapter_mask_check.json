@@ -1,0 +1,122 @@
+{
+  "status": "actual_reported_FIX_overlap_bases_checked",
+  "source_report": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/report.json",
+    "sha256": "4a5a8e07980f376c3fbd522f21841bf444c0a5a129356e33299bd9227abd2520"
+  },
+  "results": [
+    {
+      "fragment_id": "ecm_train_Fungi_1795_96749b937a49b66d5457",
+      "intervals": [
+        {
+          "start": 70563,
+          "end": 70598,
+          "action": "FIX",
+          "division": "adaptor:NGB01093.1",
+          "counts": {
+            "A": 12,
+            "G": 8,
+            "T": 5,
+            "C": 10
+          },
+          "all_N": false
+        }
+      ],
+      "all_reported_overlaps_N_masked": false
+    },
+    {
+      "fragment_id": "ecm_train_Viridiplantae_1222_1443c75d4d3ef16629a9",
+      "intervals": [
+        {
+          "start": 449,
+          "end": 493,
+          "action": "FIX",
+          "division": "adaptor:NGB00360.1",
+          "counts": {
+            "A": 9,
+            "C": 20,
+            "G": 7,
+            "T": 8
+          },
+          "all_N": false
+        }
+      ],
+      "all_reported_overlaps_N_masked": false
+    },
+    {
+      "fragment_id": "ecm_train_Viridiplantae_1576_eb59db0183d2e4cdaff7",
+      "intervals": [
+        {
+          "start": 560,
+          "end": 586,
+          "action": "FIX",
+          "division": "adaptor:NGB01083.1",
+          "counts": {
+            "G": 11,
+            "C": 3,
+            "T": 6,
+            "A": 6
+          },
+          "all_N": false
+        },
+        {
+          "start": 796,
+          "end": 822,
+          "action": "FIX",
+          "division": "adaptor:NGB01083.1",
+          "counts": {
+            "G": 11,
+            "C": 3,
+            "T": 6,
+            "A": 6
+          },
+          "all_N": false
+        },
+        {
+          "start": 1032,
+          "end": 1058,
+          "action": "FIX",
+          "division": "adaptor:NGB01083.1",
+          "counts": {
+            "G": 11,
+            "C": 3,
+            "T": 6,
+            "A": 6
+          },
+          "all_N": false
+        },
+        {
+          "start": 1268,
+          "end": 1294,
+          "action": "FIX",
+          "division": "adaptor:NGB01083.1",
+          "counts": {
+            "G": 11,
+            "C": 3,
+            "T": 6,
+            "A": 6
+          },
+          "all_N": false
+        },
+        {
+          "start": 1504,
+          "end": 1530,
+          "action": "FIX",
+          "division": "adaptor:NGB01083.1",
+          "counts": {
+            "G": 11,
+            "C": 3,
+            "T": 6,
+            "A": 6
+          },
+          "all_N": false
+        }
+      ],
+      "all_reported_overlaps_N_masked": false
+    }
+  ],
+  "scope": "Only these three frozen training fragments and reported adapter intervals; no genome-wide cleanliness claim",
+  "training_modified": false,
+  "original_final_sequence_reads": 0,
+  "model_score_reads": 0
+}

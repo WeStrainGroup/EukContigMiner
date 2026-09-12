@@ -50,6 +50,12 @@ def window_spans(length):
     return sorted(set([(0,2000),(start,start+width),(length-2000,length)]))
 
 def validate_binding(binding):
+    if binding.get("schema") == "ecm.ntv3.runtime.ieee.v1":
+        from .ntv3_runtime import validate_binding as validate_ntv3
+        validate_ntv3(binding)
+        if binding.get("alpha") != .5:
+            raise ValueError("NTv3 fusion coefficient differs")
+        return
     if (binding.get('alpha')!=.5 or binding.get('window_rule')!=WINDOW_RULE
         or binding.get('backbone_revision')!='06615c1660c892fc199840c18123f8385b3542a8'
         or binding.get('rank')!=8 or binding.get('lora_alpha')!=8
@@ -59,6 +65,13 @@ def validate_binding(binding):
         raise ValueError('NT adapter contract differs')
 
 class NTAdapter:
+    def __new__(cls, binding, device, bound_path, sha256_file):
+        if binding.get("schema") == "ecm.ntv3.runtime.ieee.v1":
+            validate_binding(binding)
+            from .ntv3_runtime import NTV3Adapter
+            return NTV3Adapter(binding, device, bound_path, sha256_file)
+        return super().__new__(cls)
+
     def __init__(self,binding,device,bound_path,sha256_file):
         validate_binding(binding)
         source_env=os.environ.get('EUKCONTIGMINER_NT500M_DIR')

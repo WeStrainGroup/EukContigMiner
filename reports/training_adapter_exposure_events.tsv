@@ -1,0 +1,14 @@
+sampling	fragment_id	global_position	optimizer_step	ddp_rank	rank_position	reverse_complement
+replacement	ecm_train_Fungi_1795_96749b937a49b66d5457	1262628	19729	1	4	False
+replacement	ecm_train_Metazoa_1743_c772a32540398debbd13	1743344	27240	1	16	True
+replacement	ecm_train_Metazoa_1588_4acb6fab4e7420ef63a9	1697895	26530	1	7	True
+replacement	ecm_train_Metazoa_1816_dc7c70e041da37da6b2b	1736956	27140	1	28	False
+replacement	ecm_train_Metazoa_1816_dc7c70e041da37da6b2b	1816409	28382	0	25	True
+replacement	ecm_train_Metazoa_1816_dc7c70e041da37da6b2b	2090023	32657	1	7	False
+replacement	ecm_train_Viridiplantae_1576_eb59db0183d2e4cdaff7	322355	5037	1	19	False
+coverage	ecm_train_Fungi_1795_96749b937a49b66d5457	1523975	23813	0	7	False
+coverage	ecm_train_Metazoa_1743_c772a32540398debbd13	203594	3182	0	10	True
+coverage	ecm_train_Metazoa_1588_4acb6fab4e7420ef63a9	370684	5792	1	28	True
+coverage	ecm_train_Metazoa_1816_dc7c70e041da37da6b2b	1891785	29560	0	9	True
+coverage	ecm_train_Viridiplantae_1222_1443c75d4d3ef16629a9	1756316	27443	0	28	False
+coverage	ecm_train_Viridiplantae_1576_eb59db0183d2e4cdaff7	1773926	27718	1	6	False

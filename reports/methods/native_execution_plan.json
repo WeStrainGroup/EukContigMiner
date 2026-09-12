@@ -1,0 +1,523 @@
+{
+  "status": "frozen_before_native_predictions",
+  "code": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_v1.py",
+    "sha256": "0cc68ca1b5d99d491dd70f322fa929d9533e18bc64161b81a34244659559cd97"
+  },
+  "packages": {
+    "v054": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v054_20260907/installed_final",
+      "config": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v054_20260907/installed_final/eukcontigminer/model_data/model.json",
+        "sha256": "2496b3975aed551fae8962adbe673acc0e71f0400079a83c30d8c467a87e109b"
+      },
+      "threshold": 0.9983936852318344,
+      "code": {
+        "eukcontigminer/__init__.py": "75e982e745ba01d2dc0b0223cf97462107500e1fea701c9a5b1bf11b44aa9cad",
+        "eukcontigminer/cli.py": "68804be23935c1d6cd1cd14b1359ce312b4b52f3e7df3a524d99fcd96a8e20b4",
+        "eukcontigminer/contracts.py": "8162456c56fe432a5029cbcba3221faf887728eace0f6ebad0390a1c4a6640f1",
+        "eukcontigminer/data_sampling.py": "551448b69f1e2283204561a0e526eb33e0a53ea93f1b7b5af77143c8dd096c70",
+        "eukcontigminer/deployment.py": "9cf42b591040b3886398c177b19bc8a38a3308f94f94bad5b9adcba036205677",
+        "eukcontigminer/dna_ensemble.py": "a12954f9127ff4155efab719c881392c59f76a357ea0332059686ba8edbc5b1f",
+        "eukcontigminer/dna_inference.py": "7e48035570fb06da1e6567a96e8ce04f123d1e1612f36b18d7121efc9947aef7",
+        "eukcontigminer/esm_features.py": "351c13c21bd0b1157fdbe08e6bb772cf8f12af8aca8b8e9d2030640844064b12",
+        "eukcontigminer/esm_inference.py": "6eb784a031a7f56eb69bc1d2f604c6dbeb77c37f91375fcbbb5618187b034e2b",
+        "eukcontigminer/fasta.py": "c6448b35bcc50b7c2476028b990a42c8a52d6e2c8c365bb8dde8e38b3094b91e",
+        "eukcontigminer/frozen_head.py": "4cf09e28f035679610c7acca8c9dcfafefc5e78e3df31cd667dc70265b663070",
+        "eukcontigminer/joint_inference.py": "5f7cd8070e01fc30333a00097876fc9e4e76f8affaba86d0e6c9f4acbada0404",
+        "eukcontigminer/kmer_model.py": "19b452b915c1cd58ad310c5da6f67c9d730931a72231f25d56e8dd152c243c5b",
+        "eukcontigminer/metrics.py": "0487c998f425e315a3eab8657920445c96ab0f3f6aa01c8dae20b6e3ed040ba5",
+        "eukcontigminer/nt_runtime.py": "7b70e8bae96d8ff9baa096883b05b8dd154d4d9021f4b8b96641270b9384a5d2",
+        "eukcontigminer/predictor.py": "a996da55a9747eb8c54575571797572f32ea4538043dd18d6cb91ff4e4db7194",
+        "eukcontigminer/protein_model.py": "77e556430b582c9c5f7b9db03fde1822c1967fbccc18726e43a6f4cd7e3037da",
+        "eukcontigminer/prototype_head.py": "df8c8d5b9691b0f943d8627bb28a3cdb9b9ee6639375202ce454aa745a5a2df6",
+        "eukcontigminer/scores.py": "57c1ae52e53524e147c0c70bbffdb6ba622afc02ead386b695b7893d4d9c4095",
+        "eukcontigminer/training_weights.py": "aa391a8b6aef09214cf019684c0555706dc6540011b0ad7f23970c32081d8249",
+        "eukcontigminer/_model/__init__.py": "adf97a6b6f5513a1e89ad16e483af56c2e6da387129bfa8d15fa861ae33aebb3",
+        "eukcontigminer/_model/hierarchical.py": "2057acae413d96ef3150de44242ffcd654fc1895d365c1d265ee57071ec65797",
+        "eukcontigminer/_model/motif_v20.py": "af9ffa39b457b33dd80cd415a2c56a149a52f1604f93f3edc8cae0b220a812e7",
+        "eukcontigminer/_model/motif_v21.py": "f0dac2f1db928df93d143e5f342ce5295622116d6b6e305e47becd717cddb1b9",
+        "eukcontigminer/_model/motif_v22.py": "dfaacb03a0bae7d0088e94866795e08f68c477f05975ad684e515a01458ebb04",
+        "eukcontigminer/_model/sequence.py": "6fd97d5a4ade2a5103babded751c300f43ac7dfbf0e4332e6f162449ba26e7dc",
+        "eukcontigminer/_model/short_expert.py": "45f1129b13d3c53f57141f666169363d8095978b550103cf7afd8f8292ab9c6a",
+        "eukcontigminer/_model/window_plan.py": "2f7ba7ffb4522be23817e06408f876a110e26254990fabfd39982c68946f14be",
+        "eukcontigminer/model_data/__init__.py": "bb28eb1324d019d5453ef3804ee7f482acd77fa8cc13fc58b6df2e1b5799a3c6"
+      },
+      "nt_checkpoint": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v054_20260907/installed_final/eukcontigminer/model_data/nt_adapter.pt",
+        "sha256": "b5b0fa82e900f0d3ef544b97889d7b423349c7444026834d3416c70c38f215a6"
+      }
+    },
+    "raw100": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v055_raw32768_20260912/installed",
+      "config": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v055_raw32768_20260912/installed/eukcontigminer/model_data/model.json",
+        "sha256": "d132f4063b0672275f8bb686f1546036da85d684ef9596c2437d39be46035ff1"
+      },
+      "threshold": 0.9994805844224834,
+      "code": {
+        "eukcontigminer/__init__.py": "f30098134e34424920761b44c3f697fc13b67bfef0d460ba0a70126e97aaae14",
+        "eukcontigminer/cli.py": "66606a8a6df54a6073172ea40dff1565fd54ea862f7266394053d96f50dc2944",
+        "eukcontigminer/contracts.py": "8162456c56fe432a5029cbcba3221faf887728eace0f6ebad0390a1c4a6640f1",
+        "eukcontigminer/data_sampling.py": "551448b69f1e2283204561a0e526eb33e0a53ea93f1b7b5af77143c8dd096c70",
+        "eukcontigminer/deployment.py": "7d027ee98845693c8053da4530e45c8006aa0af6956d1b3a336fb87ecef86a88",
+        "eukcontigminer/dna_ensemble.py": "a12954f9127ff4155efab719c881392c59f76a357ea0332059686ba8edbc5b1f",
+        "eukcontigminer/dna_inference.py": "7e48035570fb06da1e6567a96e8ce04f123d1e1612f36b18d7121efc9947aef7",
+        "eukcontigminer/esm_features.py": "351c13c21bd0b1157fdbe08e6bb772cf8f12af8aca8b8e9d2030640844064b12",
+        "eukcontigminer/esm_inference.py": "6eb784a031a7f56eb69bc1d2f604c6dbeb77c37f91375fcbbb5618187b034e2b",
+        "eukcontigminer/fasta.py": "c6448b35bcc50b7c2476028b990a42c8a52d6e2c8c365bb8dde8e38b3094b91e",
+        "eukcontigminer/frozen_head.py": "4cf09e28f035679610c7acca8c9dcfafefc5e78e3df31cd667dc70265b663070",
+        "eukcontigminer/joint_inference.py": "5f7cd8070e01fc30333a00097876fc9e4e76f8affaba86d0e6c9f4acbada0404",
+        "eukcontigminer/kmer_model.py": "19b452b915c1cd58ad310c5da6f67c9d730931a72231f25d56e8dd152c243c5b",
+        "eukcontigminer/length_calibration.py": "a02b14842d8a6645897e1bc64099e4d3266000c4efbc20fb761bbcc2fc026135",
+        "eukcontigminer/metrics.py": "0487c998f425e315a3eab8657920445c96ab0f3f6aa01c8dae20b6e3ed040ba5",
+        "eukcontigminer/nt_runtime.py": "81766f30243a7560a6d373f2458f75a1a06e60043f46c493a3fda71fcb3234e9",
+        "eukcontigminer/ntv3_runtime.py": "fe9a28f860b9e49c420691c4ba28fa4c5ee6e259a77d2afbbb2f9124e67489ee",
+        "eukcontigminer/predictor.py": "a996da55a9747eb8c54575571797572f32ea4538043dd18d6cb91ff4e4db7194",
+        "eukcontigminer/protein_model.py": "77e556430b582c9c5f7b9db03fde1822c1967fbccc18726e43a6f4cd7e3037da",
+        "eukcontigminer/prototype_head.py": "df8c8d5b9691b0f943d8627bb28a3cdb9b9ee6639375202ce454aa745a5a2df6",
+        "eukcontigminer/scores.py": "57c1ae52e53524e147c0c70bbffdb6ba622afc02ead386b695b7893d4d9c4095",
+        "eukcontigminer/training_weights.py": "aa391a8b6aef09214cf019684c0555706dc6540011b0ad7f23970c32081d8249",
+        "eukcontigminer/_model/__init__.py": "adf97a6b6f5513a1e89ad16e483af56c2e6da387129bfa8d15fa861ae33aebb3",
+        "eukcontigminer/_model/hierarchical.py": "2057acae413d96ef3150de44242ffcd654fc1895d365c1d265ee57071ec65797",
+        "eukcontigminer/_model/motif_v20.py": "af9ffa39b457b33dd80cd415a2c56a149a52f1604f93f3edc8cae0b220a812e7",
+        "eukcontigminer/_model/motif_v21.py": "f0dac2f1db928df93d143e5f342ce5295622116d6b6e305e47becd717cddb1b9",
+        "eukcontigminer/_model/motif_v22.py": "dfaacb03a0bae7d0088e94866795e08f68c477f05975ad684e515a01458ebb04",
+        "eukcontigminer/_model/sequence.py": "6fd97d5a4ade2a5103babded751c300f43ac7dfbf0e4332e6f162449ba26e7dc",
+        "eukcontigminer/_model/short_expert.py": "45f1129b13d3c53f57141f666169363d8095978b550103cf7afd8f8292ab9c6a",
+        "eukcontigminer/_model/window_plan.py": "2f7ba7ffb4522be23817e06408f876a110e26254990fabfd39982c68946f14be",
+        "eukcontigminer/model_data/__init__.py": "bb28eb1324d019d5453ef3804ee7f482acd77fa8cc13fc58b6df2e1b5799a3c6"
+      },
+      "nt_checkpoint": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/release_candidate_v055_raw32768_20260912/installed/eukcontigminer/model_data/nt_adapter.pt",
+        "sha256": "6721e6dc411b159f9cab40d1e587389c71c1055e56b62fef1031af0e61dbc71d"
+      }
+    }
+  },
+  "panels": {
+    "main": {
+      "receipt": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/receipt.json",
+        "sha256": "97243375a4003e53f826a72d2b7257ae3c18a28f49f669bf35378432367fd1e6"
+      },
+      "records": 592861,
+      "ids": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/ids.txt",
+        "sha256": "c1781101061eee1375022a664ead510f2d600770ee862e2b3b0a067d8fa57ab0"
+      },
+      "metadata": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/metadata.npz",
+        "sha256": "dfc5935519ab04f7e3bfbad708ecc3b12b41f5d8b4a28af0ed81bc5e6fcfd3fb"
+      },
+      "shards": {
+        "0": {
+          "records": 74108,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_00.fna.gz",
+            "sha256": "5af2f3091fa30b263ab9b8c70b0540923a72d4337171cbe98a2b9d51d46d7970"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_00.tsv",
+            "sha256": "faebc22094b1ec105326247d01dbd065bd04006c56d90c7d492064039d8e0f60"
+          }
+        },
+        "1": {
+          "records": 74108,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_01.fna.gz",
+            "sha256": "1b2aa6171bec1ac1e5c42f0ae081b931d4a3b5cd018975c97b61a9981cdaaa12"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_01.tsv",
+            "sha256": "448c112ffaa37090421a7a14cbf597b9c1be29a0815571c1f18feba4457230bb"
+          }
+        },
+        "2": {
+          "records": 74108,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_02.fna.gz",
+            "sha256": "3155a919e91c3ffcce75b48d64b3494c022aaba2cf77f3bc37f78d34e86b19ca"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_02.tsv",
+            "sha256": "dcf3f0fb1c9e9e213d6c6b9d39b9bb2feabfb541f20a31075a99f2c9e974183b"
+          }
+        },
+        "3": {
+          "records": 74108,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_03.fna.gz",
+            "sha256": "6b43fe7c2583eefbbef689be42ff2d5d5ceca77ce3b370abc6d18293391239e4"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_03.tsv",
+            "sha256": "184c213894864f9c48259cd835fd94c0d6b6a1d7d6f1bea3ab2ff922ec647ca3"
+          }
+        },
+        "4": {
+          "records": 74108,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_04.fna.gz",
+            "sha256": "f14896f54e52aa183fe37e8e28fc1a7afec4be2d74c8f28c4556a0c740c2d0e3"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_04.tsv",
+            "sha256": "5f4c9dce13de9e21aaf40263f738592e07389f93de4256780200b2c2f7341fd1"
+          }
+        },
+        "5": {
+          "records": 74107,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_05.fna.gz",
+            "sha256": "f49bd59415b926d6a84d36301cb310e1399631ec98d8de8e5e8fbcdfd9469619"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_05.tsv",
+            "sha256": "ac9f5455ced85f21fd2714a3e33ebdf211fe27d267cf24cc12c017ca91de15e5"
+          }
+        },
+        "6": {
+          "records": 74107,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_06.fna.gz",
+            "sha256": "245651878b2de106e0ab9428e1be3a5def73ed4766aa7fcbf7c5231f889281e5"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_06.tsv",
+            "sha256": "36bebff20b8f81bf072d6ae25e9632406297e25695a899c2531f37b323fb7347"
+          }
+        },
+        "7": {
+          "records": 74107,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_07.fna.gz",
+            "sha256": "d67328e1a39c0d121b8d74d1cfa94b69e893d21151bae770139e99a1ac85d46f"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/continuous500_scoring_v1/shards/fragments_07.tsv",
+            "sha256": "cf566c6a03974fd609d2c6acd842f98eea2ba0c2a269b3ef47ebbf4f182da283"
+          }
+        }
+      }
+    },
+    "supp_other": {
+      "receipt": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/receipt.json",
+        "sha256": "12eb47f226d626fe8607fab11e2e4214a84eddc8f761d4723051fbc8df636ec4"
+      },
+      "records": 497240,
+      "ids": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/ids.txt",
+        "sha256": "a2764a1ae834637480106ea68a5d5ad27e5e488459a9f0ec57ca9fc459121305"
+      },
+      "metadata": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/metadata.npz",
+        "sha256": "a6ebf3d84ba6394cbe25e0506911f37dabf334eebf40c76005f532ab8d19c0e3"
+      },
+      "shards": {
+        "0": {
+          "records": 62155,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_00.fna.gz",
+            "sha256": "02c247976c43e289cdee6d08e10ceac9b9d528c557b96c242f245dc953981ee6"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_00.tsv",
+            "sha256": "681b06654735263820d4c14268d2b696bd7a3569609a5b53cea76952664fbe8c"
+          }
+        },
+        "1": {
+          "records": 62155,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_01.fna.gz",
+            "sha256": "ea7714415cb3ccfdcc8b0f4f6831fd247a8e62ba06c501c180cf4462790ecfc4"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_01.tsv",
+            "sha256": "1d981b4152c1a4609d4c61a79ca8a2a33c5e32e6f0d98030fa3fc40bc6a198f6"
+          }
+        },
+        "2": {
+          "records": 62155,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_02.fna.gz",
+            "sha256": "2009b818a4dc357276af140ee31814140f4338759d5205a3b92d42b9f8b7f57c"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_02.tsv",
+            "sha256": "ac7cb5fa17362b5b625b15a6331ed33e51900a905c40a1890bdbf7ba60962421"
+          }
+        },
+        "3": {
+          "records": 62155,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_03.fna.gz",
+            "sha256": "747e2c6f1d2d0fa7e8bb9b0f67f375e31bb1fbdd5a91c31642343e35e04a079b"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_03.tsv",
+            "sha256": "77d31d7223bcc8a3efd747fce7e18874489595dd2d0230f8ada8b781f891d4f0"
+          }
+        },
+        "4": {
+          "records": 62155,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_04.fna.gz",
+            "sha256": "1215626cbe487ab9a509933a841ea441905bee881ec53c04259000e042b36d1d"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_04.tsv",
+            "sha256": "8a2ffcfe66533ec635b4239b0f8377e920e134410474ac94acc85c6d36507508"
+          }
+        },
+        "5": {
+          "records": 62155,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_05.fna.gz",
+            "sha256": "42da07990675c053b59a61e7a48283da4f514bfa44b53fce8bc9eb282a5f6a9d"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_05.tsv",
+            "sha256": "0d174153499675adc302ba09e6259d18abff725f931b66ff2b61c817d58e61ad"
+          }
+        },
+        "6": {
+          "records": 62155,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_06.fna.gz",
+            "sha256": "d784e6dd10fa2408a20637e990bafcc0b7391b3439253637e83041888d7e5660"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_06.tsv",
+            "sha256": "581af558ffec9c5cff1667d4df1ac427c1b21865d99beeee6e509377d7d36802"
+          }
+        },
+        "7": {
+          "records": 62155,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_07.fna.gz",
+            "sha256": "0c9ad476d17418f611570a9ff77a342d1d3473f97c24ad919e3069868f0cae81"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_species_generalization_scoring_v1/shards/fragments_07.tsv",
+            "sha256": "d42cde296e688923cfb20e09ab5de70679145f19ebc06d16d0308e4ca0f34bfd"
+          }
+        }
+      }
+    },
+    "supp_three": {
+      "receipt": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/receipt.json",
+        "sha256": "b1c9c372d23b0b2dc1ae3dfe1b5daa4a6c7e4f767a3ebbce92996c72621b674a"
+      },
+      "records": 167251,
+      "ids": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/ids.txt",
+        "sha256": "887431445b66ae6dbb3bd8cdb312d74b7ee0099269afa02608966f516007b33f"
+      },
+      "metadata": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/metadata.npz",
+        "sha256": "dbdb208dca9302cff7c2050bad47b42a2a01c23a520029c37f077d0c0328d18b"
+      },
+      "shards": {
+        "0": {
+          "records": 20907,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_00.fna.gz",
+            "sha256": "da3ae3b4e4dadf63d0bcef9010e49513f8a7f90839c348c4f0ca892adcd9cb23"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_00.tsv",
+            "sha256": "e3915cfeb40119f555b56bf70e666dea422dfe6b43faf7812983caba4373dee6"
+          }
+        },
+        "1": {
+          "records": 20907,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_01.fna.gz",
+            "sha256": "82bd2e589e4b5b06d3c327779b427560bc93a2b7eb4acdb45cefbd28f8b036cf"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_01.tsv",
+            "sha256": "78f47f3a8b2c7501689c396377b86582ee00c05dcbc9e2020ee50041b7cd60f1"
+          }
+        },
+        "2": {
+          "records": 20907,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_02.fna.gz",
+            "sha256": "f31403f112c83063747f61bb5e9486e999844c7b36ab3d82492be4fb356e2cb8"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_02.tsv",
+            "sha256": "e944be9af5d34f576b003838e9423154c84eb64a7bee807755c062e36e0f254f"
+          }
+        },
+        "3": {
+          "records": 20906,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_03.fna.gz",
+            "sha256": "44eaf522c3b01a80b369b4942b10ff3171fda27d5064ca11ac6cbfbd7fa2c1a7"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_03.tsv",
+            "sha256": "9829fb12ee543cf6ea7095b9a58daaabcc491c9b6036c6e5c1fb3d86f78f332d"
+          }
+        },
+        "4": {
+          "records": 20906,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_04.fna.gz",
+            "sha256": "b57f5265b817ccab7625132bf8d6132fd8bc1e3337fae0ce9a56984d3bd08830"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_04.tsv",
+            "sha256": "45887d13c578a0f1d7c0355e1cf196a31dfa3a3da55790f535b56a8bd4e628ba"
+          }
+        },
+        "5": {
+          "records": 20906,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_05.fna.gz",
+            "sha256": "12a3cd46b09014a47cfafd795bab9d0fdff94f51e60fcd36cedae25b76fee451"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_05.tsv",
+            "sha256": "79b65a9fef64132fc5cae628a81aa7fdfd123fcdbd356db433d48675522d929c"
+          }
+        },
+        "6": {
+          "records": 20906,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_06.fna.gz",
+            "sha256": "a2d65a753a2561fa075db5df071b3a01ada6076d5ae1666601059523b3a1195d"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_06.tsv",
+            "sha256": "80ff5a16e75a644f439e39fa9a69c89e313df2522f4a876cb6450cc8fef1c14c"
+          }
+        },
+        "7": {
+          "records": 20906,
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_07.fna.gz",
+            "sha256": "e6d2475d02b4d98ba7ce4bacdd652950f15b52e5047bb4d4a5bd651a5209d592"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/unused_three_euk_scoring_v1/shards/fragments_07.tsv",
+            "sha256": "c7da46904c1d0aa710210113a4a256c00b4512e6641cba5167cf67ad1396412c"
+          }
+        }
+      }
+    },
+    "formal": {
+      "receipt": {
+        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/hpc_full100_formal_allwindows_v1/plan.json",
+        "sha256": "2e951e8e099de7ce091b1aec7ab2decdaca08675e9229bd14f3dc4bac8186e58"
+      },
+      "records": 503608,
+      "shards": {
+        "0": {
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_00/fragments.fna",
+            "sha256": "b54224a5f83caeedf6c8002f4fb0c6d43f6b48efbbe16f5d69674796516f6752"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_00/fragments.tsv",
+            "sha256": "b4ba0cb4d647b59118cdc7e2650914547fc095873b059c5329538ccf8d9de856"
+          }
+        },
+        "1": {
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_01/fragments.fna",
+            "sha256": "40ef3a6110ef2085e054b9ae0be6e0be48fed8878bbf995d9eab3def3e6f685f"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_01/fragments.tsv",
+            "sha256": "a1292acbe563b9d68e34f27c0cc8ceeda674217896139b87c0d3d7364f2d207f"
+          }
+        },
+        "2": {
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_02/fragments.fna",
+            "sha256": "74b09daca48da20005b8c3f6c6dd3e3a703344e94542e1a1f05850cc10916477"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_02/fragments.tsv",
+            "sha256": "dd141e69a9b04a720554321af6ef61fbfe60d8edffeb2f48e8f33718e1be8ddd"
+          }
+        },
+        "3": {
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_03/fragments.fna",
+            "sha256": "c91438b445fc4e8a4839439dee5c7ff17afa0a6439a27169049b5aadc5ee6a9b"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_03/fragments.tsv",
+            "sha256": "a5fa7ddc9f529d41de9c9c5cb75dd0594cba140ba255506b8f5a9865ecd0433a"
+          }
+        },
+        "4": {
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_04/fragments.fna",
+            "sha256": "924de5d1148908fa37f18671f9784aa7fc03ad7c6f8a10a7917a24ff1ae392ec"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_04/fragments.tsv",
+            "sha256": "9ff5b69829ecbe87244f1aa34526f44ff3f94cfb8a4cc8e7620dbb8662fcd028"
+          }
+        },
+        "5": {
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_05/fragments.fna",
+            "sha256": "63e062d32794f69b0334253567065f2b0fc3604ac7bdde074e0a585e46aa8064"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_05/fragments.tsv",
+            "sha256": "68aceb4dfd87cf49748ac1ec5e152df982dab651b42e23d57ab30c3a8c78c1c2"
+          }
+        },
+        "6": {
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_06/fragments.fna",
+            "sha256": "77cbb8d715a306c87ccd19d6f27a5888b90c617c502ed7c5294a9cd3728b6c92"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_06/fragments.tsv",
+            "sha256": "25ca6f6a6aac42177f2a92ce69653639d1d815465987037dbf8211acdb671c4a"
+          }
+        },
+        "7": {
+          "fasta": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_07/fragments.fna",
+            "sha256": "b604e43a86c20c6b5057dcd8cb8f6185d922817389790e605f06660df48bd632"
+          },
+          "manifest": {
+            "path": "/ssd/wangxinyu2/eukcontigminer/nt500m_coverage_adaptation_20260906_v2/formal_all21_v1/panel_07/fragments.tsv",
+            "sha256": "5c7a03e6cfdeafaaff0b88e3d7534de6d2cbec31b8e4065fb9640918c6258834"
+          }
+        }
+      }
+    }
+  },
+  "canary": {
+    "fasta": {
+      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/canary4096.fna",
+      "sha256": "3d40eb395d5d81fc19a88758248d5f5f3ead114b87a3a1ab09e07746c9bc5628"
+    },
+    "records": 4096
+  },
+  "settings": {
+    "cpu_threads": 6,
+    "buffer_records": 1024
+  },
+  "method": "Unmodified installed CLI, default precision and batching. Same full contigs, same settings, fresh process for each model/shard. Frozen existing calibration thresholds; no refitting on evaluation panels.",
+  "panel_order": [
+    "main",
+    "supp_other",
+    "supp_three",
+    "formal"
+  ],
+  "limitations": "Development panels reused for selection; not untouched confirmation. Native results supersede cached scores for deployment claims. CPU/GPU exact equality not established.",
+  "original_final_whole_genome_fasta_reads": 0
+}

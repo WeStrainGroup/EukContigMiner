@@ -1,0 +1,16 @@
+{
+  "status": "built_not_published",
+  "wheel": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/release_v055_native_20260912/dist/eukcontigminer-0.55-py3-none-any.whl",
+    "sha256": "de764605f7de74bcbc5a1cae2825a0721e3b4007909d15f591bfa6fb6ee353e7"
+  },
+  "config": {
+    "path": "/ssd/wangxinyu2/eukcontigminer/release_v055_native_20260912/eukcontigminer/model_data/model.json",
+    "sha256": "d74c8956ec336a917078ad158cc3f62c62f3640320e6c88c2d57fcb356901e5f"
+  },
+  "pending": [
+    "fresh final candidate census",
+    "installed final artifact checks",
+    "GitHub publication and remote verification"
+  ]
+}

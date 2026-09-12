@@ -19,7 +19,7 @@ def test_window_coordinates_preserve_reverse_complement_at_continuous_lengths():
 def test_config_cannot_silently_change_frozen_nt_inference(key,value):
     binding=copy.deepcopy(load_deployment_parameters().config['model']['nt_adapter'])
     binding[key]=value
-    with pytest.raises(ValueError,match='NT adapter contract differs'):validate_binding(binding)
+    with pytest.raises(ValueError,match='NT(v3| adapter).*differs'):validate_binding(binding)
 
 
 def test_empty_nt_window_is_rejected():
