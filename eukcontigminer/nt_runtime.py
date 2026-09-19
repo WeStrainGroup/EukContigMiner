@@ -53,7 +53,7 @@ def validate_binding(binding):
     if binding.get("schema") == "ecm.ntv3.runtime.ieee.v1":
         from .ntv3_runtime import validate_binding as validate_ntv3
         validate_ntv3(binding)
-        if binding.get("alpha") != .5:
+        if binding.get("alpha") not in (.35, .5, .75):
             raise ValueError("NTv3 fusion coefficient differs")
         return
     if (binding.get('alpha')!=.5 or binding.get('window_rule')!=WINDOW_RULE

@@ -1,0 +1,24 @@
+{
+  "rows": 1708227,
+  "short_rows": 1611592,
+  "long_rows": 96635,
+  "species": 9757,
+  "positives": 964874,
+  "length_range": [
+    1000,
+    100000
+  ],
+  "panel_species_overlap": {
+    "validation": 0,
+    "main": 0,
+    "supplement": 0,
+    "long": 0
+  },
+  "latest_quarantined_records_excluded": true,
+  "accepted_QC_excluded": true,
+  "source_ancestry_cleared": false,
+  "all_dates_before_2026_inherited_verified": true,
+  "original_final_reads": 0,
+  "new934_reads": 0,
+  "source_sha256": "a02ef6b75d0c16b141cd41e663470c93fca79402917bad2c692c02e49f5539b6"
+}

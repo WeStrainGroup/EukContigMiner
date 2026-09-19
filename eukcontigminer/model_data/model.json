@@ -41,34 +41,29 @@
     ]
   },
   "model": {
-    "base_model_id": "frozen_logit_ensemble_h64_080_h32_020_v3_all_genomes_v1",
+    "base_model_id": "192x6_kmer_trainable",
     "dna": {
-      "base_weights_sha256": "f97dc3713803dc3568b27e716b9be19e28522e81a4b7c5d5536f2f7c54e76b1d",
-      "ensemble_weights": [
-        0.8,
-        0.2
+      "schema": "ecm.dna.192x6.kmer.v1",
+      "asset": "simplified_dna.pt",
+      "sha256": "04a575fb525a50ccf8e4b3e57d264427149ec3dad6b8fecd0df335defa65a3ca",
+      "parameters": 2409641,
+      "channels": 192,
+      "residual_layers": 6,
+      "kmer_orders": [
+        3,
+        4,
+        5,
+        6
       ],
-      "heads": [
-        {
-          "asset": "dna_head_h64.pt",
-          "hidden_dimension": 64,
-          "sha256": "7d2374f2ea77fa5f8fde82d0d48c06e4ccbd731e1208e13b727a2a14a4157ba3"
-        },
-        {
-          "asset": "dna_head_h32.pt",
-          "hidden_dimension": 32,
-          "sha256": "b1592d54c144760e88bd055faf5910a119d310e7f0209918866389bf4b920782"
-        }
-      ],
-      "unfreeze_scope": "heads-only"
+      "maximum_inference_length": 100000
     },
     "dna_other_early_exit": {
-      "comparison": "dna_p_euk_less_than_or_equal",
-      "explanation": "DNA routing is part of the confirmed classifier. --full-esm disables computation skipping but preserves this output rule.",
-      "full_esm_preserves_routing": true,
-      "maximum_dna_p_euk": 0.00046582122085783587,
+      "status": "validation_frozen_guarded",
+      "maximum_dna_p_euk": 0.01,
       "short_sequence_fallback_below_bp": 3,
-      "status": "frozen_model_routing"
+      "explanation": "DNA<=0.01 skips ORF and both language models. If any final score in the buffer lies within2logit units of the decision threshold, recompute the full original buffer without exits. Validation-derived safeguard; full native confirmation required.",
+      "fallback_logit_margin": 2.0,
+      "fallback": "complete_original_buffer"
     },
     "esmc": {
       "checkpoint_bytes": 1332095738,
@@ -110,7 +105,7 @@
         "source": "complete standard-code six-frame translation"
       }
     },
-    "formula": "DNA_if_routed_else_sigmoid(logit(v052_tree_score)+0.5*mean_NT_window_logit)",
+    "formula": "sigmoid(logit(tree(ESMC1920,raw_DNA_logit,log10length,protein_probe))+NTalpha*NTlogit), then frozen log-length transform",
     "fusion_tree": {
       "asset": "fusion_tree.ubj",
       "feature_dimension": 1923,
@@ -121,8 +116,8 @@
         "protein_probe_logit"
       ],
       "objective": "binary:logistic",
-      "rounds": 400,
-      "sha256": "162a9dca513aab43832fba1b4cdfbf08387c76fc115511967f62918565e1fb2a",
+      "rounds": 600,
+      "sha256": "3b79495b4208ab3a50f4ab2ce00e12a63dbb9cfcdc70d8d03fbf6a11a8d614f8",
       "xgboost_version": "3.2.0"
     },
     "nt_adapter": {
@@ -153,25 +148,22 @@
         "sha256": "6721e6dc411b159f9cab40d1e587389c71c1055e56b62fef1031af0e61dbc71d"
       },
       "checkpoint_plan_sha256": "38a77cb2a0049ab5f18a03c57cd4404a2d2abbfb33d284dd6bf259a0526b5c73",
-      "alpha": 0.5,
+      "alpha": 0.75,
       "license": "InstaDeep Open Model Licence 1.0 (April 2025)",
       "checkpoint_step": 32768
-    },
-    "piecewise_protein_fusion": {
-      "boundary_bp": 2000,
-      "comparison": "length_less_than_or_equal",
-      "long_alpha": 10.949999999999985,
-      "short_alpha": 6.300000000000011,
-      "usage": "v0.51 reference metadata; not used by the tree classifier"
     },
     "probe": {
       "asset": "esmc_probe.pt",
       "sha256": "2bf12d0b4655db5554314d3d8ef3d137cc621d2bb083bc05e9c202f42bb363bd"
     },
     "probe_logit_center": 1.5310083413159512,
-    "probe_logit_scale": 8.262124854196705
+    "probe_logit_scale": 8.262124854196705,
+    "slim_length_calibration": {
+      "short": -1.0,
+      "long": -1.0
+    }
   },
-  "model_id": "esmc_tree_ntv3_fullcoverage_replacement_lr2_step32768_v1",
+  "model_id": "simplified192x6_nt100_esmc300_d6_v060",
   "prediction_rule": {
     "comparison": "strict_greater_than",
     "equal_threshold_label": "Other",
@@ -180,95 +172,33 @@
       0.0,
       1.0
     ],
-    "threshold": 0.9994805844224834,
-    "threshold_selection": "Frozen on registered 39807-record calibration by exact F1@1% search; raw score, strict global threshold, no length transform."
+    "threshold": 0.9999054162961046,
+    "threshold_selection": "Five species-fold OOF shape selection on491991 Validation, then one exact global F1@1% threshold; frozen before panel evaluation."
   },
-  "release_version": "0.55",
-  "schema": "eukcontigminer.release_model.v5",
+  "release_version": "0.6",
+  "schema": "eukcontigminer.release_model.v6",
   "scientific_validation": {
-    "status": "native_installed_development_comparison_verified",
+    "status": "actual_installed_native_panels_verified",
     "goal_achieved": false,
     "statistically_established_superiority": false,
-    "conditional_paired_improvement_vs_v054": true,
-    "claim_scope": "Native installed inference improves overall and 1-2kb F1@1% on the three reused development panels. Main and supplementary overall paired-species intervals are positive, conditional on selected development data. No independent-confirmation or all-bin 0.99 claim.",
-    "native_evidence": {
-      "main": {
-        "report": {
-          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/main/report.json",
-          "sha256": "c2d72741d5d2c37d4b58c1fc711223b01b200ea9822b64c0c453ff710c85fe6c"
-        },
-        "readback": {
-          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/main/independent_readback.json",
-          "sha256": "ea47c4bccf5c7673309b63e291962195957d984eba251024d2af1f895398680b"
-        }
-      },
-      "supplement": {
-        "report": {
-          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/supplement/report.json",
-          "sha256": "bae37cf9ad32b74cea930d400b1a25662ea24bb82ea8c1357a8ac2578a12216b"
-        },
-        "readback": {
-          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/supplement/independent_readback.json",
-          "sha256": "6dcfd4e144bb91dd7332cb9bec5efe172be4c177657411549e0fa71d4673d591"
-        }
-      },
-      "formal": {
-        "report": {
-          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/formal/report.json",
-          "sha256": "4f0165ae70877d857701acfba4621c59230178b79860643be5ee5ff34930b88a"
-        },
-        "readback": {
-          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/native_installed_pair_20260912_v1/evaluation/formal/independent_readback.json",
-          "sha256": "b49f7c700321fb01e74f1aad5584004f3e42739bcd5ccb5d2450211444a9f7d8"
-        }
-      }
+    "source_ancestry_cleared": false,
+    "all_known_current_fitting_exclusions_applied": true,
+    "source_reports_sha256": {
+      "validation": "e8781ccd6ba56e5ee656e7e4e457d3cfedc209023937d67ef182e7753d0f2283",
+      "main": "71d406e3abf96773ee6117d5fb2e93205ebffb77550adec0eed289a043d4cec7",
+      "supplement": "d25484b4c9caca4ab1014aba3b5d3147124c3c497593565e7a7dd94c076c5c5c",
+      "long": "1a76384340c11529cbef6799f0173a1104efbde33ae74dfb6a493c099cb151a3"
     },
-    "original_final_whole_genome_fasta_reads_in_this_round": 0,
-    "calibration": {
-      "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/fullcoverage_final32768_cpu_v1/replacement_lr2/calibration/report.json",
-      "sha256": "446e3f96bd88c1f04c97d2ab1e61c42e4b5b60ae34d8db4ef41ae7b240f2383f"
-    },
-    "contamination_screening": "Partial similarity/contamination audit; not an exhaustive clean-genome certification.",
-    "cached_gpu_parity": "Earlier rc2 differed from research feature caches. Native paired installed evaluation supersedes cached performance for this release. No relaxed cached-score tolerance was used.",
-    "cross_hardware": "CPU legal-input support tested separately. Exact CPU/GPU score and label equality is not guaranteed near the threshold.",
-    "known_training_adapter_overlaps": {
-      "fragments": 6,
-      "broad_fit_fragments": 1234292,
-      "source_check": {
-        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/report.json",
-        "sha256": "4a5a8e07980f376c3fbd522f21841bf444c0a5a129356e33299bd9227abd2520"
-      },
-      "actual_mask_check": {
-        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/actual_fix_interval_masking.json",
-        "sha256": "9ac2a0c6807ebf0c32a873c836d8982c0ebb6cf990c79c5cabd23dd3b077dc4a"
-      },
-      "public_sequence_check": {
-        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_broad_hard_fcs_source_check_v1/public_accession_records_v1/report.json",
-        "sha256": "685b51c73cd8d529e0204e4955cb486b926b788a051d63b100bbdd2c12e6d838"
-      },
-      "trimmed_source_check": {
-        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/three_trimmed_broad_fcs_source_check_v1/report.json",
-        "sha256": "0e06d78344aebdeec6d3a6074ee282117a2f316e78fe66bb2fffa5b6b5a21b1e"
-      },
-      "consolidated_fit_qc": {
-        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_fit_exclusions_v1/report.json",
-        "sha256": "9b9c1387180d68404f0e23ee1742d54c2e67b3ac7d7ed277c01d991296029096"
-      },
-      "future_exclusions": {
-        "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_fit_exclusions_v1/exclusions.tsv",
-        "sha256": "f9b0487f8a6ee97134e94a891b587558643739c5f583eab9736f54e2559d5abf"
-      },
-      "actual_continuation_exposure": {
-        "report": {
-          "path": "/ssd/wangxinyu2/eukcontigminer/small_dna_backbone_selection_20260907_v1/confirmed_adapter_training_exposure_v1/report.json",
-          "sha256": "9e39fcfc54c8bd0d7fffda5a2c712af59912052b2286bc2a321bbf1665f2fe00"
-        },
-        "fragments_seen": 5,
-        "total_draws": 7,
-        "scope": "Counts cover the six exact broad-pool sequences during this completed 32768-step continuation only. They do not exhaust replay inputs, donor training, protein/tree training, homologous sequences, or upstream pretraining. Exposure counts do not measure causal performance impact or establish contamination-free weights."
-      },
-      "interpretation": "Six broad-fit fragments overlap upstream FCS adapter FIX intervals that remain A/C/G/T. Public accession.version sequences resolve the corresponding training fragment coordinates. The four affected species and six fragment IDs do not occur in these evaluation panels; this does not establish absence of homologous sequence or learned artifact effects. Current weights predate this audit and retain their historical exposure. A future-fit exclusion list is not a correction of already-trained weights. No fully decontaminated training claim."
+    "strict_guarded_label_parity_rows": 1797325,
+    "guarded_label_parity_scope": "Registered RTX4090/default1024-buffer panel runs only. Not a universal score/label invariance guarantee across hardware or batching.",
+    "scientific_scope": "Reused development genome-fragment panels. Validation selects calibration; Main/Supplement/Long have development exposure. Historical former-Final reuse is inherited. No independent confirmation or all500bp-bin0.99 claim.",
+    "efficiency": {
+      "real_SPIRE_samples": 10,
+      "records": 84990,
+      "total_speedup_vs_v055": 1.7081433516968336,
+      "hardware": "RTX4090",
+      "source_report_sha256": "c03adafc48c0d4c52247f19a9dfff276b611f032610233db48a73d462310e888"
     }
   },
-  "status": "validation_only_final_test_unchanged"
+  "status": "released"
 }

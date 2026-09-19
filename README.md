@@ -1,18 +1,18 @@
 # EukContigMiner
 
-**v0.55** screens metagenomic contigs for eukaryotic sequences with DNA features, ESM-C 300M and an adapted NTv3 100M. It replaces the NT-v2 500M branch in v0.54; the legacy DNA and protein branches remain. The 100M size describes one backbone, not the whole tool.
+**v0.6** screens metagenomic contigs for eukaryotic sequences using a simplified DNA branch, NTv3 100M and ESM-C 300M. The initial DNA branch has **69.7% fewer parameters** than v0.55; both language models remain.
 
-Every nonempty legal contig receives `p_euk` in [0,1]. Strictly `p_euk > 0.9994805844224834` means **Eukaryota**; otherwise **Other**. Equality is Other, organelles are positive, and there is no Unknown. All lengths are scored; formal evaluation starts at 1,000 bp.
+Every nonempty legal contig receives a finite 0–1 `p_euk`. Strictly `p_euk > 0.9999054162961046` means **Eukaryota**; otherwise **Other**, including equality. Organelles are positive and there is no Unknown. All lengths are scored; formal evaluation starts at 1,000 bp. These are decision scores, not guaranteed posterior probabilities.
 
 ## Install and run
 
 Use Python 3.10–3.12.
 
 ```bash
-python -m pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.55/eukcontigminer-0.55-py3-none-any.whl
+python -m pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.6/eukcontigminer-0.6-py3-none-any.whl
 ```
 
-Follow the [one-time backbone download instructions](NTV3_INSTALL.md), including model terms and pinned-file verification. Then run:
+Follow the [one-time backbone setup](NTV3_INSTALL.md), including model terms and file verification, then run:
 
 ```bash
 export EUKCONTIGMINER_NTV3_DIR="$PWD/models/ntv3_100m"
@@ -21,28 +21,26 @@ export TRANSFORMERS_OFFLINE=1
 eukcontigminer input.fna.gz -o predictions.tsv --device cuda:0
 ```
 
-Use `--device cpu --cpu-threads 4` for CPU. Inference needs no reference database or sequence-similarity search. Output columns are `contig_id`, `length_bp`, `p_euk`, and `label`. For source checkout installation, see [source installation](SOURCE_INSTALL.md).
+Use `--device cpu --cpu-threads 4` for CPU. Add `--min-length 1000` to skip shorter records, or `--full-esm` to disable confidence-based early exits. Inference needs no reference database, similarity search or runtime network. Output columns are `contig_id`, `length_bp`, `p_euk`, `label`. See [source installation](SOURCE_INSTALL.md) for a checkout.
 
 ## Performance
 
-Both installed packages were run on identical complete fragments with the same batching and each version's frozen global threshold. F1 is adjusted to 1% Eukaryota prevalence using TPR/FPR; overall values pool counts rather than average length-bin F1.
+Actual installed inference uses each version's frozen global threshold. F1 is standardized to 1% Eukaryota prevalence using TPR/FPR; pooled counts determine the overall value.
 
-| Dataset | Records | v0.54 F1@1% | v0.55 F1@1% | v0.54 1–2 kb | v0.55 1–2 kb |
+| Dataset | Records | v0.55 F1@1% | v0.6 F1@1% | v0.55 1–2kb | v0.6 1–2kb |
 |---|---:|---:|---:|---:|---:|
-| main | 592,861 | 0.987389 | 0.988787 | 0.941472 | 0.950310 |
-| supplement | 664,491 | 0.971821 | 0.974781 | 0.894843 | 0.906498 |
-| formal | 503,608 | 0.985811 | 0.987084 | 0.921007 | 0.926616 |
+| main | 592,861 | 0.988787 | 0.989202 | 0.950310 | 0.951209 |
+| supplement | 664,491 | 0.974781 | 0.976361 | 0.906498 | 0.912209 |
+| long | 47,982 | 0.999108 | 0.999343 | — | — |
 
-These are reused development panels of reference-genome fragments, not an untouched final test or real assembled metagenomic contigs. Complete length, 0.1%/1%/10% prevalence and count tables are in the [main](reports/main_scientific_report.md), [supplementary](reports/supplement_scientific_report.md) and [fixed-length diagnostic](reports/formal_scientific_report.md) reports. `raw100` in these source reports denotes the v0.55 checkpoint. Paired-species intervals, source hashes and the frozen execution/evaluation scripts accompany the reports.
+These are reused development panels of reference-genome fragments, not an untouched final test or real metagenomic assemblies. See complete [Main](reports/main_scientific_report.md), [supplementary](reports/supplement_scientific_report.md), [long-contig](reports/long_scientific_report.md) and [Validation](reports/validation_scientific_report.md) reports for 0.1%/1%/10% prevalence, 500 bp strata, FP/FN and uncertainty.
 
-The change combines a different DNA backbone with further supervised adaptation: 32,768 steps at encoder/head learning rates 2e-6/2e-5, class-balanced broad sampling plus replay. The comparison does not isolate model size or pretraining as the cause of improvement. The retained checkpoint is a single 100M branch, not a 100M+500M Agreement ensemble.
+Across ten real SPIRE samples (84,990 contigs ≥1,000 bp), the ratio of summed paired runtimes was **1.71x faster than v0.55** on RTX4090 with four CPU threads. This includes startup/I/O and does not establish cross-GPU speed or classification accuracy on these unlabeled samples. [Per-sample timings](reports/efficiency.md).
 
-**The F1 ≥ 0.99 target in every 500 bp bin remains unmet.** Genomes used for supervised Train/Validation predate 2026-01-01. Historical former-Final development reuse is disclosed in model metadata. Contamination screening is incomplete and foundation-model pretraining overlap is unknown. Scores are decision scores, not guaranteed posterior probabilities at arbitrary prevalence.
+The initial DNA branch reads the central 100 kb of longer inputs. A guarded early exit skips both language models for confident Other calls and recomputes the original batch when a score is close to the decision threshold. On the registered panels this preserved full-inference labels; scores and behavior near thresholds can differ across hardware or batching. Accuracy beyond 100 kb has not been validated.
 
-The post-training source audit identified six of 1,234,292 broad-fit fragments overlapping unmasked upstream FCS adapter FIX intervals, with coordinates verified against public accession-version sequences. The completed continuation sampled five of these fragments seven times in total; packed sequence hashes and frozen schedules were verified. This count does not exhaust exposure in earlier training or shared components. The four affected species and six fragment IDs are absent from these evaluation panels; absence of homologous sequence or learned artifact effects is not established. They are listed for exclusion from future fits; these already-trained weights retain their historical exposure. This release does not claim fully decontaminated training. Source, masking and exposure checks are included in the reports.
-
-The earlier research feature caches did not exactly reproduce installed inference, so release performance was re-evaluated with the actual installed CLIs. CPU/GPU numerical differences can change labels near the threshold; exact cross-hardware equality is not claimed.
+**F1>=0.99 in every 500 bp bin remains unmet.** Lower false-positive counts can come with more false negatives. Supervised Train/Validation genomes predate 2026-01-01, and current fitting excludes known contaminated records, but ancestor-model exposure and foundation-model pretraining overlap are not fully resolved. This release does not claim completely decontaminated training or independent confirmation. See [methods and limits](reports/methods.md).
 
 ## License
 
-Code is MIT. NTv3 and the adapted derivative use the included InstaDeep Open Model Licence 1.0 (April 2025), including noncommercial restrictions. ESM-C has separate upstream terms. See [third-party notices](THIRD_PARTY_NOTICES.md).
+Code is MIT. NTv3 and its adapted derivative use the included InstaDeep Open Model Licence 1.0 (April 2025), including noncommercial restrictions. ESM-C has separate upstream terms. See [third-party notices](THIRD_PARTY_NOTICES.md).

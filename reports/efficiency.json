@@ -1,0 +1,140 @@
+{
+  "samples": {
+    "SAMN09980693": {
+      "records": 1320,
+      "gpu": 0,
+      "order": [
+        "v055",
+        "v060"
+      ],
+      "v055_seconds": 34.6050676330924,
+      "v060_seconds": 28.971069494262338,
+      "speedup": 1.1944698016739033,
+      "v060_exit_fraction": 0.8484848484848485,
+      "fallback_records": 0
+    },
+    "SAMEA104565284": {
+      "records": 4859,
+      "gpu": 1,
+      "order": [
+        "v060",
+        "v055"
+      ],
+      "v055_seconds": 125.47037606593221,
+      "v060_seconds": 92.4784992588684,
+      "speedup": 1.3567518620161865,
+      "v060_exit_fraction": 0.4124305412636345,
+      "fallback_records": 763
+    },
+    "SAMEA1906428": {
+      "records": 8811,
+      "gpu": 2,
+      "order": [
+        "v055",
+        "v060"
+      ],
+      "v055_seconds": 147.19709964375943,
+      "v060_seconds": 137.38559358660132,
+      "speedup": 1.0714158289891829,
+      "v060_exit_fraction": 0.38429236182045173,
+      "fallback_records": 4096
+    },
+    "MMWV60617913ST": {
+      "records": 10000,
+      "gpu": 3,
+      "order": [
+        "v060",
+        "v055"
+      ],
+      "v055_seconds": 195.24492145888507,
+      "v060_seconds": 73.10230257827789,
+      "speedup": 2.6708450291263666,
+      "v060_exit_fraction": 0.7129,
+      "fallback_records": 0
+    },
+    "SAMN06328498": {
+      "records": 10000,
+      "gpu": 0,
+      "order": [
+        "v055",
+        "v060"
+      ],
+      "v055_seconds": 159.45614799391478,
+      "v060_seconds": 80.45796212367713,
+      "speedup": 1.981856658869938,
+      "v060_exit_fraction": 0.6954,
+      "fallback_records": 784
+    },
+    "SAMN20081668": {
+      "records": 10000,
+      "gpu": 1,
+      "order": [
+        "v060",
+        "v055"
+      ],
+      "v055_seconds": 156.05678361281753,
+      "v060_seconds": 80.81459209881723,
+      "speedup": 1.9310470987961779,
+      "v060_exit_fraction": 0.6807,
+      "fallback_records": 784
+    },
+    "SAMEA2737839": {
+      "records": 10000,
+      "gpu": 3,
+      "order": [
+        "v055",
+        "v060"
+      ],
+      "v055_seconds": 175.78332929499447,
+      "v060_seconds": 67.74699995107949,
+      "speedup": 2.5947027827347138,
+      "v060_exit_fraction": 0.7573,
+      "fallback_records": 0
+    },
+    "SAMN11311699": {
+      "records": 10000,
+      "gpu": 2,
+      "order": [
+        "v060",
+        "v055"
+      ],
+      "v055_seconds": 168.27292351052165,
+      "v060_seconds": 83.86738546844572,
+      "speedup": 2.006416708600421,
+      "v060_exit_fraction": 0.6559,
+      "fallback_records": 1024
+    },
+    "MH0200": {
+      "records": 10000,
+      "gpu": 0,
+      "order": [
+        "v055",
+        "v060"
+      ],
+      "v055_seconds": 173.52310733497143,
+      "v060_seconds": 142.0840187650174,
+      "speedup": 1.22127111017284,
+      "v060_exit_fraction": 0.4965,
+      "fallback_records": 3072
+    },
+    "SAMEA14100735": {
+      "records": 10000,
+      "gpu": 1,
+      "order": [
+        "v060",
+        "v055"
+      ],
+      "v055_seconds": 161.464857859537,
+      "v060_seconds": 89.52540345024318,
+      "speedup": 1.80356470495301,
+      "v060_exit_fraction": 0.6729,
+      "fallback_records": 1024
+    }
+  },
+  "records": 84990,
+  "sum_v055_seconds": 1497.074614408426,
+  "sum_v060_seconds": 876.4338267752901,
+  "total_speedup": 1.7081433516968336,
+  "scope": "Sum of per-sample elapsed times, not total four-GPU makespan. RTX4090 only; no HPC/cross-GPU extrapolation, one paired run per sample.",
+  "source_sha256": "c03adafc48c0d4c52247f19a9dfff276b611f032610233db48a73d462310e888"
+}

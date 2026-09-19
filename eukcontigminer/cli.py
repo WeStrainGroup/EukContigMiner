@@ -40,7 +40,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--full-esm",
         action="store_true",
-        help="compute ESM-C for every eligible contig; the model keeps its frozen DNA output routing",
+        help="compute ESM-C for every eligible contig; disable the validated DNA early exit",
     )
     args = parser.parse_args(argv)
     summary = args.summary or args.output.with_name(

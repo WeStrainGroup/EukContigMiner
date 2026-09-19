@@ -1,7 +1,4 @@
-"""EukContigMiner: low-prevalence eukaryotic contig screening."""
-
-MODEL_ID = "esmc_tree_ntv3_fullcoverage_replacement_lr2_step32768_v1"
-DEPLOYMENT_THRESHOLD = 0.9994805844224834
-
-__all__ = ["DEPLOYMENT_THRESHOLD", "MODEL_ID"]
-__version__ = "0.55"
+"""Simplified DNA and dual-language-model contig screening."""
+__version__="0.6"
+MODEL_ID='simplified192x6_nt100_esmc300_d6_v060'
+DEPLOYMENT_THRESHOLD=0.9999054162961046
