@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eukcontigminer"
-version = "0.6"
+version = "0.61"
 description = "Single-device DNA and protein-language-model screening of eukaryotic contigs"
 requires-python = ">=3.10,<3.13"
 license = "MIT AND LicenseRef-InstaDeep-Open-Model"
@@ -33,7 +33,7 @@ Repository = "https://github.com/WeStrainGroup/EukContigMiner"
 include = ["eukcontigminer*"]
 
 [tool.setuptools.package-data]
-eukcontigminer = ["model_data/*.json", "model_data/*.pt", "model_data/*.ubj"]
+eukcontigminer = ["model_data/*.json", "model_data/*.pt", "model_data/*.ubj", "model_data/*.npz", "_staged_gates.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

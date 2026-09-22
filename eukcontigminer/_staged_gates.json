@@ -1,0 +1,70 @@
+{
+  "cuts": {
+    "dna": {
+      "0": {
+        "other_below": -5.234755277633667,
+        "euk_above": 17.783513069152832,
+        "positive_rows": 12812,
+        "negative_rows": 48207
+      },
+      "1": {
+        "other_below": -5.895605802536011,
+        "euk_above": 27.621768951416016,
+        "positive_rows": 89578,
+        "negative_rows": 317133
+      },
+      "2": {
+        "other_below": -3.007763385772705,
+        "euk_above": 10.843713760375977,
+        "positive_rows": 5583,
+        "negative_rows": 18678
+      }
+    },
+    "nt": {
+      "0": {
+        "other_below": 0.33685576915740967,
+        "euk_above": 14.06920051574707,
+        "positive_rows": 12812,
+        "negative_rows": 48207
+      },
+      "1": {
+        "other_below": -1.5719926754633586,
+        "euk_above": 13.962115287780762,
+        "positive_rows": 89578,
+        "negative_rows": 317133
+      },
+      "2": {
+        "other_below": -1.2649523615837097,
+        "euk_above": 8.335169792175293,
+        "positive_rows": 5583,
+        "negative_rows": 18678
+      }
+    },
+    "sum": {
+      "0": {
+        "other_below": 1.1225409507751465,
+        "euk_above": 24.091415882110596,
+        "positive_rows": 12812,
+        "negative_rows": 48207
+      },
+      "1": {
+        "other_below": -2.4546915739774704,
+        "euk_above": 32.27833980321884,
+        "positive_rows": 89578,
+        "negative_rows": 317133
+      },
+      "2": {
+        "other_below": -1.7748189270496368,
+        "euk_above": 13.89844560623169,
+        "positive_rows": 5583,
+        "negative_rows": 18678
+      }
+    }
+  },
+  "margin_logits": 2.0,
+  "groups": [
+    2000,
+    10000
+  ],
+  "policy": "Three fixed length groups; extrema of baseline labels on Validation only, plus fixed2logit margin. Proxy sum DNA+.75NT is fixed, not fitted. External failures reject the rule without external retuning."
+}

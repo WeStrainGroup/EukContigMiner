@@ -895,6 +895,8 @@ def predict_fasta(
         torch.set_num_threads(cpu_threads)
     effective_cpu_threads = int(torch.get_num_threads())
     fusion_tree = _load_fusion_tree(parameters, device, effective_cpu_threads)
+    from ._fast_nt import install as install_fast_nt
+    install_fast_nt(16)
     from .nt_runtime import NTAdapter
     nt_binding = parameters.config["model"].get("nt_adapter")
     nt_adapter = NTAdapter(nt_binding, device, _bound_path, sha256_file) if nt_binding else None
@@ -932,6 +934,12 @@ def predict_fasta(
         torch.cuda.reset_peak_memory_stats(device)
     started = time.perf_counter()
     records = bases = early_exit_other_records = esm_records = 0
+    certified_esm_skip_records = 0
+    stage_counts = dict(dna_euk=0, nt_euk=0, nt_other=0, certified_euk=0, nt_records=0)
+    from ._staged_exit import FrozenGates
+    staged_gates = FrozenGates(Path(__file__).parent / '_staged_gates.json')
+    from ._certified_exit import BoundRouter
+    certificate_router = BoundRouter(_bound_path(parameters.config['runtime_optimization']['conditional_bounds'], 'conditional bounds'), _bound_path(parameters.config['model']['fusion_tree'], 'fusion tree'), parameters.config)
     guarded_fallback_buffers = guarded_fallback_records = 0
     input_records = input_bases = skipped_records = skipped_bases = 0
     seen: set[str] = set()
@@ -978,193 +986,209 @@ def predict_fasta(
                 sequences = [row[1] for row in buffer]
                 lengths = np.asarray([len(sequence) for sequence in sequences])
                 buffer_use_dna_early_exit = use_dna_early_exit
-                for guarded_attempt in range(2):
-                    limit = parameters.config["model"]["dna"].get("maximum_inference_length")
-                    dna_input = sequences if limit is None else [sequence[max(0, (len(sequence)-limit)//2):max(0, (len(sequence)-limit)//2)+limit] for sequence in sequences]
-                    dna_sequences = _pretokenize_sequences(dna_input, token_table)
-                    dna_scores = np.full(len(buffer), np.nan, dtype=np.float64)
-                    raw_dna_logits = np.full(len(buffer), np.nan, dtype=np.float64)
-                    simplified = parameters.config["schema"] == "eukcontigminer.release_model.v6"
-                    with torch.inference_mode():
-                        for indices in _bounded_indices(
-                            lengths,
-                            batch_size=dna_batch_size,
-                            max_padded_bases=dna_max_padded_bases,
-                        ):
-                            tokens, selected_lengths = _collate(
-                                dna_sequences, indices, token_table
-                            )
-                            logits = dna_model(
-                                tokens.to(device), selected_lengths.to(device)
-                            )
-                            raw_dna_logits[indices] = logits.double().cpu().numpy()
-                            dna_scores[indices] = (
-                                torch.sigmoid(logits.double()).cpu().numpy()
-                            )
-                    early_exit_other = (
-                        dna_scores <= parameters.early_exit_other_max_score
-                        if buffer_use_dna_early_exit
-                        else np.zeros(len(buffer), dtype=bool)
-                    )
-                    protein_indices = np.flatnonzero(
-                        (lengths >= 3) & ~early_exit_other
-                    )
-                    probe_logit = np.full(
-                        len(buffer), parameters.probe_center, dtype=np.float64
-                    )
-                    secondary_probe_logit = (
-                        np.full(
-                            len(buffer),
-                            parameters.secondary_probe_center,
-                            dtype=np.float64,
+                limit = parameters.config["model"]["dna"].get("maximum_inference_length")
+                dna_input = sequences if limit is None else [sequence[max(0, (len(sequence)-limit)//2):max(0, (len(sequence)-limit)//2)+limit] for sequence in sequences]
+                dna_sequences = _pretokenize_sequences(dna_input, token_table)
+                dna_scores = np.full(len(buffer), np.nan, dtype=np.float64)
+                raw_dna_logits = np.full(len(buffer), np.nan, dtype=np.float64)
+                simplified = parameters.config["schema"] == "eukcontigminer.release_model.v6"
+                with torch.inference_mode():
+                    for indices in _bounded_indices(
+                        lengths,
+                        batch_size=dna_batch_size,
+                        max_padded_bases=dna_max_padded_bases,
+                    ):
+                        tokens, selected_lengths = _collate(
+                            dna_sequences, indices, token_table
                         )
-                        if parameters.secondary_probe_center is not None
-                        else None
+                        logits = dna_model(
+                            tokens.to(device), selected_lengths.to(device)
+                        )
+                        raw_dna_logits[indices] = logits.double().cpu().numpy()
+                        dna_scores[indices] = (
+                            torch.sigmoid(logits.double()).cpu().numpy()
+                        )
+                early_exit_other = (
+                    dna_scores <= parameters.early_exit_other_max_score
+                    if buffer_use_dna_early_exit
+                    else np.zeros(len(buffer), dtype=bool)
+                )
+                early_dna_euk = staged_gates.dna_euk(raw_dna_logits, lengths) & ~early_exit_other & use_dna_early_exit
+                routed_for_nt = early_exit_other | early_dna_euk | (lengths < 3)
+                nt_logits = nt_adapter.contig_logits(sequences, np.flatnonzero(~routed_for_nt))
+                upper_scores = certificate_router.upper_probability(raw_dna_logits, nt_logits, lengths)
+                lower_scores = certificate_router.lower_probability(raw_dna_logits, nt_logits, lengths)
+                pending_nt = ~routed_for_nt & use_dna_early_exit
+                early_nt_other, early_nt_euk = staged_gates.nt_sides(nt_logits, lengths)
+                early_nt_other &= pending_nt
+                early_nt_euk &= pending_nt
+                certified_euk = pending_nt & ~early_nt_other & ~early_nt_euk & (lower_scores > parameters.threshold)
+                guard_margin = parameters.config['model']['dna_other_early_exit']['certified_other_logit_margin']
+                certificate_cutoff = _sigmoid(np.array([np.log(parameters.threshold / (1.0-parameters.threshold)) - guard_margin]))[0] if buffer_use_dna_early_exit else parameters.threshold
+                certified_other = pending_nt & ~early_nt_other & ~early_nt_euk & ~certified_euk & (upper_scores < certificate_cutoff)
+                protein_indices = np.flatnonzero(
+                    (lengths >= 3) & ~early_exit_other & ~early_dna_euk & ~early_nt_other & ~early_nt_euk & ~certified_euk & ~certified_other
+                )
+                probe_logit = np.full(
+                    len(buffer), parameters.probe_center, dtype=np.float64
+                )
+                secondary_probe_logit = (
+                    np.full(
+                        len(buffer),
+                        parameters.secondary_probe_center,
+                        dtype=np.float64,
                     )
-                    tree_scores = dna_scores.copy() if fusion_tree is not None else None
-                    if len(protein_indices):
-                        orfs = [
-                            select_orfs_from_contig(sequences[int(index)], orf_config)
-                            for index in protein_indices
-                        ]
-                        if parameters.protein_family == "esmc":
-                            features = esmc_features_from_orfs(
-                                esm_model,
-                                batch_converter,
-                                orfs,
-                                device=device,
-                                config=orf_config,
-                            )
-                        else:
-                            features = esm2_features_from_orfs(
-                                esm_model,
-                                batch_converter,
-                                orfs,
-                                representation_layer=int(esm_model.num_layers),
-                                device=device,
-                                config=orf_config,
-                            )
-                        standardized = (features - feature_mean) / feature_std
-                        with torch.inference_mode():
-                            selected_probe_logit = (
-                                probe(standardized.to(device)).double().cpu().numpy()
-                            )
-                        probe_logit[protein_indices] = selected_probe_logit
-                        if fusion_tree is not None:
-                            tree_scores[protein_indices] = _tree_probability(
-                                fusion_tree, standardized.cpu().numpy(), dna_scores[protein_indices],
-                                lengths[protein_indices], selected_probe_logit, effective_cpu_threads,
-                                raw_dna_logits[protein_indices] if simplified else None)
-
-                        if secondary_probe is not None:
-                            if secondary_mean is None or secondary_std is None:
-                                raise RuntimeError(
-                                    "secondary probe standardization is missing"
-                                )
-                            secondary_standardized = (
-                                features - secondary_mean
-                            ) / secondary_std
-                            with torch.inference_mode():
-                                selected_secondary_logit = (
-                                    secondary_probe(secondary_standardized.to(device))
-                                    .double()
-                                    .cpu()
-                                    .numpy()
-                                )
-                            assert secondary_probe_logit is not None
-                            secondary_probe_logit[
-                                protein_indices
-                            ] = selected_secondary_logit
-                    if fusion_tree is not None:
-                        scores = _apply_tree_routing(tree_scores, dna_scores, lengths,
-                                                    (-1. if not buffer_use_dna_early_exit else parameters.early_exit_other_max_score) if simplified else parameters.early_exit_other_max_score)
-                    elif parameters.protein_family == "esmc":
-                        if any(
-                            value is None
-                            for value in (
-                                parameters.secondary_probe_center,
-                                parameters.secondary_probe_scale,
-                                parameters.short_alpha,
-                                parameters.long_alpha,
-                                parameters.piecewise_boundary_bp,
-                            )
-                        ):
-                            raise RuntimeError(
-                                "ESM-C piecewise fusion parameters are missing"
-                            )
-                        scores = dual_probe_piecewise_probability(
-                            dna_scores,
-                            probe_logit,
-                            lengths,
-                            secondary_probe_center=float(parameters.probe_center),
-                            secondary_probe_scale=float(parameters.probe_scale),
-                            secondary_source_alpha=1.0,
-                            short_alpha=float(parameters.short_alpha),
-                            long_alpha=float(parameters.long_alpha),
-                            boundary_bp=int(parameters.piecewise_boundary_bp),
+                    if parameters.secondary_probe_center is not None
+                    else None
+                )
+                tree_scores = dna_scores.copy() if fusion_tree is not None else None
+                if len(protein_indices):
+                    orfs = [
+                        select_orfs_from_contig(sequences[int(index)], orf_config)
+                        for index in protein_indices
+                    ]
+                    if parameters.protein_family == "esmc":
+                        features = esmc_features_from_orfs(
+                            esm_model,
+                            batch_converter,
+                            orfs,
+                            device=device,
+                            config=orf_config,
                         )
                     else:
-                        scores = direct_joint_probability(
-                            dna_scores,
-                            probe_logit,
-                            probe_center=parameters.probe_center,
-                            probe_scale=parameters.probe_scale,
-                            positive_alpha=parameters.positive_alpha,
-                            negative_alpha=parameters.negative_alpha,
+                        features = esm2_features_from_orfs(
+                            esm_model,
+                            batch_converter,
+                            orfs,
+                            representation_layer=int(esm_model.num_layers),
+                            device=device,
+                            config=orf_config,
                         )
-                    if (
-                        parameters.protein_family == "esm2"
-                        and secondary_probe_logit is not None
-                    ):
-                        if any(
-                            value is None
-                            for value in (
-                                parameters.secondary_probe_center,
-                                parameters.secondary_probe_scale,
-                                parameters.secondary_source_alpha,
-                                parameters.short_alpha,
-                                parameters.long_alpha,
-                                parameters.piecewise_boundary_bp,
+                    standardized = (features - feature_mean) / feature_std
+                    with torch.inference_mode():
+                        selected_probe_logit = (
+                            probe(standardized.to(device)).double().cpu().numpy()
+                        )
+                    probe_logit[protein_indices] = selected_probe_logit
+                    if fusion_tree is not None:
+                        tree_scores[protein_indices] = _tree_probability(
+                            fusion_tree, standardized.cpu().numpy(), dna_scores[protein_indices],
+                            lengths[protein_indices], selected_probe_logit, effective_cpu_threads,
+                            raw_dna_logits[protein_indices] if simplified else None)
+
+                    if secondary_probe is not None:
+                        if secondary_mean is None or secondary_std is None:
+                            raise RuntimeError(
+                                "secondary probe standardization is missing"
                             )
-                        ):
-                            raise RuntimeError("dual-probe fusion parameters are missing")
-                        scores = dual_probe_piecewise_probability(
-                            scores,
-                            secondary_probe_logit,
-                            lengths,
-                            secondary_probe_center=float(
-                                parameters.secondary_probe_center
-                            ),
-                            secondary_probe_scale=float(parameters.secondary_probe_scale),
-                            secondary_source_alpha=float(
-                                parameters.secondary_source_alpha
-                            ),
-                            short_alpha=float(parameters.short_alpha),
-                            long_alpha=float(parameters.long_alpha),
-                            boundary_bp=int(parameters.piecewise_boundary_bp),
+                        secondary_standardized = (
+                            features - secondary_mean
+                        ) / secondary_std
+                        with torch.inference_mode():
+                            selected_secondary_logit = (
+                                secondary_probe(secondary_standardized.to(device))
+                                .double()
+                                .cpu()
+                                .numpy()
+                            )
+                        assert secondary_probe_logit is not None
+                        secondary_probe_logit[
+                            protein_indices
+                        ] = selected_secondary_logit
+                if fusion_tree is not None:
+                    scores = _apply_tree_routing(tree_scores, dna_scores, lengths,
+                                                (-1. if not buffer_use_dna_early_exit else parameters.early_exit_other_max_score) if simplified else parameters.early_exit_other_max_score)
+                elif parameters.protein_family == "esmc":
+                    if any(
+                        value is None
+                        for value in (
+                            parameters.secondary_probe_center,
+                            parameters.secondary_probe_scale,
+                            parameters.short_alpha,
+                            parameters.long_alpha,
+                            parameters.piecewise_boundary_bp,
                         )
-                    if nt_adapter is not None:
-                        routed = (early_exit_other | (lengths < 3)) if simplified else ((dna_scores <= parameters.early_exit_other_max_score) | (lengths < 3))
-                        nt_logits = nt_adapter.contig_logits(sequences, np.flatnonzero(~routed))
-                        scores = _sigmoid(_logit(scores) + nt_binding["alpha"] * nt_logits)
-                        scores[routed] = dna_scores[routed]
-                    # Legacy scalar models use a validated optimization. Tree models
-                    # retain their frozen DNA route even when --full-esm is enabled.
-                    scores[early_exit_other] = dna_scores[early_exit_other]
-                    if simplified:
-                        from .simplified_dna import transform
-                        scores = transform(scores, lengths, parameters.config["model"]["slim_length_calibration"])
-                    calibration = parameters.config["model"].get("length_calibration")
-                    if calibration is not None:
-                        from .length_calibration import apply_length_calibration
-                        scores = apply_length_calibration(scores, lengths, calibration)
-                    guard = parameters.config["model"]["dna_other_early_exit"].get("fallback_logit_margin")
-                    if simplified and buffer_use_dna_early_exit and guard is not None and np.any(np.abs(_logit(scores) - np.log(parameters.threshold / (1.0-parameters.threshold))) <= guard):
-                        buffer_use_dna_early_exit = False
-                        guarded_fallback_buffers += 1
-                        guarded_fallback_records += len(buffer)
-                        continue
-                    break
+                    ):
+                        raise RuntimeError(
+                            "ESM-C piecewise fusion parameters are missing"
+                        )
+                    scores = dual_probe_piecewise_probability(
+                        dna_scores,
+                        probe_logit,
+                        lengths,
+                        secondary_probe_center=float(parameters.probe_center),
+                        secondary_probe_scale=float(parameters.probe_scale),
+                        secondary_source_alpha=1.0,
+                        short_alpha=float(parameters.short_alpha),
+                        long_alpha=float(parameters.long_alpha),
+                        boundary_bp=int(parameters.piecewise_boundary_bp),
+                    )
+                else:
+                    scores = direct_joint_probability(
+                        dna_scores,
+                        probe_logit,
+                        probe_center=parameters.probe_center,
+                        probe_scale=parameters.probe_scale,
+                        positive_alpha=parameters.positive_alpha,
+                        negative_alpha=parameters.negative_alpha,
+                    )
+                if (
+                    parameters.protein_family == "esm2"
+                    and secondary_probe_logit is not None
+                ):
+                    if any(
+                        value is None
+                        for value in (
+                            parameters.secondary_probe_center,
+                            parameters.secondary_probe_scale,
+                            parameters.secondary_source_alpha,
+                            parameters.short_alpha,
+                            parameters.long_alpha,
+                            parameters.piecewise_boundary_bp,
+                        )
+                    ):
+                        raise RuntimeError("dual-probe fusion parameters are missing")
+                    scores = dual_probe_piecewise_probability(
+                        scores,
+                        secondary_probe_logit,
+                        lengths,
+                        secondary_probe_center=float(
+                            parameters.secondary_probe_center
+                        ),
+                        secondary_probe_scale=float(parameters.secondary_probe_scale),
+                        secondary_source_alpha=float(
+                            parameters.secondary_source_alpha
+                        ),
+                        short_alpha=float(parameters.short_alpha),
+                        long_alpha=float(parameters.long_alpha),
+                        boundary_bp=int(parameters.piecewise_boundary_bp),
+                    )
+                if nt_adapter is not None:
+                    routed = (early_exit_other | (lengths < 3)) if simplified else ((dna_scores <= parameters.early_exit_other_max_score) | (lengths < 3))
+                    # Reuse NT logits already computed before the ESM branch.
+                    scores = _sigmoid(_logit(scores) + nt_binding["alpha"] * nt_logits)
+                    scores[routed] = dna_scores[routed]
+                # Legacy scalar models use a validated optimization. Tree models
+                # retain their frozen DNA route even when --full-esm is enabled.
+                scores[early_exit_other] = dna_scores[early_exit_other]
+                if simplified:
+                    from .simplified_dna import transform
+                    scores = transform(scores, lengths, parameters.config["model"]["slim_length_calibration"])
+                calibration = parameters.config["model"].get("length_calibration")
+                if calibration is not None:
+                    from .length_calibration import apply_length_calibration
+                    scores = apply_length_calibration(scores, lengths, calibration)
+                # Upper bound is a conservative decision score, not the full-model probability.
+                scores[certified_other] = upper_scores[certified_other]
+                scores[certified_euk] = lower_scores[certified_euk]
+                scores[early_dna_euk | early_nt_euk] = 1.0
+                scores[early_nt_other] = 0.0
+                stage_counts['dna_euk'] += int(early_dna_euk.sum())
+                stage_counts['nt_euk'] += int(early_nt_euk.sum())
+                stage_counts['nt_other'] += int(early_nt_other.sum())
+                stage_counts['certified_euk'] += int(certified_euk.sum())
+                stage_counts['nt_records'] += int((~routed_for_nt).sum())
+                # Ablation: no whole-buffer rerun; all first-pass routing cutoffs unchanged.
                 for identifier, sequence, dna_score, esm_logit, score in zip(
                     identifiers,
                     sequences,
@@ -1197,6 +1221,7 @@ def predict_fasta(
                                 format(value, ".17g"),
                             )
                         )
+                certified_esm_skip_records += int(certified_other.sum())
                 records += len(buffer)
                 bases += int(lengths.sum())
                 early_exit_other_records += int(early_exit_other.sum())
@@ -1231,11 +1256,15 @@ def predict_fasta(
         "skipped_below_minimum_length_bases": skipped_bases,
         "elapsed_seconds": elapsed,
         "records_per_second": records / elapsed if records else 0.0,
+        "early_exit_score_semantics": "empirical_decision_scores_0_or_1;certified_lower_or_upper_bounds;remaining_model_scores" if use_dna_early_exit else "full_model_score",
         "inference_mode": (
             "dna_early_exit" if use_dna_early_exit else "full_esm"
         ),
         "nt_adapter": None if nt_adapter is None else {"precision": "bfloat16" if nt_adapter.bf16 else "float32", "windows": nt_adapter.windows, "license": nt_binding["license"], "checkpoint_sha256": nt_binding["checkpoint"]["sha256"]},
         "dna_early_exit_enabled": use_dna_early_exit,
+        "staged_exit_counts": stage_counts,
+        "empirical_gate_scope_bp": [1000, 100000],
+        "certified_esm_skip_records": certified_esm_skip_records,
         "guarded_fallback_buffers": guarded_fallback_buffers,
         "guarded_fallback_records": guarded_fallback_records,
         "dna_maximum_inference_length": parameters.config["model"]["dna"].get("maximum_inference_length"),

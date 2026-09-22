@@ -1,0 +1,99 @@
+{
+  "version": "0.61",
+  "regression_tests": {
+    "passed": 15
+  },
+  "installed_wheel": {
+    "status": "installed_wheel_verified",
+    "version": "0.61",
+    "wheel_sha256": "65d08f8f1d78ca7124f005f76c78d2e92ce58ae02087e64b83cc7b65308c0810",
+    "results": {
+      "euk_10_of_1000": {
+        "rows": 1000,
+        "changed_labels": 0,
+        "max_abs_score_error": 0.0,
+        "quantile_abs_score_error": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "within_1e5": true,
+        "threshold": 0.9999054162961046
+      },
+      "euk_900_of_1000": {
+        "rows": 1000,
+        "changed_labels": 0,
+        "max_abs_score_error": 0.0,
+        "quantile_abs_score_error": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "within_1e5": true,
+        "threshold": 0.9999054162961046
+      },
+      "cpu": {
+        "rows": 24,
+        "fallback_records": 0,
+        "esm_records": 11,
+        "staged_exit_counts": {
+          "certified_euk": 0,
+          "dna_euk": 3,
+          "nt_euk": 0,
+          "nt_other": 2,
+          "nt_records": 13
+        }
+      },
+      "gpu": {
+        "rows": 24,
+        "fallback_records": 0,
+        "esm_records": 11,
+        "staged_exit_counts": {
+          "certified_euk": 0,
+          "dna_euk": 3,
+          "nt_euk": 0,
+          "nt_other": 2,
+          "nt_records": 13
+        }
+      },
+      "full": {
+        "rows": 24,
+        "fallback_records": 0,
+        "esm_records": 22,
+        "staged_exit_counts": {
+          "certified_euk": 0,
+          "dna_euk": 0,
+          "nt_euk": 0,
+          "nt_other": 0,
+          "nt_records": 22
+        }
+      }
+    },
+    "final_new934_reads": 0
+  },
+  "hardware_canaries": {
+    "a40": {
+      "status": "incomplete_environment_timeout",
+      "job_id": "6799254",
+      "rows_verified": 0,
+      "deployment_sha256": "d01b04ff3fc04e55e4de2655595a9c254ccb7efc194e03fd51df4f3f76b708d1"
+    },
+    "a100": {
+      "status": "incomplete_environment_timeout",
+      "job_id": "6799255",
+      "rows_verified": 0,
+      "deployment_sha256": "d01b04ff3fc04e55e4de2655595a9c254ccb7efc194e03fd51df4f3f76b708d1"
+    },
+    "v100": {
+      "status": "pending_resources",
+      "job_id": "6799253",
+      "rows_verified": 0,
+      "deployment_sha256": "d01b04ff3fc04e55e4de2655595a9c254ccb7efc194e03fd51df4f3f76b708d1"
+    }
+  },
+  "scope": "Installed package verified on CPU/RTX4090. New A40/A100 canaries timed out during shared-filesystem startup/loading; V100 remained queued at source freeze. These three devices are NOT newly validated by this release check. The unchanged model operators retain the existing device support. No cross-device parity or timing claim."
+}

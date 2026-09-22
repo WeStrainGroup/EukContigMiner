@@ -6,7 +6,7 @@
   },
   "dataset_role_revision": {
     "confirmation_genomes": {
-      "path": "/data/wangxinyu2/eukcontigminer/runs/dataset_role_revision_20260906_v1/confirmation_genomes.tsv",
+      "path": "confirmation_genomes.tsv",
       "sha256": "1884959cdecc108a3a2ffb3d8bc272362f811dde5f20c114a3760d64d47dc1b9"
     },
     "confirmation_plan_sha256": "9d2d67c062cc067c7319488dc76e019f3964cba03ae2a5dbe58befb19c74688e",
@@ -15,7 +15,7 @@
     "development_species": 1551,
     "original_train_fragments": 5345684,
     "policy": {
-      "path": "/data/wangxinyu2/eukcontigminer/runs/dataset_role_revision_20260906_v1/policy.json",
+      "path": "policy.json",
       "sha256": "a266ffba21873dc50df8416dff7ff411ea8a47c91553355ec604004200d6b5fd"
     },
     "scope": "Historical supervised role-revision record. Isolation booleans and species counts describe that historical split, not an independent confirmation of v0.55. Current reused development evidence is described under scientific_validation.",
@@ -58,12 +58,12 @@
       "maximum_inference_length": 100000
     },
     "dna_other_early_exit": {
-      "status": "validation_frozen_guarded",
+      "status": "validation_frozen_bidirectional",
       "maximum_dna_p_euk": 0.01,
       "short_sequence_fallback_below_bp": 3,
-      "explanation": "DNA<=0.01 skips ORF and both language models. If any final score in the buffer lies within2logit units of the decision threshold, recompute the full original buffer without exits. Validation-derived safeguard; full native confirmation required.",
-      "fallback_logit_margin": 2.0,
-      "fallback": "complete_original_buffer"
+      "explanation": "DNA<=0.01 skips both language models. Additional frozen DNA-positive and NT two-sided gates operate at1000..100000bp. Conditional score bounds can skip ESM. No whole-buffer rerun; the2logit margin applies only to the conditional Other bound.",
+      "fallback": "disabled",
+      "certified_other_logit_margin": 2.0
     },
     "esmc": {
       "checkpoint_bytes": 1332095738,
@@ -163,7 +163,7 @@
       "long": -1.0
     }
   },
-  "model_id": "simplified192x6_nt100_esmc300_d6_v060",
+  "model_id": "simplified192x6_nt100_esmc300_d6_v061",
   "prediction_rule": {
     "comparison": "strict_greater_than",
     "equal_threshold_label": "Other",
@@ -175,30 +175,40 @@
     "threshold": 0.9999054162961046,
     "threshold_selection": "Five species-fold OOF shape selection on491991 Validation, then one exact global F1@1% threshold; frozen before panel evaluation."
   },
-  "release_version": "0.6",
+  "release_version": "0.61",
   "schema": "eukcontigminer.release_model.v6",
   "scientific_validation": {
-    "status": "actual_installed_native_panels_verified",
+    "status": "four_development_panels_independently_audited",
+    "rows": 1797325,
     "goal_achieved": false,
     "statistically_established_superiority": false,
     "source_ancestry_cleared": false,
-    "all_known_current_fitting_exclusions_applied": true,
-    "source_reports_sha256": {
-      "validation": "e8781ccd6ba56e5ee656e7e4e457d3cfedc209023937d67ef182e7753d0f2283",
-      "main": "71d406e3abf96773ee6117d5fb2e93205ebffb77550adec0eed289a043d4cec7",
-      "supplement": "d25484b4c9caca4ab1014aba3b5d3147124c3c497593565e7a7dd94c076c5c5c",
-      "long": "1a76384340c11529cbef6799f0173a1104efbde33ae74dfb6a493c099cb151a3"
-    },
-    "strict_guarded_label_parity_rows": 1797325,
-    "guarded_label_parity_scope": "Registered RTX4090/default1024-buffer panel runs only. Not a universal score/label invariance guarantee across hardware or batching.",
-    "scientific_scope": "Reused development genome-fragment panels. Validation selects calibration; Main/Supplement/Long have development exposure. Historical former-Final reuse is inherited. No independent confirmation or all500bp-bin0.99 claim.",
-    "efficiency": {
-      "real_SPIRE_samples": 10,
-      "records": 84990,
-      "total_speedup_vs_v055": 1.7081433516968336,
-      "hardware": "RTX4090",
-      "source_report_sha256": "c03adafc48c0d4c52247f19a9dfff276b611f032610233db48a73d462310e888"
-    }
+    "scientific_scope": "Reused development panels, including substantial Validation/Main/Long species overlap. Not unseen-species confirmation. Historical former-Final lineage remains inherited; no new Final/New934 reads in this release.",
+    "label_changes_vs_v060": 26,
+    "corrected_fp": 1,
+    "new_fp": 0,
+    "corrected_fn": 11,
+    "new_fn": 14,
+    "report": "reports/v061_validation.json"
   },
-  "status": "released"
+  "status": "released",
+  "runtime_optimization": {
+    "id": "ecm_v061_staged_bidirectional",
+    "status": "released",
+    "nt_batch_windows": 16,
+    "conditional_bounds": {
+      "asset": "certified_bounds.npz",
+      "sha256": "811bcd7fdd061ec6fbca259dd5397b9239d626c0411fccef588c6e4ddab53841"
+    },
+    "early_score_semantics": "Empirical exits emit0/1 decision scores; conditional exits emit bounds; unresolved rows retain model scores. No posterior calibration or universal label parity guarantee.",
+    "whole_buffer_fallback": false,
+    "empirical_gates": {
+      "asset": "_staged_gates.json",
+      "sha256": "7c9dccb2d4bca53e0fc7fa66d422244f085a75899413135fe1810a9837b60f62",
+      "scope_bp": [
+        1000,
+        100000
+      ]
+    }
+  }
 }

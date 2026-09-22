@@ -59,7 +59,7 @@ def load_parameters(config):
     if d['schema']!='ecm.dna.192x6.kmer.v1' or d['parameters']!=2409641:raise ValueError('Invalid DNA binding')
     if tree['feature_dimension']!=1923 or tree['feature_order']!=TREE_FEATURE_ORDER or tree['objective']!='binary:logistic' or tree['xgboost_version']!='3.2.0' or tree['rounds'] not in [400,600]:raise ValueError('Invalid fusion binding')
     if selection['maximum_orfs']!=2 or selection['aggregation']!='mean_max' or selection['reverse_complement_invariant'] is not True or m['feature_definition']['feature_dimension']!=1920:raise ValueError('Invalid protein representation')
-    if route['status'] not in ['validation_frozen_guarded','validated_guarded'] or route['maximum_dna_p_euk']!=.01 or route['fallback_logit_margin']!=2. or d['maximum_inference_length']!=100000:raise ValueError('Unexpected guarded inference contract')
+    if route['status'] != 'validation_frozen_bidirectional' or route['fallback'] != 'disabled' or route['maximum_dna_p_euk']!=.01 or route['certified_other_logit_margin']!=2. or d['maximum_inference_length']!=100000:raise ValueError('Unexpected staged inference contract')
     if config['inference_contract']['reference_free'] is not True or config['inference_contract']['reference_database'] is not None or config['inference_contract']['external_similarity_search'] is not False:raise ValueError('Reference-free inference required')
     esmc=m['esmc']
     if esmc['name']!='esmc_300m' or esmc['layers']!=30 or esmc['embedding_dimension']!=960 or esmc['release_package']!='esm 3.2.1' or esmc['use_flash_attention'] is not False:raise ValueError('Invalid protein backbone')
