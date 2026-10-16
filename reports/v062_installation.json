@@ -1,0 +1,60 @@
+{
+  "at": 1792142774.5577714,
+  "passed": true,
+  "version": "0.62",
+  "wheel": {
+    "name": "eukcontigminer-0.62-py3-none-any.whl",
+    "sha256": "3aa892e942d33fa1fbd2a44032f2dc88c549524d59199e940cabaf661d9ee090",
+    "bytes": 407019895
+  },
+  "installed_application_isolated": true,
+  "dependency_scope": "Explicit .pth dependency reuse from verified .111 environment; application installed in separate venv; not a clean dependency resolver install",
+  "results": {
+    "0": {
+      "rows": 1024,
+      "label_mismatches": 0,
+      "max_absolute_probability_difference": 0.0,
+      "input_sha256": "9328196191a5973ab4ed9175c2d76bcf433ad0551f3959d7dcf22af986a1bd4f",
+      "output_sha256": "afff1ba948efcd210bc902099b82b83174da2f99a931b1031775d1f7ef2f15cc"
+    },
+    "319": {
+      "rows": 1024,
+      "label_mismatches": 0,
+      "max_absolute_probability_difference": 0.0,
+      "input_sha256": "09334982ec14082ad87757a1da939f88454c2fea09c6f4225f3d9071b0ee9394",
+      "output_sha256": "ad70f044c3c3b803e6bf3cdee0245f1514cec8a747d68804265d3c474db89dcc"
+    },
+    "476": {
+      "rows": 446,
+      "label_mismatches": 0,
+      "max_absolute_probability_difference": 0.0,
+      "input_sha256": "3a01c4735829826654972c6fa11f3254ecdca9b8227d9cc0a9a0ffac2abe94bc",
+      "output_sha256": "7c0f658af4176e615db294d185328596a57cd47c2491ebf8449834393a25b8ab"
+    },
+    "CPU_short": {
+      "rows": 2,
+      "label_mismatches": 0,
+      "max_absolute_probability_difference": 0.0
+    },
+    "CPU_eligible": {
+      "rows": 6,
+      "label_mismatches": 0,
+      "max_absolute_probability_difference": 0.0
+    },
+    "CPU_mixed": {
+      "rows": 8,
+      "finite_scores": true,
+      "strict_threshold_labels": true,
+      "original_bug": "1/2bp translation failure in mixed buffer; now uses existing DNA fallback"
+    }
+  },
+  "scope": "Installed wheel CLI versus accepted native implementation on three original Validation buffers plus bounded CPU parity. Model hashes are unchanged; inference source differs only by the documented handling of non-translatable 1/2bp rows. Full native scientific evaluation is inherited for the unchanged >=1000bp path. No Test reread.",
+  "prepared_sha256": "c662d1983f01942d82d9a28c7455c4a8e8f697383fac4e1601f31a2b655cd8b5",
+  "short_input_fix": {
+    "at": 1792142422.5761256,
+    "original_sha256": "ebc40ca8862ab058cd52344010afbcce35175b1c3f011f8f044a4688d1f88ed6",
+    "repaired_sha256": "9f67a1823d48523d1a1048ebcaedd5e8282f461f22e337dafbcc52722303fa67",
+    "change": "Exclude only 1/2bp rows from ESM ORF selection; retain existing DNA fallback and full eligible ESM batching. Inputs >=3bp have identical ORF order and feature row mapping. No weights, thresholds, precision, learned parameters or evaluated >=1000bp input changes."
+  },
+  "verification_receipt_sha256": "9d898972fbae035382b7c482aa3e2ff195ad618f54a6168113c21c60b4cd2d7d"
+}

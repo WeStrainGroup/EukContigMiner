@@ -11,6 +11,8 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Score whole contigs with the frozen DNA + ESM-C + NTv3 100M model"
     )
+    from . import __version__
+    parser.add_argument("--version", action="version", version="%(prog)s " + __version__)
     parser.add_argument("fasta", type=Path, help="input FASTA or FASTA.GZ")
     parser.add_argument("-o", "--output", type=Path, required=True)
     parser.add_argument("--summary", type=Path)

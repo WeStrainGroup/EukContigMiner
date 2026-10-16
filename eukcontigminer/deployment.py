@@ -728,7 +728,7 @@ def _load_models(
             or sha256_file(weight_path) != str(esm_binding["sha256"])
         ):
             raise ValueError("ESM-C 300M backbone differs")
-        with torch.device(device):
+        with torch.device('cpu'):
             esm_model = ESMC(
                 d_model=960,
                 n_heads=15,
@@ -736,7 +736,7 @@ def _load_models(
                 tokenizer=get_esmc_model_tokenizers(),
                 use_flash_attn=False,
             ).eval()
-        state_dict = torch.load(weight_path, map_location=device, weights_only=True)
+        state_dict = torch.load(weight_path, map_location='cpu', weights_only=True)
         esm_model.load_state_dict(state_dict, strict=True)
         esm_model.requires_grad_(False).eval().to(device)
         if (
@@ -1015,7 +1015,7 @@ def predict_fasta(
                 )
                 early_dna_euk = staged_gates.dna_euk(raw_dna_logits, lengths) & ~early_exit_other & use_dna_early_exit
                 routed_for_nt = early_exit_other | early_dna_euk | (lengths < 3)
-                nt_logits = nt_adapter.contig_logits(sequences, np.flatnonzero(~routed_for_nt))
+                nt_logits = nt_adapter.contig_logits(sequences, np.arange(len(sequences)))
                 upper_scores = certificate_router.upper_probability(raw_dna_logits, nt_logits, lengths)
                 lower_scores = certificate_router.lower_probability(raw_dna_logits, nt_logits, lengths)
                 pending_nt = ~routed_for_nt & use_dna_early_exit
@@ -1043,9 +1043,12 @@ def predict_fasta(
                 )
                 tree_scores = dna_scores.copy() if fusion_tree is not None else None
                 if len(protein_indices):
+                    # Non-translatable 1/2bp rows keep the existing DNA fallback.
+                    # Every eligible row stays in the original full-buffer order.
+                    esm_indices = np.flatnonzero(lengths >= 3)
                     orfs = [
                         select_orfs_from_contig(sequences[int(index)], orf_config)
-                        for index in protein_indices
+                        for index in esm_indices
                     ]
                     if parameters.protein_family == "esmc":
                         features = esmc_features_from_orfs(
@@ -1064,6 +1067,7 @@ def predict_fasta(
                             device=device,
                             config=orf_config,
                         )
+                    features = features[np.searchsorted(esm_indices, protein_indices)]
                     standardized = (features - feature_mean) / feature_std
                     with torch.inference_mode():
                         selected_probe_logit = (
@@ -1392,7 +1396,7 @@ def predict_fasta(
             ),
             "dna_routing_is_part_of_classifier": fusion_tree is not None,
             "input_dataset_role": "user_supplied_not_inferred",
-            "model_training_former_final_reused": parameters.config["final_test"]["read_or_changed_for_this_candidate"],
+            "model_training_former_final_reused": parameters.config.get("final_test", {}).get("read_or_changed_for_this_candidate"),
         },
     }
     summary_part.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
