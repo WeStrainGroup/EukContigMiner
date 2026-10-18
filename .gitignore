@@ -1,10 +1,9 @@
-/build/
-/dist/
-/*.egg-info/
 __pycache__/
-*.py[cod]
+*.pyc
+*.egg-info/
+build/
+dist/
+.venv/
+models/
+*.partial
 .pytest_cache/
-eukcontigminer/model_data/nt_adapter.pt
-
-# Distributed inside the release wheel, not as a Git blob.
-eukcontigminer/model_data/nt_adapter.pt

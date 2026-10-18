@@ -1,34 +1,34 @@
 # EukContigMiner
 
-Identify eukaryotic contigs from FASTA, including organelle DNA, without a reference database.
-
-**v0.62** is the v0.61 architecture retrained on the revised dataset, released as a reproducible baseline.
+Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent models. Host-derived organelle DNA is included in the corresponding positive class. No reference database is needed during prediction.
 
 ## Install
 
-Python 3.10–3.12. Install the wheel and follow the one-time [backbone setup](NTV3_INSTALL.md).
+Use a fresh Python 3.11 environment:
 
 ```bash
-pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.62/eukcontigminer-0.62-py3-none-any.whl
+pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.7/eukcontigminer-0.7-py3-none-any.whl
+eukcontigminer download-models --output models
 ```
+
+The one-time setup downloads the trained heads and original NTv3/ESM-C backbones (about 1.8 GB). [Upstream model terms](THIRD_PARTY_NOTICES.md) apply; Hugging Face authentication may be required. Existing backbones can be supplied with `--nt-dir` and `--esm-weights`.
 
 ## Run
 
 ```bash
-export EUKCONTIGMINER_NTV3_DIR="$PWD/models/ntv3_100m"
-export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
-eukcontigminer input.fna.gz -o predictions.tsv --device cuda:0 --cpu-threads 4
+eukcontigminer input.fasta.gz --task euk --models models -o euk.tsv --device cuda:0
+eukcontigminer input.fasta.gz --task fun --models models -o fun.tsv --device cuda:0
 ```
 
-One GPU is sufficient; CPU is supported with `--device cpu`. Output: contig ID, length, `p_euk`, and Eukaryota/Other. The frozen decision rule is `p_euk > 0.9996954815448658`; equality is Other. Keep the default 1024-record buffer for the evaluated batching.
+`euk` is the default. Each task outputs contig ID, length, `p_euk` or `p_fungi`, and its binary label. Prediction runs offline on one GPU; `--device cpu` is also supported. Inputs must be at least **1,000 bp**. Output files are never overwritten.
 
-## Results
+## Validation
 
-F1 standardized to **1% eukaryotic prevalence**:
+F1 at **1% target prevalence**, on the same 487,870-contig Validation set:
 
-| Dataset | Overall | 1–2 kb |
+| Task | Overall | 1–2 kb |
 |---|---:|---:|
-| Validation (487,870) | 0.992132 | 0.978562 |
-| Test (489,080) | 0.991848 | 0.975371 |
+| `euk` | 0.990373 | 0.973732 |
+| `fun` | 0.911217 | 0.803682 |
 
-Train was used for learning, Validation for selection/calibration, and Test for fixed reporting. See [evaluation and checksums](reports/v062_evaluation.json), [source installation](SOURCE_INSTALL.md), and [model licences](THIRD_PARTY_NOTICES.md). Scores are decision scores, not calibrated posterior probabilities; hardware or batching changes can affect boundary labels.
+Train fits the models; Validation selects models and thresholds. The two tasks use separate frozen decision rules. Scores are not calibrated posterior probabilities. [Evaluation details](reports/v07_evaluation.json) include auxiliary prevalences and verification scope. The earlier [v0.62](https://github.com/WeStrainGroup/EukContigMiner/releases/tag/v0.62) remains available as the retrained reference baseline.

@@ -1,0 +1,273 @@
+{
+  "version": "0.7",
+  "selection": "User-retained simple euk architecture and best fully validated independent fungi head at release freeze",
+  "Validation_rows": 487870,
+  "Train_rows": 2319041,
+  "dataset_sha256": "74f9c75025236262c603f7bbd179ad05688cca55c6c2b8744326742ea12353db",
+  "short_definition": "1000 <= length_bp < 2000",
+  "tasks": {
+    "euk": {
+      "model_id": "H1epoch3_projectionH2epoch2_sharedMishH3epoch3",
+      "threshold": 0.5,
+      "architecture": "H1 + projection H2 + shared-Mish H3, frozen two-sided decision gates"
+    },
+    "fun": {
+      "model_id": "fungi_compact_seed2026101801_refine_epoch1",
+      "threshold": 0.9920285346180445,
+      "architecture": "DNA942 + NT1536 + ESM1920 + loglength -> 256 GELU -> 64 GELU -> 1"
+    }
+  },
+  "metrics": {
+    "euk": {
+      "overall": {
+        "TP": 193774,
+        "FP": 13,
+        "FN": 2898,
+        "TN": 291185,
+        "TPR": 0.9852648063781321,
+        "FPR": 4.464316375799284e-05,
+        "F1_at_prevalence": {
+          "0.001": 0.9707696013678903,
+          "0.01": 0.9903729123735967,
+          "0.1": 0.9923768762918538
+        }
+      },
+      "length_0": {
+        "TP": 49374,
+        "FP": 12,
+        "FN": 1878,
+        "TN": 77460,
+        "TPR": 0.9633575275111215,
+        "FPR": 0.00015489467162329616,
+        "F1_at_prevalence": {
+          "0.001": 0.909644259950989,
+          "0.01": 0.9737316154547052,
+          "0.1": 0.9806405425860053
+        }
+      },
+      "length_1": {
+        "TP": 50216,
+        "FP": 1,
+        "FN": 555,
+        "TN": 77471,
+        "TPR": 0.9890685627622068,
+        "FPR": 1.2907889301941347e-05,
+        "F1_at_prevalence": {
+          "0.001": 0.9880984752595718,
+          "0.01": 0.9938657321107596,
+          "0.1": 0.9944461627650866
+        }
+      },
+      "length_2": {
+        "TP": 49545,
+        "FP": 0,
+        "FN": 300,
+        "TN": 77408,
+        "TPR": 0.9939813421606981,
+        "FPR": 0.0,
+        "F1_at_prevalence": {
+          "0.001": 0.9969815876848777,
+          "0.01": 0.9969815876848777,
+          "0.1": 0.9969815876848777
+        }
+      },
+      "length_3": {
+        "TP": 44639,
+        "FP": 0,
+        "FN": 165,
+        "TN": 58846,
+        "TPR": 0.9963172930988304,
+        "FPR": 0.0,
+        "F1_at_prevalence": {
+          "0.001": 0.9981552497121071,
+          "0.01": 0.9981552497121071,
+          "0.1": 0.9981552497121072
+        }
+      },
+      "organelles": {
+        "TP": 4224,
+        "FP": 0,
+        "FN": 285,
+        "TN": 0,
+        "TPR": 0.9367930805056554,
+        "FPR": null,
+        "F1_at_prevalence": {
+          "0.001": null,
+          "0.01": null,
+          "0.1": null
+        }
+      }
+    },
+    "fun": {
+      "overall": {
+        "TP": 37961,
+        "FP": 333,
+        "TN": 445303,
+        "FN": 4273,
+        "TPR": 0.8988255907562628,
+        "FPR": 0.0007472466317801973,
+        "F1_at_prevalence": {
+          "0.001": 0.6795577851064379,
+          "0.01": 0.9112167686577742,
+          "0.1": 0.943376147023487
+        }
+      },
+      "length_0": {
+        "TP": 8528,
+        "FP": 202,
+        "TN": 117669,
+        "FN": 2325,
+        "TPR": 0.7857735188427163,
+        "FPR": 0.001713737899907526,
+        "F1_at_prevalence": {
+          "0.001": 0.4492961517726721,
+          "0.01": 0.8036821403936244,
+          "0.1": 0.8725013966467385
+        }
+      },
+      "length_1": {
+        "TP": 9641,
+        "FP": 79,
+        "TN": 117373,
+        "FN": 1150,
+        "TPR": 0.8934297099434714,
+        "FPR": 0.0006726151959949596,
+        "F1_at_prevalence": {
+          "0.001": 0.696530256577229,
+          "0.01": 0.9116543112435074,
+          "0.1": 0.9407081757547974
+        }
+      },
+      "length_2": {
+        "TP": 10155,
+        "FP": 30,
+        "TN": 116501,
+        "FN": 567,
+        "TPR": 0.9471180749860101,
+        "FPR": 0.000257442225673855,
+        "F1_at_prevalence": {
+          "0.001": 0.8593357045853379,
+          "0.01": 0.9602714628101827,
+          "0.1": 0.9716846658199799
+        }
+      },
+      "length_3": {
+        "TP": 9637,
+        "FP": 22,
+        "TN": 93760,
+        "FN": 231,
+        "TPR": 0.9765910012160519,
+        "FPR": 0.00023458659444243032,
+        "F1_at_prevalence": {
+          "0.001": 0.8834158069316069,
+          "0.01": 0.9766813080676813,
+          "0.1": 0.9871025174506649
+        }
+      },
+      "organelles": {
+        "TP": 259,
+        "FP": 1,
+        "TN": 4166,
+        "FN": 83,
+        "TPR": 0.7573099415204678,
+        "FPR": 0.00023998080153587713,
+        "F1_at_prevalence": {
+          "0.001": 0.7584283342556725,
+          "0.01": 0.8503997872529032,
+          "0.1": 0.8608388219881193
+        }
+      }
+    }
+  },
+  "evidence_sha256": {
+    "training_work_20261011/full_distribution_sharedshape_cli_20261014_v1/verified_complete.json": "38f6d46cddfdbd665dd620854876e07c9fbdf3fed3ef57cd3ef04c00aec5b2ff",
+    "dataset_revision_work_20261011/fungi_seed1_full_Validation_CLI_20261018_v1/verified_complete.json": "02a6fb4e726291eb409fde4f57dfd908867cd3d78c545207ad389befe2168ed9",
+    "training_work_20261011/fungi_raw_seed1_refine1_binding_20261018_v1/binding.json": "f1765d6ad5f8ae277d4b6f9f420fabf56f954cae54dab7c1b7a1ad851bf7d7c8",
+    "training_work_20261011/portable_sharedshape_distribution_install_20261014_v1/bundle/candidate/candidate.json": "90c43cc4b7e2f843dd133536373c7fa8e15bfa817483d24ce1bfb945b693ef2a",
+    "training_work_20261011/revised_frozen_encoder_assets_20261013_v1/assets.json": "346be02ff29259e7cfc842a92a248bdede29e8b26f99931a798a7b9083eab876"
+  },
+  "full_raw_Validation_CLI": {
+    "euk_rows": 487870,
+    "fun_rows": 487870,
+    "exact_scores_and_labels": true
+  },
+  "source_identity": {
+    "ecm_revised_native_heads_20261012.py": {
+      "original_sha256": "118fc6460c73bd0a7f18c037214e9c9e94690ce66ff2f971a4c04af9b6b28b27",
+      "release_sha256": "118fc6460c73bd0a7f18c037214e9c9e94690ce66ff2f971a4c04af9b6b28b27",
+      "only_manifest_digest_changed": false
+    },
+    "dna.py": {
+      "original_sha256": "e011181b029779f276d70980e118e06dcf90d092a1df13c54725b6199cf1f2f9",
+      "release_sha256": "e011181b029779f276d70980e118e06dcf90d092a1df13c54725b6199cf1f2f9",
+      "only_manifest_digest_changed": false
+    },
+    "dna_features.py": {
+      "original_sha256": "9d5369c135e7a629a00505b736a90a76cf9e4ad84aab7caf3b4c3c68729f3f42",
+      "release_sha256": "9d5369c135e7a629a00505b736a90a76cf9e4ad84aab7caf3b4c3c68729f3f42",
+      "only_manifest_digest_changed": false
+    },
+    "sequence.py": {
+      "original_sha256": "54763388bb2b6ec8f4bc617d0d847e527b94e3fafbb7888dbe8c35c18c61bd4f",
+      "release_sha256": "54763388bb2b6ec8f4bc617d0d847e527b94e3fafbb7888dbe8c35c18c61bd4f",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_revised_native_h1_20261013.py": {
+      "original_sha256": "04d0133a228007819a207ea26e500734bed2e0f7e7226c77e7fb3eed3058acb3",
+      "release_sha256": "04d0133a228007819a207ea26e500734bed2e0f7e7226c77e7fb3eed3058acb3",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_revised_native_encoders_20261013.py": {
+      "original_sha256": "a758877e275ab37f2db15128d71408e1a53431f49f8cee49ffc9e99e2723033a",
+      "release_sha256": "39ad5f79342a24606122b93d2e7c92c6b5fc3b67ad646bf279f5f307f0ee7abe",
+      "only_manifest_digest_changed": true
+    },
+    "ecm_revised_native_pca_head_20261014.py": {
+      "original_sha256": "250cb0fe496e828864266ae6d18526f068398698bc27ae7fa101d2ee67566f5b",
+      "release_sha256": "250cb0fe496e828864266ae6d18526f068398698bc27ae7fa101d2ee67566f5b",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_revised_native_gateenergy_H2_20261014.py": {
+      "original_sha256": "b0d3601dcff91c4a1dfae4ff7e0758a730aaf157f8e95d3de334d5e97f2251e3",
+      "release_sha256": "b0d3601dcff91c4a1dfae4ff7e0758a730aaf157f8e95d3de334d5e97f2251e3",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_revised_native_activation_H3_20261014.py": {
+      "original_sha256": "943bad00dfd1322693daf12fbf1039688105589a2aad424f8ddf5e6dda6da5b7",
+      "release_sha256": "943bad00dfd1322693daf12fbf1039688105589a2aad424f8ddf5e6dda6da5b7",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_revised_native_response_H2_20261014.py": {
+      "original_sha256": "8262da05abb81b6e33da41c4555b5faa02a3fc62ad22f7b64ba3065abf7678fe",
+      "release_sha256": "8262da05abb81b6e33da41c4555b5faa02a3fc62ad22f7b64ba3065abf7678fe",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_revised_native_pipeline_sharedshape_20261014.py": {
+      "original_sha256": "4cba0db6fb7befa02bae5e2fc7144aa7b1125847f09d613038479fd146b0d8d4",
+      "release_sha256": "4cba0db6fb7befa02bae5e2fc7144aa7b1125847f09d613038479fd146b0d8d4",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_revised_native_shared_shape_H3_20261014.py": {
+      "original_sha256": "57def11493a79428d2e8267241dacb8ec2366202fa3ad87a7fe45307088d3440",
+      "release_sha256": "57def11493a79428d2e8267241dacb8ec2366202fa3ad87a7fe45307088d3440",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_fungi_raw_pipeline_20261017.py": {
+      "original_sha256": "ce8808c98efb7cf770311deb611fa0f794983d03f1b925c86f5c1f136414aa8a",
+      "release_sha256": "ce8808c98efb7cf770311deb611fa0f794983d03f1b925c86f5c1f136414aa8a",
+      "only_manifest_digest_changed": false
+    },
+    "ecm_fungi_compact_runtime_20261017.py": {
+      "original_sha256": "ac79ab14fbcab60fdb93442521c3239c95b371890e4002c3ec19c4f120b01b3f",
+      "release_sha256": "ac79ab14fbcab60fdb93442521c3239c95b371890e4002c3ec19c4f120b01b3f",
+      "only_manifest_digest_changed": false
+    }
+  },
+  "selection_split": "Train fitting and Validation selection. No new Test evaluation or Test-driven optimization for this release.",
+  "scope": "Repackages two previously full-Validation-verified models. Packaging verification is additional. Scores are not calibrated posterior probabilities; no cross-hardware bitwise claim.",
+  "baseline_v062_F1_prev1": {
+    "overall": 0.9921322525720374,
+    "short": 0.9785615414317606
+  },
+  "euk_does_not_outperform_v062": true
+}

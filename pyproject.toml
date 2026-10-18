@@ -4,24 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eukcontigminer"
-version = "0.62"
-description = "Single-device DNA and protein-language-model screening of eukaryotic contigs"
-requires-python = ">=3.10,<3.13"
-license = "MIT AND LicenseRef-InstaDeep-Open-Model"
+version = "0.7"
+description = "Independent eukaryotic and fungal contig classification"
+requires-python = ">=3.11,<3.13"
+license = "MIT"
 license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "NTV3-MODEL-LICENSE.md"]
 authors = [{name = "WeStrainGroup"}]
-dependencies = [
-  "esm==3.2.1",
-  "numpy>=1.26,<3",
-  "scipy>=1.11,<2",
-  "torch>=2.2,<3",
-  "xgboost==3.2.0",
-  "transformers==4.48.1",
-]
-classifiers = [
-  "Programming Language :: Python :: 3",
-  "Operating System :: OS Independent",
-]
+dependencies = ["torch==2.13.0", "numpy==2.4.6", "scipy==1.17.1", "transformers==4.48.1", "safetensors==0.8.0", "esm==3.2.1", "einops==0.8.2", "huggingface-hub==0.36.2"]
 
 [project.scripts]
 eukcontigminer = "eukcontigminer.cli:main"
@@ -33,7 +22,7 @@ Repository = "https://github.com/WeStrainGroup/EukContigMiner"
 include = ["eukcontigminer*"]
 
 [tool.setuptools.package-data]
-eukcontigminer = ["model_data/*.json", "model_data/*.pt", "model_data/*.ubj", "model_data/*.npz", "_staged_gates.json"]
+eukcontigminer = ["release.json", "assets/**/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

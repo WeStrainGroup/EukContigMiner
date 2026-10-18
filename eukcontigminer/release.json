@@ -1,0 +1,264 @@
+{
+  "version": "0.7",
+  "tasks": {
+    "euk": {
+      "model_id": "H1epoch3_projectionH2epoch2_sharedMishH3epoch3",
+      "threshold": 0.5,
+      "architecture": "H1 + projection H2 + shared-Mish H3, frozen two-sided decision gates"
+    },
+    "fun": {
+      "model_id": "fungi_compact_seed2026101801_refine_epoch1",
+      "threshold": 0.9920285346180445,
+      "architecture": "DNA942 + NT1536 + ESM1920 + loglength -> 256 GELU -> 64 GELU -> 1"
+    }
+  },
+  "models_frozen": true,
+  "chunk_rows": 2048,
+  "candidate_sha256": "b7c0fbb5f2a97993e9576a2a05884421b80b76dea649665ac281071656563b4c",
+  "euk_head_thresholds": [
+    0.9950056290764133,
+    0.9993903212286569,
+    0.9986010087227154
+  ],
+  "euk_gates": {
+    "H1": {
+      "0": {
+        "other_below": -17.154922962139068,
+        "euk_above": 10.26573514946674
+      },
+      "1": {
+        "other_below": -17.905638217876373,
+        "euk_above": 8.850737094943138
+      },
+      "2": {
+        "other_below": -15.714191913555082,
+        "euk_above": 1.1083068848152813
+      }
+    },
+    "H2": {
+      "0": {
+        "other_below": -20.244582653045622,
+        "euk_above": 12.277291774457032
+      },
+      "1": {
+        "other_below": -25.839481830596892,
+        "euk_above": 7.64988851546614
+      },
+      "2": {
+        "other_below": -21.174832820892302,
+        "euk_above": 1.0998597145080913
+      }
+    }
+  },
+  "files": {
+    "candidate/candidate.json": {
+      "sha256": "b7c0fbb5f2a97993e9576a2a05884421b80b76dea649665ac281071656563b4c",
+      "bytes": 6060,
+      "source": "package"
+    },
+    "candidate/diagnostic_gates.json": {
+      "sha256": "7896eb94b048cb96385f4b9e7ca16784619cab46e89a4c5c75867b279b998c87",
+      "bytes": 615,
+      "source": "package"
+    },
+    "candidate/runtime/dna.py": {
+      "sha256": "e011181b029779f276d70980e118e06dcf90d092a1df13c54725b6199cf1f2f9",
+      "bytes": 11528,
+      "source": "package"
+    },
+    "candidate/runtime/dna_features.py": {
+      "sha256": "9d5369c135e7a629a00505b736a90a76cf9e4ad84aab7caf3b4c3c68729f3f42",
+      "bytes": 5377,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_fungi_compact_runtime_20261017.py": {
+      "sha256": "ac79ab14fbcab60fdb93442521c3239c95b371890e4002c3ec19c4f120b01b3f",
+      "bytes": 3711,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_fungi_raw_pipeline_20261017.py": {
+      "sha256": "ce8808c98efb7cf770311deb611fa0f794983d03f1b925c86f5c1f136414aa8a",
+      "bytes": 2959,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_activation_H3_20261014.py": {
+      "sha256": "943bad00dfd1322693daf12fbf1039688105589a2aad424f8ddf5e6dda6da5b7",
+      "bytes": 1685,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_encoders_20261013.py": {
+      "sha256": "39ad5f79342a24606122b93d2e7c92c6b5fc3b67ad646bf279f5f307f0ee7abe",
+      "bytes": 7098,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_gateenergy_H2_20261014.py": {
+      "sha256": "b0d3601dcff91c4a1dfae4ff7e0758a730aaf157f8e95d3de334d5e97f2251e3",
+      "bytes": 4910,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_h1_20261013.py": {
+      "sha256": "04d0133a228007819a207ea26e500734bed2e0f7e7226c77e7fb3eed3058acb3",
+      "bytes": 3011,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_heads_20261012.py": {
+      "sha256": "118fc6460c73bd0a7f18c037214e9c9e94690ce66ff2f971a4c04af9b6b28b27",
+      "bytes": 5028,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_pca_head_20261014.py": {
+      "sha256": "250cb0fe496e828864266ae6d18526f068398698bc27ae7fa101d2ee67566f5b",
+      "bytes": 4225,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_pipeline_sharedshape_20261014.py": {
+      "sha256": "4cba0db6fb7befa02bae5e2fc7144aa7b1125847f09d613038479fd146b0d8d4",
+      "bytes": 4890,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_response_H2_20261014.py": {
+      "sha256": "8262da05abb81b6e33da41c4555b5faa02a3fc62ad22f7b64ba3065abf7678fe",
+      "bytes": 1959,
+      "source": "package"
+    },
+    "candidate/runtime/ecm_revised_native_shared_shape_H3_20261014.py": {
+      "sha256": "57def11493a79428d2e8267241dacb8ec2366202fa3ad87a7fe45307088d3440",
+      "bytes": 1830,
+      "source": "package"
+    },
+    "candidate/runtime/sequence.py": {
+      "sha256": "54763388bb2b6ec8f4bc617d0d847e527b94e3fafbb7888dbe8c35c18c61bd4f",
+      "bytes": 2849,
+      "source": "package"
+    },
+    "encoders/assets.json": {
+      "sha256": "977bb82da74acff0f5d150287e3aa4d596ac5cb0a016c1aef8ac257150e6dc58",
+      "bytes": 8040,
+      "source": "package"
+    },
+    "encoders/runtime/esm_features.py": {
+      "sha256": "351c13c21bd0b1157fdbe08e6bb772cf8f12af8aca8b8e9d2030640844064b12",
+      "bytes": 6932,
+      "source": "package"
+    },
+    "encoders/runtime/esm_inference.py": {
+      "sha256": "6eb784a031a7f56eb69bc1d2f604c6dbeb77c37f91375fcbbb5618187b034e2b",
+      "bytes": 29481,
+      "source": "package"
+    },
+    "encoders/runtime/ntv3_runtime.py": {
+      "sha256": "fe9a28f860b9e49c420691c4ba28fa4c5ee6e259a77d2afbbb2f9124e67489ee",
+      "bytes": 10385,
+      "source": "package"
+    },
+    "encoders/runtime/protein_model.py": {
+      "sha256": "77e556430b582c9c5f7b9db03fde1822c1967fbccc18726e43a6f4cd7e3037da",
+      "bytes": 13097,
+      "source": "package"
+    },
+    "candidate/models/H1.pt": {
+      "sha256": "9203718cf7105e7483182f5ad919584369b353fdfd350ed493037fd490cd3bfd",
+      "bytes": 11340301,
+      "source": "heads"
+    },
+    "candidate/models/H2.pt": {
+      "sha256": "3932cca88c0df913861ff9fff8ea1d89aa9e841bf307471be40ed599d721b7a5",
+      "bytes": 1913733,
+      "source": "heads"
+    },
+    "candidate/models/H3.pt": {
+      "sha256": "b3da6f6ca06751c2e99cd9bf8c3a1405df3adba770d4deec053ef6c3cf146d80",
+      "bytes": 2991189,
+      "source": "heads"
+    },
+    "fun/head.pt": {
+      "sha256": "48cacacd78329a6d31c8e1bfbee8d3bc7bbf57cd4c0bc4b9815dcb6469adb49b",
+      "bytes": 4610693,
+      "source": "heads"
+    },
+    "encoders/nt/MODEL-LICENSE.md": {
+      "sha256": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb",
+      "bytes": 9003,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "MODEL-LICENSE.md"
+    },
+    "encoders/nt/special_tokens_map.json": {
+      "sha256": "4f98fb3de0902c87821f2e518a9f808ea1ffe3810882e4d429758a55dfbff009",
+      "bytes": 149,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "special_tokens_map.json"
+    },
+    "encoders/nt/tokenizer_config.json": {
+      "sha256": "07019b4b8964bc28c08c23bf1e1704a2dcdf686d1b99ad211008429b34d1d0fb",
+      "bytes": 1479,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "tokenizer_config.json"
+    },
+    "encoders/nt/vocab.json": {
+      "sha256": "dafebcb0654e403cc30269f52bed31f07fd8c55a1370be63a54d82b917c61153",
+      "bytes": 138,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "vocab.json"
+    },
+    "encoders/nt/config.json": {
+      "sha256": "c79343c3183cbb7f36ce082d8e2bf7c7bd348501204eaa44ba9f9bd5358bf43d",
+      "bytes": 1752,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "config.json"
+    },
+    "encoders/nt/model.safetensors": {
+      "sha256": "8504dd659224628df906d6a876a8975e284fc9f75d194f2ca2bd9e98d4000ed2",
+      "bytes": 425879780,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "model.safetensors"
+    },
+    "encoders/nt/configuration_ntv3_pretrained.py": {
+      "sha256": "e210b5ec18ebe626d8dd91b408a83fc20afc59bf6c5382084ee91b9b8be69df3",
+      "bytes": 8090,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "configuration_ntv3_pretrained.py"
+    },
+    "encoders/nt/modeling_ntv3_pretrained.py": {
+      "sha256": "bc2157369fd9c73cc24323be8c38943871a2a7f1aaa1ca92a8945c1a65c4757a",
+      "bytes": 35193,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "modeling_ntv3_pretrained.py"
+    },
+    "encoders/nt/tokenization_ntv3.py": {
+      "sha256": "59e507620a65cebaab59e977c8f2840ff2f208f0f1a6ec38ece6b53cb3eebda3",
+      "bytes": 7851,
+      "source": "upstream",
+      "repository": "InstaDeepAI/NTv3_100M_pre",
+      "revision": "5c685dca15891f5c5b80e0c930e23b87a217e441",
+      "filename": "tokenization_ntv3.py"
+    },
+    "encoders/esm/esmc_300m_2024_12_v0.pth": {
+      "sha256": "323dff9fbf3fef297a74f4f18b6528e6f2e599b0bcf72b6927516804015becea",
+      "bytes": 1332095738,
+      "source": "upstream",
+      "repository": "EvolutionaryScale/esmc-300m-2024-12",
+      "revision": "7f10b20ae75017b2dbc884070e03434515709a8d",
+      "filename": "data/weights/esmc_300m_2024_12_v0.pth"
+    }
+  },
+  "heads_archive": {
+    "sha256": "ec8aa592a43dd51f8a0e137b2c06e83cc6ad67592bb0c9a5c0d86c8bec0c2822",
+    "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.7/eukcontigminer-0.7-models.tar.gz"
+  }
+}
