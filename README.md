@@ -7,7 +7,7 @@ Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent
 Use a fresh Python 3.11 environment:
 
 ```bash
-pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.71/eukcontigminer-0.71-py3-none-any.whl
+pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.72/eukcontigminer-0.72-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -20,7 +20,7 @@ eukcontigminer input.fasta.gz --task euk --models models -o euk.tsv --device cud
 eukcontigminer input.fasta.gz --task fun --models models -o fun.tsv --device cuda:0
 ```
 
-`euk` is the default. Each task outputs contig ID, length, `p_euk` or `p_fungi`, and its binary label. Prediction runs offline on one GPU; `--device cpu` is also supported. Inputs must be at least **1,000 bp**. Output files are never overwritten.
+`euk` is the default. Each task outputs contig ID, length, `p_euk` or `p_fungi`, and its binary label. Prediction runs offline on one GPU; `--device cpu` is also supported. `euk` inputs must be at least **500 bp**; `fun` inputs must be at least **1,000 bp**. Output files are never overwritten.
 
 ## Validation
 

@@ -21,7 +21,7 @@ def sha(path):
     return h.hexdigest()
 
 
-def read_fasta(path):
+def read_fasta(path, min_length=1000):
     opener = gzip.open if str(path).endswith('.gz') else open
     header, parts = None, []
     allowed = frozenset(b'ACGTRYSWKMBDHVN')
@@ -32,7 +32,7 @@ def read_fasta(path):
                 continue
             if line.startswith(b'>'):
                 if header is not None:
-                    yield checked_record(header, parts)
+                    yield checked_record(header, parts, min_length)
                 header, parts = line[1:].decode('utf-8'), []
                 if not header.strip() or any(ord(c) < 32 or ord(c) == 127 for c in header):
                     raise ValueError('Invalid FASTA header')
@@ -43,13 +43,13 @@ def read_fasta(path):
                 parts.append(line)
     if header is None:
         raise ValueError('Empty FASTA input')
-    yield checked_record(header, parts)
+    yield checked_record(header, parts, min_length)
 
 
-def checked_record(header, parts):
+def checked_record(header, parts, min_length=1000):
     seq = b''.join(parts)
-    if len(seq) < 1000:
-        raise ValueError(f'Contig {header!r} is shorter than the supported minimum of 1000 bp')
+    if len(seq) < min_length:
+        raise ValueError(f'Contig {header!r} is shorter than the supported minimum of {min_length} bp')
     return header, seq
 
 
@@ -140,7 +140,7 @@ def main(argv=None):
     if argv and argv[0] == 'download-models':
         from .setup_models import main as setup
         return setup(argv[1:])
-    parser = argparse.ArgumentParser(description='Classify eukaryotic or fungal contigs (>=1000 bp).')
+    parser = argparse.ArgumentParser(description='Classify eukaryotic (>=500 bp) or fungal (>=1000 bp) contigs.')
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     parser.add_argument('fasta', help='DNA FASTA or .fasta.gz')
     parser.add_argument('--task', choices=['euk', 'fun'], default='euk', help='euk (default): eukaryotic origin; fun: fungal origin')
@@ -156,14 +156,15 @@ def main(argv=None):
             parser.error('Output already exists: ' + str(p))
     source = Path(args.fasta).resolve()
     # Parse once before loading models; no partial prediction for malformed inputs.
-    rows_expected = sum(1 for _ in read_fasta(source))
+    min_length = 500 if args.task == 'euk' else 1000
+    rows_expected = sum(1 for _ in read_fasta(source, min_length))
     root, meta = verify_models(args.models)
     before = sha(source)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', CUBLAS_WORKSPACE_CONFIG=':4096:8')
     start = time.monotonic()
     pipeline = load_pipeline(root, meta, args.task, args.device)
     with partial.open('x', newline='') as stream:
-        rows, chunks = write_predictions(read_fasta(source), pipeline, stream, args.task, meta)
+        rows, chunks = write_predictions(read_fasta(source, min_length), pipeline, stream, args.task, meta)
     if rows != rows_expected or sha(source) != before:
         raise ValueError('FASTA changed during inference')
     # Hard-link publishes without overwriting a file created concurrently.

@@ -29,7 +29,7 @@ def copy_checked(source, target, expected):
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description='Prepare v0.71 assets; downloads are checksum-verified.')
+    p = argparse.ArgumentParser(description='Prepare v0.72 assets; downloads are checksum-verified.')
     p.add_argument('--output', default='models')
     p.add_argument('--nt-dir', help='Use an existing original NTv3_100M_pre directory')
     p.add_argument('--esm-weights', help='Use the original esmc_300m_2024_12_v0.pth')
@@ -75,4 +75,4 @@ def main(argv=None):
             src = hf_hub_download(repo_id=item['repository'], filename=item['filename'], revision=item['revision'])
         copy_checked(src, root/name, item['sha256'])
     verify_models(root)
-    print(json.dumps(dict(version='0.71', models=str(root), verified=True)))
+    print(json.dumps(dict(version='0.72', models=str(root), verified=True)))
