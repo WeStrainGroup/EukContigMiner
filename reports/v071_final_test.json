@@ -2,13 +2,12 @@
   "version": "0.71",
   "scope": "ECM-dataset Test; frozen v0.71 models and fixed Validation thresholds; no Test tuning",
   "rows": 489080,
-  "labels": {"positive": 197793, "negative": 291287},
+  "labels": {
+    "positive": 197793,
+    "negative": 291287
+  },
   "short_rows": 128821,
   "fixed_threshold": 0.5,
-  "at_natural_test_prevalence": {
-    "overall_f1": 0.9936916862529633,
-    "short_f1": 0.9820131408128276
-  },
   "at_1_percent_prevalence": {
     "overall_f1": 0.9915203720345402,
     "short_f1": 0.9745244547567805

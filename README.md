@@ -40,6 +40,5 @@ Frozen v0.71 models and fixed Validation thresholds; no Test tuning.
 | Metric | Overall | 1–2 kb |
 |---|---:|---:|
 | F1 @ 1% prevalence | **0.991520** | **0.974524** |
-| F1 at natural Test prevalence | 0.993692 | 0.982013 |
 
 489,080 Test contigs; 8-GPU sharded run in about 27 minutes. [Full report](reports/v071_final_test.json).
