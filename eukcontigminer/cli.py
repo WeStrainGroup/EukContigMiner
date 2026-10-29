@@ -92,8 +92,9 @@ def load_pipeline(root, meta, task, device):
         from ecm_fungi_raw_pipeline_20261017 import FungiRawPipeline
         return FungiRawPipeline(root/'candidate', meta['candidate_sha256'], root/'encoders',
                                 root/'fun/head.pt', meta['files']['fun/head.pt']['sha256'], device)
-    module = importlib.import_module('ecm_revised_native_pipeline_sharedshape_20261014')
-    return module.RawPipeline(root/'candidate', root/'encoders', meta['candidate_sha256'], device)
+    sys.path.insert(0, str(root/'v071'))
+    from v071_raw_lazy import V071LazyRuntime
+    return V071LazyRuntime(root, device)
 
 
 def task_scores(raw, lengths, task, meta):
@@ -105,9 +106,12 @@ def task_scores(raw, lengths, task, meta):
             raise ValueError('Incorrect task runtime')
         scores = np.asarray(raw['scores'])
     else:
-        from .gate import predict
-        scores = predict([raw['probabilities'][s] for s in ['H1', 'H2', 'H3']],
-                         meta['euk_head_thresholds'], lengths, meta['euk_gates'])['scores']
+        if 'scores' in raw:
+            scores = np.asarray(raw['scores'])
+        else:
+            from .gate import predict
+            scores = predict([raw['probabilities'][s] for s in ['H1', 'H2', 'H3']],
+                             meta['euk_head_thresholds'], lengths, meta['euk_gates'])['scores']
     if scores.shape != (len(lengths),) or not np.isfinite(scores).all() or not ((scores >= 0) & (scores <= 1)).all():
         raise ValueError('Invalid prediction scores')
     return scores

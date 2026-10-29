@@ -7,11 +7,11 @@ Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent
 Use a fresh Python 3.11 environment:
 
 ```bash
-pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.7/eukcontigminer-0.7-py3-none-any.whl
+pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.71/eukcontigminer-0.71-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
-The one-time setup downloads the trained heads and original NTv3/ESM-C backbones (about 1.8 GB). [Upstream model terms](THIRD_PARTY_NOTICES.md) apply; Hugging Face authentication may be required. Existing backbones can be supplied with `--nt-dir` and `--esm-weights`.
+The one-time setup downloads the new v0.71 heads, legacy encoder-compatible heads, and original NTv3/ESM-C backbones (about 2.0 GB). [Upstream model terms](THIRD_PARTY_NOTICES.md) apply; Hugging Face authentication may be required. Existing backbones can be supplied with `--nt-dir` and `--esm-weights`.
 
 ## Run
 
@@ -28,7 +28,7 @@ F1 at **1% target prevalence**, on the same 487,870-contig Validation set:
 
 | Task | Overall | 1–2 kb |
 |---|---:|---:|
-| `euk` | 0.990373 | 0.973732 |
+| `euk` | **0.992477** | **0.980114** |
 | `fun` | 0.911217 | 0.803682 |
 
-Train fits the models; Validation selects models and thresholds. The two tasks use separate frozen decision rules. Scores are not calibrated posterior probabilities. [Evaluation details](reports/v07_evaluation.json) include auxiliary prevalences and verification scope. The earlier [v0.62](https://github.com/WeStrainGroup/EukContigMiner/releases/tag/v0.62) remains available as the retrained reference baseline.
+Train fits the models; Validation selects models and thresholds. The new euk v0.71 heads use newly fitted thresholds and two-sided early-exit gates. Scores are not calibrated posterior probabilities. [Evaluation details](reports/v07_evaluation.json) include auxiliary prevalences and verification scope. The earlier [v0.62](https://github.com/WeStrainGroup/EukContigMiner/releases/tag/v0.62) remains available as the retrained reference baseline.
