@@ -42,3 +42,14 @@ Frozen v0.71 models and fixed Validation thresholds; no Test tuning.
 | F1 @ 1% prevalence | **0.991520** | **0.974524** |
 
 489,080 Test contigs; 8-GPU sharded run in about 27 minutes. [Full report](reports/v071_final_test.json).
+
+## Extra Test500 evaluation (v0.72)
+
+A separate 500–999 bp Test extension was cut from the frozen Test genomes with the original 32/2 quota, seed 20261001, QC and no-overlap rules. Models, heads, thresholds and gates are unchanged from v0.71; the threshold was fixed at 0.5 and Test was not used for tuning.
+
+| Metric | Overall |
+|---|---:|
+| F1 @ 1% prevalence | **0.904923** |
+| Rows | 127,976 |
+
+[Full report](reports/v072_test500.json). Test500 is a generalization stress test, not a replacement for the 1 kb+ Test.
