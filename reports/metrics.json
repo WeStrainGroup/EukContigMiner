@@ -1,0 +1,43 @@
+{
+ "license": "CC-BY-NC-SA-4.0",
+ "minimum_input_bp": {
+  "euk": 500,
+  "fun": 500
+ },
+ "early_exit": {
+  "H1": [
+   -10.0,
+   8.0
+  ],
+  "H2": [
+   -4.0,
+   1.0
+  ],
+  "H3": "fallback",
+  "length_groups": false
+ },
+ "validation": {
+  "euk": {
+   "f1_at_1pct": 0.9925026845361219,
+   "short_f1_at_1pct": 0.9801140993382603
+  },
+  "fun": {
+   "f1_at_1pct": 0.911217,
+   "short_f1_at_1pct": 0.803682
+  }
+ },
+ "test_1kb": {
+  "euk": {
+   "f1_at_1pct": 0.9913640230895675,
+   "short_f1_at_1pct": 0.9745143695750821,
+   "rows": 489080
+  }
+ },
+ "test_500_999": {
+  "euk": {
+   "f1_at_1pct": 0.9049228969719414,
+   "rows": 127976
+  }
+ },
+ "note": "F1 at 1% target prevalence. Test did not tune thresholds."
+}
