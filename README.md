@@ -9,7 +9,7 @@ python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install "torch==2.13.0"
-python -m pip install eukcontigminer-0.84.1-py3-none-any.whl
+python -m pip install eukcontigminer-0.84.2-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -65,4 +65,4 @@ See [reports/metrics.json](reports/metrics.json). Test results use fixed Validat
 
 ## License
 
-**CC BY-NC-SA 4.0**. See [LICENSE](LICENSE), [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), and [NTV3-MODEL-LICENSE.md](NTV3-MODEL-LICENSE.md).
+**CC BY-NC-SA 4.0**. See [LICENSE](LICENSE) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
