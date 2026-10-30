@@ -1,5 +1,5 @@
 {
- "version": "0.82",
+ "version": "0.83",
  "tasks": {
   "euk": {
    "model_id": "euk_h1h2h3_early_exit_current",
@@ -31,8 +31,8 @@
  },
  "files": {
   "encoders/assets.json": {
-   "sha256": "977bb82da74acff0f5d150287e3aa4d596ac5cb0a016c1aef8ac257150e6dc58",
-   "bytes": 8040,
+   "sha256": "8c4e0324f3fc96e08640e9fbb2def4f9538db9c8d0e9286182937511b3274c6e",
+   "bytes": 6250,
    "source": "package"
   },
   "encoders/nt/MODEL-LICENSE.md": {
@@ -143,7 +143,7 @@
  },
  "heads_archive": {
   "sha256": "ae08b0bd1f959a037636c7c50df799cb36bad174829e26bfe03fc9941bea834d",
-  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.82/eukcontigminer-0.82-models.tar.gz"
+  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.83/eukcontigminer-0.83-models.tar.gz"
  },
  "min_input_bp": {
   "euk": 500,

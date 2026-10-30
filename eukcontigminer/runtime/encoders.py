@@ -14,7 +14,7 @@ from torch import nn
 from packaging.version import Version, InvalidVersion
 from .upstream import ntv3_runtime, esm_inference
 
-ASSET_SHA='977bb82da74acff0f5d150287e3aa4d596ac5cb0a016c1aef8ac257150e6dc58'
+ASSET_SHA='8c4e0324f3fc96e08640e9fbb2def4f9538db9c8d0e9286182937511b3274c6e'
 def sha(path):
     h=hashlib.sha256()
     with Path(path).open('rb')as f:
@@ -121,19 +121,11 @@ class EncoderBundle:
             self._esm = FrozenESM(self.root / 'encoders', self.device, verified=self.verified)
         return self._esm
 
-def digest_lookup(digests):
-    by_name = {Path(k).name: v for k, v in digests.items()}
-    def lookup(path):
-        return by_name[Path(path).name]
-    return lookup
-
-
 class FrozenNT(nn.Module):
     def __init__(self,assets,device='cpu',verified=False):
         super().__init__();root,self.manifest=checked_assets(assets,verify=not verified)
         self.runtime=ntv3_runtime
-        loader_sha = sha if not verified else digest_lookup(self.manifest['NT']['source_digests'])
-        self.tokenizer,self.encoder=self.runtime.load_source(root/'nt',self.manifest['NT']['source_digests'],loader_sha)
+        self.tokenizer,self.encoder=self.runtime.load_source(root/'nt',self.manifest['NT']['source_digests'],sha,verify=not verified)
         self.device=torch.device(device)
         torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
         finite_frozen(self.encoder).to(self.device);self.eval()

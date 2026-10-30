@@ -1,222 +1,186 @@
 {
-  "schema": "ecm.revised.frozen_encoder_assets.v1",
-  "files": {
-    "nt/MODEL-LICENSE.md": {
-      "bytes": 9003,
-      "sha256": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb",
-      "source": {
-        "path": "MODEL-LICENSE.md",
-        "bytes": 9003,
-        "sha256": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb"
-      }
-    },
-    "nt/special_tokens_map.json": {
-      "bytes": 149,
-      "sha256": "4f98fb3de0902c87821f2e518a9f808ea1ffe3810882e4d429758a55dfbff009",
-      "source": {
-        "path": "special_tokens_map.json",
-        "bytes": 149,
-        "sha256": "4f98fb3de0902c87821f2e518a9f808ea1ffe3810882e4d429758a55dfbff009"
-      }
-    },
-    "nt/tokenizer_config.json": {
-      "bytes": 1479,
-      "sha256": "07019b4b8964bc28c08c23bf1e1704a2dcdf686d1b99ad211008429b34d1d0fb",
-      "source": {
-        "path": "tokenizer_config.json",
-        "bytes": 1479,
-        "sha256": "07019b4b8964bc28c08c23bf1e1704a2dcdf686d1b99ad211008429b34d1d0fb"
-      }
-    },
-    "nt/vocab.json": {
-      "bytes": 138,
-      "sha256": "dafebcb0654e403cc30269f52bed31f07fd8c55a1370be63a54d82b917c61153",
-      "source": {
-        "path": "vocab.json",
-        "bytes": 138,
-        "sha256": "dafebcb0654e403cc30269f52bed31f07fd8c55a1370be63a54d82b917c61153"
-      }
-    },
-    "nt/config.json": {
-      "bytes": 1752,
-      "sha256": "c79343c3183cbb7f36ce082d8e2bf7c7bd348501204eaa44ba9f9bd5358bf43d",
-      "source": {
-        "path": "config.json",
-        "bytes": 1752,
-        "sha256": "c79343c3183cbb7f36ce082d8e2bf7c7bd348501204eaa44ba9f9bd5358bf43d"
-      }
-    },
-    "nt/model.safetensors": {
-      "bytes": 425879780,
-      "sha256": "8504dd659224628df906d6a876a8975e284fc9f75d194f2ca2bd9e98d4000ed2",
-      "source": {
-        "path": "model.safetensors",
-        "bytes": 425879780,
-        "sha256": "8504dd659224628df906d6a876a8975e284fc9f75d194f2ca2bd9e98d4000ed2"
-      }
-    },
-    "nt/configuration_ntv3_pretrained.py": {
-      "bytes": 8090,
-      "sha256": "e210b5ec18ebe626d8dd91b408a83fc20afc59bf6c5382084ee91b9b8be69df3",
-      "source": {
-        "path": "configuration_ntv3_pretrained.py",
-        "bytes": 8090,
-        "sha256": "e210b5ec18ebe626d8dd91b408a83fc20afc59bf6c5382084ee91b9b8be69df3"
-      }
-    },
-    "nt/modeling_ntv3_pretrained.py": {
-      "bytes": 35193,
-      "sha256": "bc2157369fd9c73cc24323be8c38943871a2a7f1aaa1ca92a8945c1a65c4757a",
-      "source": {
-        "path": "modeling_ntv3_pretrained.py",
-        "bytes": 35193,
-        "sha256": "bc2157369fd9c73cc24323be8c38943871a2a7f1aaa1ca92a8945c1a65c4757a"
-      }
-    },
-    "nt/tokenization_ntv3.py": {
-      "bytes": 7851,
-      "sha256": "59e507620a65cebaab59e977c8f2840ff2f208f0f1a6ec38ece6b53cb3eebda3",
-      "source": {
-        "path": "tokenization_ntv3.py",
-        "bytes": 7851,
-        "sha256": "59e507620a65cebaab59e977c8f2840ff2f208f0f1a6ec38ece6b53cb3eebda3"
-      }
-    },
-    "esm/esmc_300m_2024_12_v0.pth": {
-      "bytes": 1332095738,
-      "sha256": "323dff9fbf3fef297a74f4f18b6528e6f2e599b0bcf72b6927516804015becea",
-      "source": {
-        "path": "esmc_300m_2024_12_v0.pth",
-        "bytes": 1332095738,
-        "sha256": "323dff9fbf3fef297a74f4f18b6528e6f2e599b0bcf72b6927516804015becea"
-      }
-    },
-    "runtime/ntv3_runtime.py": {
-      "bytes": 10385,
-      "sha256": "fe9a28f860b9e49c420691c4ba28fa4c5ee6e259a77d2afbbb2f9124e67489ee",
-      "source": {
-        "path": "ntv3_runtime.py",
-        "bytes": 10385,
-        "sha256": "fe9a28f860b9e49c420691c4ba28fa4c5ee6e259a77d2afbbb2f9124e67489ee"
-      }
-    },
-    "runtime/esm_inference.py": {
-      "bytes": 29481,
-      "sha256": "6eb784a031a7f56eb69bc1d2f604c6dbeb77c37f91375fcbbb5618187b034e2b",
-      "source": {
-        "path": "esm_inference.py",
-        "bytes": 29481,
-        "sha256": "6eb784a031a7f56eb69bc1d2f604c6dbeb77c37f91375fcbbb5618187b034e2b"
-      }
-    },
-    "runtime/esm_features.py": {
-      "bytes": 6932,
-      "sha256": "351c13c21bd0b1157fdbe08e6bb772cf8f12af8aca8b8e9d2030640844064b12",
-      "source": {
-        "path": "esm_features.py",
-        "bytes": 6932,
-        "sha256": "351c13c21bd0b1157fdbe08e6bb772cf8f12af8aca8b8e9d2030640844064b12"
-      }
-    },
-    "runtime/protein_model.py": {
-      "bytes": 13097,
-      "sha256": "77e556430b582c9c5f7b9db03fde1822c1967fbccc18726e43a6f4cd7e3037da",
-      "source": {
-        "path": "protein_model.py",
-        "bytes": 13097,
-        "sha256": "77e556430b582c9c5f7b9db03fde1822c1967fbccc18726e43a6f4cd7e3037da"
-      }
-    }
+ "schema": "ecm.revised.frozen_encoder_assets.v1",
+ "files": {
+  "nt/MODEL-LICENSE.md": {
+   "bytes": 9003,
+   "sha256": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb",
+   "source": {
+    "path": "MODEL-LICENSE.md",
+    "bytes": 9003,
+    "sha256": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb"
+   }
   },
-  "NT": {
-    "model_directory": "nt",
-    "source_digests": {
-      "MODEL-LICENSE.md": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb",
-      "special_tokens_map.json": "4f98fb3de0902c87821f2e518a9f808ea1ffe3810882e4d429758a55dfbff009",
-      "tokenizer_config.json": "07019b4b8964bc28c08c23bf1e1704a2dcdf686d1b99ad211008429b34d1d0fb",
-      "vocab.json": "dafebcb0654e403cc30269f52bed31f07fd8c55a1370be63a54d82b917c61153",
-      "config.json": "c79343c3183cbb7f36ce082d8e2bf7c7bd348501204eaa44ba9f9bd5358bf43d",
-      "model.safetensors": "8504dd659224628df906d6a876a8975e284fc9f75d194f2ca2bd9e98d4000ed2",
-      "configuration_ntv3_pretrained.py": "e210b5ec18ebe626d8dd91b408a83fc20afc59bf6c5382084ee91b9b8be69df3",
-      "modeling_ntv3_pretrained.py": "bc2157369fd9c73cc24323be8c38943871a2a7f1aaa1ca92a8945c1a65c4757a",
-      "tokenization_ntv3.py": "59e507620a65cebaab59e977c8f2840ff2f208f0f1a6ec38ece6b53cb3eebda3"
-    },
-    "definition": "Original pretrained NTv3-100M, no adapted weights; <=5000 whole, >5000 exact central5000/4999 for RC symmetry; paired RC per-view token mean/max1536 then mean; FP32 noTF32; float32 stored",
-    "batch": 8,
-    "chunk": 2048,
-    "dtype": "float32",
-    "TF32": false
+  "nt/special_tokens_map.json": {
+   "bytes": 149,
+   "sha256": "4f98fb3de0902c87821f2e518a9f808ea1ffe3810882e4d429758a55dfbff009",
+   "source": {
+    "path": "special_tokens_map.json",
+    "bytes": 149,
+    "sha256": "4f98fb3de0902c87821f2e518a9f808ea1ffe3810882e4d429758a55dfbff009"
+   }
   },
-  "ESM": {
-    "weight": "esm/esmc_300m_2024_12_v0.pth",
-    "definition": {
-      "feature_dimension": 1920,
-      "model": {
-        "checkpoint_bytes": 1332095738,
-        "checkpoint_sha256": "323dff9fbf3fef297a74f4f18b6528e6f2e599b0bcf72b6927516804015becea",
-        "embedding_dimension": 960,
-        "frozen": true,
-        "layers": 30,
-        "local_inference": true,
-        "lora_adapter": null,
-        "name": "esmc_300m",
-        "release_package": "esm 3.2.1",
-        "repository": "EvolutionaryScale/esmc-300m-2024-12",
-        "representation_layer": 30,
-        "weight_license": "Cambrian Open License Agreement"
-      },
-      "selection": {
-        "aggregation": "mean_max",
-        "aggregation_mode": "mean_max",
-        "maximum_orf_length": 1000,
-        "maximum_orfs": 2,
-        "minimum_orf_length": 20,
-        "ordering": "length descending then amino-acid lexicographic",
-        "reverse_complement_invariant": true,
-        "source": "complete standard-code six-frame translation"
-      }
-    },
-    "rows_per_chunk": 1024,
-    "dtype": "float16",
-    "use_flash_attn": false
+  "nt/tokenizer_config.json": {
+   "bytes": 1479,
+   "sha256": "07019b4b8964bc28c08c23bf1e1704a2dcdf686d1b99ad211008429b34d1d0fb",
+   "source": {
+    "path": "tokenizer_config.json",
+    "bytes": 1479,
+    "sha256": "07019b4b8964bc28c08c23bf1e1704a2dcdf686d1b99ad211008429b34d1d0fb"
+   }
   },
-  "source_plans": [
-    {
-      "path": "plan.json",
-      "bytes": 5842,
-      "sha256": "bae934d24b25c70ad74e08343fbfb2cdf9aa760012948bc4fe968553b4eea886"
-    },
-    {
-      "path": "plan.json",
-      "bytes": 3222,
-      "sha256": "1c45d88e4ca852784cd047aecc79577c3fe6162dbfa480f7954007c825d082e3"
-    },
-    {
-      "path": "plan.json",
-      "bytes": 4649,
-      "sha256": "cfc546c7dc2c811bd034037be4402cb68428f84468ec0038c6000dbba20080c8"
-    }
-  ],
-  "reference_implementations": [
-    {
-      "path": "ecm_nt_center5k_two_routes_20261007_v1.py",
-      "sha256": "f5f615f6919203427ad43f1a5515342717a7428756bf4ed9d6afb8f53d274d09"
-    },
-    {
-      "path": "ecm_revised_frozen_nt_20261011.py",
-      "sha256": "56fe4b3e0480d0252e296242c6f7508265291a9722a86eb080b7597a6f561e27"
-    },
-    {
-      "path": "ecm_revised_v061_esmc_20261011_v2.py",
-      "sha256": "bdbc99a3e36c27c52d94f5941ad0b5732345828ef945fbab539bd3ac32969c27"
-    }
-  ],
-  "observed_dependency_versions": {
-    "torch": "2.13.0",
-    "numpy": "2.4.6",
-    "transformers": "4.48.1",
-    "safetensors": "0.8.0",
-    "esm": "3.2.1",
-    "einops": "0.8.2"
+  "nt/vocab.json": {
+   "bytes": 138,
+   "sha256": "dafebcb0654e403cc30269f52bed31f07fd8c55a1370be63a54d82b917c61153",
+   "source": {
+    "path": "vocab.json",
+    "bytes": 138,
+    "sha256": "dafebcb0654e403cc30269f52bed31f07fd8c55a1370be63a54d82b917c61153"
+   }
+  },
+  "nt/config.json": {
+   "bytes": 1752,
+   "sha256": "c79343c3183cbb7f36ce082d8e2bf7c7bd348501204eaa44ba9f9bd5358bf43d",
+   "source": {
+    "path": "config.json",
+    "bytes": 1752,
+    "sha256": "c79343c3183cbb7f36ce082d8e2bf7c7bd348501204eaa44ba9f9bd5358bf43d"
+   }
+  },
+  "nt/model.safetensors": {
+   "bytes": 425879780,
+   "sha256": "8504dd659224628df906d6a876a8975e284fc9f75d194f2ca2bd9e98d4000ed2",
+   "source": {
+    "path": "model.safetensors",
+    "bytes": 425879780,
+    "sha256": "8504dd659224628df906d6a876a8975e284fc9f75d194f2ca2bd9e98d4000ed2"
+   }
+  },
+  "nt/configuration_ntv3_pretrained.py": {
+   "bytes": 8090,
+   "sha256": "e210b5ec18ebe626d8dd91b408a83fc20afc59bf6c5382084ee91b9b8be69df3",
+   "source": {
+    "path": "configuration_ntv3_pretrained.py",
+    "bytes": 8090,
+    "sha256": "e210b5ec18ebe626d8dd91b408a83fc20afc59bf6c5382084ee91b9b8be69df3"
+   }
+  },
+  "nt/modeling_ntv3_pretrained.py": {
+   "bytes": 35193,
+   "sha256": "bc2157369fd9c73cc24323be8c38943871a2a7f1aaa1ca92a8945c1a65c4757a",
+   "source": {
+    "path": "modeling_ntv3_pretrained.py",
+    "bytes": 35193,
+    "sha256": "bc2157369fd9c73cc24323be8c38943871a2a7f1aaa1ca92a8945c1a65c4757a"
+   }
+  },
+  "nt/tokenization_ntv3.py": {
+   "bytes": 7851,
+   "sha256": "59e507620a65cebaab59e977c8f2840ff2f208f0f1a6ec38ece6b53cb3eebda3",
+   "source": {
+    "path": "tokenization_ntv3.py",
+    "bytes": 7851,
+    "sha256": "59e507620a65cebaab59e977c8f2840ff2f208f0f1a6ec38ece6b53cb3eebda3"
+   }
+  },
+  "esm/esmc_300m_2024_12_v0.pth": {
+   "bytes": 1332095738,
+   "sha256": "323dff9fbf3fef297a74f4f18b6528e6f2e599b0bcf72b6927516804015becea",
+   "source": {
+    "path": "esmc_300m_2024_12_v0.pth",
+    "bytes": 1332095738,
+    "sha256": "323dff9fbf3fef297a74f4f18b6528e6f2e599b0bcf72b6927516804015becea"
+   }
   }
+ },
+ "NT": {
+  "model_directory": "nt",
+  "source_digests": {
+   "MODEL-LICENSE.md": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb",
+   "special_tokens_map.json": "4f98fb3de0902c87821f2e518a9f808ea1ffe3810882e4d429758a55dfbff009",
+   "tokenizer_config.json": "07019b4b8964bc28c08c23bf1e1704a2dcdf686d1b99ad211008429b34d1d0fb",
+   "vocab.json": "dafebcb0654e403cc30269f52bed31f07fd8c55a1370be63a54d82b917c61153",
+   "config.json": "c79343c3183cbb7f36ce082d8e2bf7c7bd348501204eaa44ba9f9bd5358bf43d",
+   "model.safetensors": "8504dd659224628df906d6a876a8975e284fc9f75d194f2ca2bd9e98d4000ed2",
+   "configuration_ntv3_pretrained.py": "e210b5ec18ebe626d8dd91b408a83fc20afc59bf6c5382084ee91b9b8be69df3",
+   "modeling_ntv3_pretrained.py": "bc2157369fd9c73cc24323be8c38943871a2a7f1aaa1ca92a8945c1a65c4757a",
+   "tokenization_ntv3.py": "59e507620a65cebaab59e977c8f2840ff2f208f0f1a6ec38ece6b53cb3eebda3"
+  },
+  "definition": "Original pretrained NTv3-100M, no adapted weights; <=5000 whole, >5000 exact central5000/4999 for RC symmetry; paired RC per-view token mean/max1536 then mean; FP32 noTF32; float32 stored",
+  "batch": 8,
+  "chunk": 2048,
+  "dtype": "float32",
+  "TF32": false
+ },
+ "ESM": {
+  "weight": "esm/esmc_300m_2024_12_v0.pth",
+  "definition": {
+   "feature_dimension": 1920,
+   "model": {
+    "checkpoint_bytes": 1332095738,
+    "checkpoint_sha256": "323dff9fbf3fef297a74f4f18b6528e6f2e599b0bcf72b6927516804015becea",
+    "embedding_dimension": 960,
+    "frozen": true,
+    "layers": 30,
+    "local_inference": true,
+    "lora_adapter": null,
+    "name": "esmc_300m",
+    "release_package": "esm 3.2.1",
+    "repository": "EvolutionaryScale/esmc-300m-2024-12",
+    "representation_layer": 30,
+    "weight_license": "Cambrian Open License Agreement"
+   },
+   "selection": {
+    "aggregation": "mean_max",
+    "aggregation_mode": "mean_max",
+    "maximum_orf_length": 1000,
+    "maximum_orfs": 2,
+    "minimum_orf_length": 20,
+    "ordering": "length descending then amino-acid lexicographic",
+    "reverse_complement_invariant": true,
+    "source": "complete standard-code six-frame translation"
+   }
+  },
+  "rows_per_chunk": 1024,
+  "dtype": "float16",
+  "use_flash_attn": false
+ },
+ "source_plans": [
+  {
+   "path": "plan.json",
+   "bytes": 5842,
+   "sha256": "bae934d24b25c70ad74e08343fbfb2cdf9aa760012948bc4fe968553b4eea886"
+  },
+  {
+   "path": "plan.json",
+   "bytes": 3222,
+   "sha256": "1c45d88e4ca852784cd047aecc79577c3fe6162dbfa480f7954007c825d082e3"
+  },
+  {
+   "path": "plan.json",
+   "bytes": 4649,
+   "sha256": "cfc546c7dc2c811bd034037be4402cb68428f84468ec0038c6000dbba20080c8"
+  }
+ ],
+ "reference_implementations": [
+  {
+   "path": "ecm_nt_center5k_two_routes_20261007_v1.py",
+   "sha256": "f5f615f6919203427ad43f1a5515342717a7428756bf4ed9d6afb8f53d274d09"
+  },
+  {
+   "path": "ecm_revised_frozen_nt_20261011.py",
+   "sha256": "56fe4b3e0480d0252e296242c6f7508265291a9722a86eb080b7597a6f561e27"
+  },
+  {
+   "path": "ecm_revised_v061_esmc_20261011_v2.py",
+   "sha256": "bdbc99a3e36c27c52d94f5941ad0b5732345828ef945fbab539bd3ac32969c27"
+  }
+ ],
+ "observed_dependency_versions": {
+  "torch": "2.13.0",
+  "numpy": "2.4.6",
+  "transformers": "4.48.1",
+  "safetensors": "0.8.0",
+  "esm": "3.2.1",
+  "einops": "0.8.2"
+ }
 }

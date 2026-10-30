@@ -74,9 +74,10 @@ class Classifier(nn.Module):
             valid=mask[take,:size].bool().unsqueeze(-1)
             groups.append(torch.cat([(h*valid).sum(1)/valid.sum(1),h.masked_fill(~valid,-torch.inf).amax(1)],1))
         return self.head(torch.cat(groups)[torch.argsort(torch.cat(indices))]).squeeze(-1).float()
-def load_source(source,digests,sha):
-    for name,digest in digests.items():
-        if Path(name).name!=name or sha(source/name)!=digest:raise ValueError('NTv3 source artifact differs: '+name)
+def load_source(source,digests,sha,verify=True):
+    if verify:
+        for name,digest in digests.items():
+            if Path(name).name!=name or sha(source/name)!=digest:raise ValueError('NTv3 source artifact differs: '+name)
     # A private module namespace prevents collisions with other NTv3 snapshots.
     package='_ecm_ntv3_'+digests['modeling_ntv3_pretrained.py'][:20]
     if package not in sys.modules:
@@ -86,7 +87,7 @@ def load_source(source,digests,sha):
         key=package+'.'+name
         if key in sys.modules:
             mod=sys.modules[key]
-            if sha(Path(mod.__file__))!=digests[name+'.py']:raise ValueError('Loaded NTv3 module differs')
+            if verify and sha(Path(mod.__file__))!=digests[name+'.py']:raise ValueError('Loaded NTv3 module differs')
         else:
             spec=importlib.util.spec_from_file_location(key,source/(name+'.py'));mod=importlib.util.module_from_spec(spec);sys.modules[key]=mod;spec.loader.exec_module(mod)
         loaded[name]=mod

@@ -35,10 +35,6 @@ class H1Flex(nn.Module):
             self.out = nn.Linear(h, 1)
         else:
             raise ValueError(self.family)
-        if cfg["init"] == "orthogonal":
-            for p in self.parameters():
-                if p.ndim >= 2:
-                    nn.init.orthogonal_(p)
 
     def forward(self, x):
         x = self.inp(x)
@@ -86,10 +82,6 @@ class HeadFlex(nn.Module):
             self.norm = nn.LayerNorm(h); self.out = nn.Linear(h, 1)
         else:
             raise ValueError(self.family)
-        if cfg["init"] == "orthogonal":
-            for p in self.parameters():
-                if p.ndim >= 2:
-                    nn.init.orthogonal_(p)
 
     def forward(self, x):
         x = self.inp(x)

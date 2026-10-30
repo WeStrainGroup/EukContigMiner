@@ -11,7 +11,7 @@ python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install "torch==2.13.0"
-python -m pip install eukcontigminer-0.82-py3-none-any.whl
+python -m pip install eukcontigminer-0.83-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 

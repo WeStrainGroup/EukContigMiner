@@ -7,15 +7,15 @@ import tempfile
 import tarfile
 import urllib.request
 
-from .resources import copy_checked, metadata, sha, verify_models
+from .resources import copy_checked, copy_package_checked, metadata, sha, verify_models
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description='Prepare v0.82 assets; downloads are checksum-verified.')
+    p = argparse.ArgumentParser(description='Prepare v0.83 assets; downloads are checksum-verified.')
     p.add_argument('--output', default='models')
     p.add_argument('--nt-dir', help='Use an existing original NTv3_100M_pre directory')
     p.add_argument('--esm-weights', help='Use the original esmc_300m_2024_12_v0.pth')
-    p.add_argument('--heads-archive', help='Use a local v0.82 models archive')
+    p.add_argument('--heads-archive', help='Use a local v0.83 models archive')
     args = p.parse_args(argv)
     root = Path(args.output).resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -23,7 +23,7 @@ def main(argv=None):
     package = Path(__file__).parent / 'assets'
     for name, item in meta['files'].items():
         if item['source'] == 'package':
-            copy_checked(package/name, root/name, item['sha256'])
+            copy_package_checked(package/name, root/name, item['sha256'])
     head_files = {k: v for k, v in meta['files'].items() if v['source'] == 'heads'}
     if not all((root/n).is_file() and sha(root/n) == v['sha256'] for n, v in head_files.items()):
         with tempfile.TemporaryDirectory(dir=root) as tmp:
@@ -57,4 +57,4 @@ def main(argv=None):
             src = hf_hub_download(repo_id=item['repository'], filename=item['filename'], revision=item['revision'])
         copy_checked(src, root/name, item['sha256'])
     verify_models(root)
-    print(json.dumps(dict(version='0.82', models=str(root), verified=True)))
+    print(json.dumps(dict(version='0.83', models=str(root), verified=True)))

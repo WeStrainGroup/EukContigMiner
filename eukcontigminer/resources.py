@@ -58,3 +58,26 @@ def copy_checked(source, target, expected):
             temp.unlink()
         except FileNotFoundError:
             pass
+
+
+def copy_package_checked(source, target, expected):
+    """Atomically refresh a package metadata file; never leave a partial file."""
+    source, target = Path(source), Path(target)
+    if not source.is_file() or sha(source) != expected:
+        raise ValueError('Package checksum mismatch: ' + str(source))
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp_name = tempfile.mkstemp(prefix=target.name + '.', suffix='.partial', dir=target.parent)
+    temp = Path(temp_name)
+    try:
+        with source.open('rb') as src, os.fdopen(fd, 'wb') as dst:
+            shutil.copyfileobj(src, dst, 8 << 20)
+            dst.flush()
+            os.fsync(dst.fileno())
+        if sha(temp) != expected:
+            raise ValueError('Copied package checksum mismatch')
+        os.replace(temp, target)
+    finally:
+        try:
+            temp.unlink()
+        except FileNotFoundError:
+            pass
