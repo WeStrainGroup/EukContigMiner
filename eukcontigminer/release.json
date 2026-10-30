@@ -1,5 +1,5 @@
 {
- "version": "0.78",
+ "version": "0.79",
  "tasks": {
   "euk": {
    "model_id": "euk_h1h2h3_early_exit_current",
@@ -163,7 +163,7 @@
  },
  "heads_archive": {
   "sha256": "ae08b0bd1f959a037636c7c50df799cb36bad174829e26bfe03fc9941bea834d",
-  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.78/eukcontigminer-0.78-models.tar.gz"
+  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.79/eukcontigminer-0.79-models.tar.gz"
  },
  "min_input_bp": {
   "euk": 500,

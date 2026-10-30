@@ -7,7 +7,7 @@ Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent
 Use a fresh Python 3.11 environment:
 
 ```bash
-pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.78/eukcontigminer-0.78-py3-none-any.whl
+pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.79/eukcontigminer-0.79-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -20,7 +20,7 @@ eukcontigminer input.fasta.gz --task euk --models models -o euk.tsv --device cud
 eukcontigminer input.fasta.gz --task fun --models models -o fun.tsv --device cuda:0
 ```
 
-`euk` is the default; use `--task fun`, `--task both`, or `--task euk,fun`. The output schema is always `contig_id, length_bp, p_euk, label_euk, p_fun, label_fun`; an unspecified task is NA. Prediction runs offline on one GPU; `--device cpu` is also supported. Contigs shorter than the task minimum are still emitted in the output table with `length_bp`, `p_euk`/`p_fungi = NA`, and `label = NA`; they are not silently dropped. The minimum for prediction is **500 bp for both euk and fun**. Output files are never overwritten.
+`euk` is the default; use `--task fun`, `--task both`, or `--task euk,fun`. The output schema is always `contig_id, length_bp, p_euk, label_euk, head_euk, p_fun, label_fun, head_fun`; an unspecified task is NA. Prediction runs offline on one GPU; `--device cpu` is also supported. Contigs shorter than the task minimum are still emitted in the output table with `length_bp`, `p_euk`/`p_fungi = NA`, and `label = NA`; they are not silently dropped. The minimum for prediction is **500 bp for both euk and fun**. Output files are never overwritten.
 
 ## Validation
 
@@ -68,7 +68,7 @@ python -m pip install --upgrade pip
 # Install a CUDA-compatible torch build first if needed; local tags such as
 # 2.13.0+cu126 are accepted by the runtime version check.
 python -m pip install "torch>=2.13.0,<2.14"
-python -m pip install eukcontigminer-0.78-py3-none-any.whl
+python -m pip install eukcontigminer-0.79-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -90,7 +90,7 @@ contig_id  length_bp  p_euk  label_euk  p_fun  label_fun
 - below-minimum contigs keep their row and `length_bp`, with NA prediction/label
 
 
-## v0.78 early-exit Test
+## v0.79 early-exit Test
 
 Fixed uniform gates selected on Validation; no Test tuning.
 

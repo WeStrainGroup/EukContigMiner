@@ -116,27 +116,34 @@ def task_scores(raw, lengths, task, meta):
 def write_predictions(records, pipelines, stream, tasks, meta):
     import numpy as np
     writer = csv.writer(stream, delimiter='\t', lineterminator='\n')
-    writer.writerow(['contig_id', 'length_bp', 'p_euk', 'label_euk', 'p_fun', 'label_fun'])
+    writer.writerow(['contig_id', 'length_bp', 'p_euk', 'label_euk', 'head_euk', 'p_fun', 'label_fun', 'head_fun'])
     total = count = 0
     for batch in batches(records):
         lengths = [len(seq) for _, seq in batch]
         scores = {}
+        heads = {}
         for task in tasks:
             scores[task] = np.full(len(batch), np.nan, dtype=np.float64)
+            heads[task] = np.full(len(batch), 'NA', dtype=object)
             min_bp = meta['min_input_bp'][task]
             eligible = [i for i, n in enumerate(lengths) if n >= min_bp]
             if eligible:
                 raw = pipelines[task].infer_chunk([batch[i][1] for i in eligible])
                 scores[task][eligible] = task_scores(raw, [lengths[i] for i in eligible], task, meta)
+                if task == 'euk':
+                    for j, route in zip(eligible, raw.get('routes', [])):
+                        heads['euk'][j] = ('1', '2', '3')[int(route)]
+                else:
+                    heads['fun'][eligible] = '1'
         for i, (header, seq) in enumerate(batch):
             row = [header, len(seq)]
             for task in ('euk', 'fun'):
                 if task not in tasks or not np.isfinite(scores[task][i]):
-                    row.extend(['NA', 'NA'])
+                    row.extend(['NA', 'NA', 'NA'])
                 else:
                     score = float(scores[task][i])
                     label = ('eukaryota' if task == 'euk' else 'fungi') if score > meta['tasks'][task]['threshold'] else 'other'
-                    row.extend([format(score, '.17g'), label])
+                    row.extend([format(score, '.17g'), label, heads[task][i]])
             writer.writerow(row)
         total += len(batch)
         count += 1

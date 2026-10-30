@@ -41,8 +41,8 @@ def test_task_decision_boundary_and_batches():
     assert write_predictions(((str(i), b'A'*1000) for i in range(2050)), {'fun': pipeline}, stream, ['fun'], meta) == (2050, 2)
     rows = list(csv.DictReader(io.StringIO(stream.getvalue()), delimiter='\t'))
     assert pipeline.sizes == [2048, 2]
-    assert rows[0]['p_euk'] == rows[0]['label_euk'] == 'NA'
-    assert rows[0]['label_fun'] == 'other' and rows[2047]['label_fun'] == rows[-1]['label_fun'] == 'fungi'
+    assert rows[0]['p_euk'] == rows[0]['label_euk'] == rows[0]['head_euk'] == 'NA'
+    assert rows[0]['label_fun'] == 'other' and rows[0]['head_fun'] == '1' and rows[2047]['label_fun'] == rows[-1]['label_fun'] == 'fungi'
     assert rows[2048]['label_fun'] == 'other' and rows[-1]['contig_id'] == '2049'
     with pytest.raises(ValueError):
         task_scores(dict(task='p_euk', scores=np.ones(1), lengths=[1000]), [1000], 'fun', meta)
@@ -68,7 +68,7 @@ def test_model_setup_rejects_corruption(tmp_path):
 
 def test_release_contract():
     m = metadata()
-    assert __version__ == m['version'] == '0.78'
+    assert __version__ == m['version'] == '0.79'
     assert set(m['tasks']) == {'euk', 'fun'}
     assert m['tasks']['euk']['threshold'] == .5
     assert m['euk_head_thresholds'] == [0.9875542092225127, 0.8710327904902847, 0.9982100708165487]
@@ -86,5 +86,6 @@ def test_short_contigs_are_emitted_with_na():
     rows = [('too_short', b'ACGT'*100), ('at_min', b'ACGT'*125)]
     assert write_predictions(rows, {'euk': Pipeline()}, stream, ['euk'], metadata()) == (2, 1)
     out = list(csv.DictReader(io.StringIO(stream.getvalue()), delimiter='\t'))
-    assert out[0] == {'contig_id':'too_short','length_bp':'400','p_euk':'NA','label_euk':'NA','p_fun':'NA','label_fun':'NA'}
-    assert out[1]['length_bp'] == '500' and out[1]['label_euk'] == 'eukaryota'
+    assert out[0] == {'contig_id':'too_short','length_bp':'400','p_euk':'NA','label_euk':'NA','head_euk':'NA','p_fun':'NA','label_fun':'NA','head_fun':'NA'}
+    assert out[1]['length_bp'] == '500' and out[1]['label_euk'] == 'eukaryota' and out[1]['head_euk'] == 'NA'
+    assert out[1]['p_fun'] == out[1]['label_fun'] == out[1]['head_fun'] == 'NA'
