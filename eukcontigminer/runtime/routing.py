@@ -1,4 +1,4 @@
-"""One center/route implementation for v0.71 early exit."""
+"""Single two-sided early-exit implementation; no length groups."""
 import numpy as np
 
 
@@ -9,24 +9,13 @@ def centered(probabilities, thresholds):
     return z - np.log(t / (1 - t))
 
 
-def apply_stage(routes, group, z, stage, gates):
-    name = 'H1' if stage == 0 else 'H2'
-    for g in (0, 1, 2):
-        lo, hi = gates[name][str(g)]
-        take = (routes == 2) & (group == g) & ((z[:, stage] < lo) | (z[:, stage] > hi))
-        routes[take] = stage
-    return routes
-
-
-def final_scores(z, routes):
-    selected = z[np.arange(len(z)), routes]
-    return 1.0 / (1.0 + np.exp(-selected))
-
-
-def route(probabilities, thresholds, lengths, gates):
+def route(probabilities, thresholds, gates):
+    """Return final centered scores and routes; H1/H2 have one pair of cuts each."""
     z = centered(probabilities, thresholds)
-    group = np.digitize(np.asarray(lengths), [2000, 10000])
     routes = np.full(len(z), 2, dtype=np.int8)
-    routes = apply_stage(routes, group, z, 0, gates)
-    routes = apply_stage(routes, group, z, 1, gates)
-    return final_scores(z, routes), routes
+    for stage, name in enumerate(('H1', 'H2')):
+        lo, hi = gates[name]
+        take = (routes == 2) & ((z[:, stage] < lo) | (z[:, stage] > hi))
+        routes = np.where(take, stage, routes).astype(np.int8)
+    selected = z[np.arange(len(z)), routes]
+    return 1.0 / (1.0 + np.exp(-selected)), routes

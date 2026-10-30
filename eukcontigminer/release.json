@@ -1,10 +1,10 @@
 {
- "version": "0.77",
+ "version": "0.78",
  "tasks": {
   "euk": {
    "model_id": "euk_h1h2h3_early_exit_current",
    "threshold": 0.5,
-   "architecture": "new H1/H2/H3 heads, two-sided H1->H2->H3 early exit"
+   "architecture": "H1/H2 two-sided uniform early exit -> H3"
   },
   "fun": {
    "model_id": "fungi_compact_seed2026101801_refine_epoch1",
@@ -20,34 +20,14 @@
   0.9982100708165487
  ],
  "euk_gates": {
-  "H1": {
-   "0": [
-    -100.0,
-    100.0
-   ],
-   "1": [
-    -100.0,
-    100.0
-   ],
-   "2": [
-    -4.0,
-    0.0
-   ]
-  },
-  "H2": {
-   "0": [
-    -4.0,
-    1.0
-   ],
-   "1": [
-    -100.0,
-    100.0
-   ],
-   "2": [
-    -100.0,
-    100.0
-   ]
-  }
+  "H1": [
+   -10.0,
+   8.0
+  ],
+  "H2": [
+   -4.0,
+   1.0
+  ]
  },
  "files": {
   "encoders/assets.json": {
@@ -183,7 +163,7 @@
  },
  "heads_archive": {
   "sha256": "ae08b0bd1f959a037636c7c50df799cb36bad174829e26bfe03fc9941bea834d",
-  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.77/eukcontigminer-0.77-models.tar.gz"
+  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.78/eukcontigminer-0.78-models.tar.gz"
  },
  "min_input_bp": {
   "euk": 500,

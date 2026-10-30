@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import torch
 from .heads import H1Flex, HeadFlex
-from .routing import centered, apply_stage, final_scores
+from .routing import centered, route as route_scores
 from .dna_encoder import load_dna_encoder
 from .encoders import FrozenNT, FrozenESM
 
@@ -38,12 +38,7 @@ class EukRuntime:
         p = np.column_stack([self.head_prob('H1', np.asarray(h1[:, :943])),
                              self.head_prob('H2', np.asarray(h2[:, :2479])),
                              self.head_prob('H3', np.asarray(h3[:, :4399]))])
-        z = centered(p, self.t)
-        group = np.digitize(np.asarray(lengths), [2000, 10000])
-        routes = np.full(len(z), 2, dtype=np.int8)
-        routes = apply_stage(routes, group, z, 0, self.gates)
-        routes = apply_stage(routes, group, z, 1, self.gates)
-        scores = final_scores(z, routes)
+        scores, routes = route_scores(p, self.t, self.gates)
         return {'scores': scores, 'routes': routes, 'probs': p, 'labels': scores > 0.5}
 
 
@@ -91,27 +86,27 @@ class EukPipeline:
             dna[lo:hi] = r['dna'].cpu().numpy(); lo = hi
         loglen = np.log10(lengths.astype(np.float64)).astype(np.float32)[:, None]
         p1 = self.heads.head_prob('H1', np.concatenate([dna, loglen], 1))
-        z = np.full((n, 3), np.nan)
-        z[:, 0] = centered(p1, self.heads.t[0])
-        group = np.digitize(lengths, [2000, 10000])
-        routes = np.full(n, 2, dtype=np.int8)
-        routes = apply_stage(routes, group, z, 0, self.heads.gates)
         p2 = np.full(n, np.nan); p3 = np.full(n, np.nan)
         nt_all = np.full((n, 1536), np.nan, np.float32)
+        z = np.full((n, 3), np.nan); z[:, 0] = centered(p1, self.heads.t[0])
+        routes = np.full(n, 2, dtype=np.int8)
+        lo, hi = self.heads.gates['H1']
+        routes = np.where((routes == 2) & ((z[:, 0] < lo) | (z[:, 0] > hi)), 0, routes).astype(np.int8)
         need = np.where(routes != 0)[0]
         if len(need):
             nt = self._nt([sequences[i] for i in need]); nt_all[need] = nt
             h2 = np.concatenate([dna[need], nt, loglen[need]], 1)
             p2[need] = self.heads.head_prob('H2', h2)
             z[need, 1] = centered(p2[need], self.heads.t[1])
-            routes = apply_stage(routes, group, z, 1, self.heads.gates)
+            lo, hi = self.heads.gates['H2']
+            routes = np.where((routes == 2) & ((z[:, 1] < lo) | (z[:, 1] > hi)), 1, routes).astype(np.int8)
         need = np.where(routes == 2)[0]
         if len(need):
             esm = self._esm([sequences[i] for i in need])
             h3 = np.concatenate([dna[need], nt_all[need], esm, loglen[need]], 1)
             p3[need] = self.heads.head_prob('H3', h3)
             z[need, 2] = centered(p3[need], self.heads.t[2])
-        scores = final_scores(z, routes)
+        scores, routes = route_scores(np.column_stack([p1, p2, p3]), self.heads.t, self.heads.gates)
         return {'scores': scores, 'routes': routes, 'probs': np.column_stack([p1, p2, p3]),
                 'labels': scores > 0.5, 'lengths': lengths}
 

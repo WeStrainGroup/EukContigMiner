@@ -7,7 +7,7 @@ Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent
 Use a fresh Python 3.11 environment:
 
 ```bash
-pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.77/eukcontigminer-0.77-py3-none-any.whl
+pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.78/eukcontigminer-0.78-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -43,6 +43,10 @@ Frozen v0.71 models and fixed Validation thresholds; no Test tuning.
 
 489,080 Test contigs; 8-GPU sharded run in about 27 minutes. [Full report](reports/final_test_1kb.json).
 
+## Early exit
+
+H1 and H2 each use one pair of two-sided cuts for every contig of at least 500 bp; H3 is the fallback. There are no length groups. Validation routes: H1 80.4%, H2 15.3%, H3 4.3%.
+
 ## Extra Test500 evaluation
 
 A separate 500–999 bp Test extension was cut from the frozen Test genomes with the original 32/2 quota, seed 20261001, QC and no-overlap rules. Models, heads, thresholds and gates are unchanged from v0.71; the threshold was fixed at 0.5 and Test was not used for tuning.
@@ -64,7 +68,7 @@ python -m pip install --upgrade pip
 # Install a CUDA-compatible torch build first if needed; local tags such as
 # 2.13.0+cu126 are accepted by the runtime version check.
 python -m pip install "torch>=2.13.0,<2.14"
-python -m pip install eukcontigminer-0.77-py3-none-any.whl
+python -m pip install eukcontigminer-0.78-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -84,3 +88,13 @@ contig_id  length_bp  p_euk  label_euk  p_fun  label_fun
 - `label_euk` is `eukaryota` or `other`
 - `label_fun` is `fungi` or `other`
 - below-minimum contigs keep their row and `length_bp`, with NA prediction/label
+
+
+## v0.78 early-exit Test
+
+Fixed uniform gates selected on Validation; no Test tuning.
+
+| Dataset | F1 @ 1% | 1–2 kb F1 @ 1% |
+|---|---:|---:|
+| 1 kb+ Test | **0.991364** | **0.974514** |
+| Validation | **0.992503** | **0.980114** |
