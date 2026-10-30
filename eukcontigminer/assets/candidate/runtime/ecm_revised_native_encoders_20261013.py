@@ -12,6 +12,7 @@ import sys
 import types
 import torch
 from torch import nn
+from packaging.version import Version, InvalidVersion
 
 ASSET_SHA='977bb82da74acff0f5d150287e3aa4d596ac5cb0a016c1aef8ac257150e6dc58'
 def sha(path):
@@ -29,7 +30,12 @@ def checked_assets(root):
         if not p.is_relative_to(root)or p.stat().st_size!=b['bytes']or sha(p)!=b['sha256']:
             raise ValueError('Frozen asset differs: '+rel)
     for name,version in m['observed_dependency_versions'].items():
-        if importlib.metadata.version(name)!=version:raise ValueError('Dependency version differs: '+name)
+        installed=importlib.metadata.version(name)
+        try:
+            compatible=Version(installed).base_version==Version(version).base_version
+        except InvalidVersion:
+            compatible=installed==version
+        if not compatible:raise ValueError(f'Dependency version differs: {name} required {version}, installed {installed}')
     return root,m
 
 def runtime_module(root,manifest,name):

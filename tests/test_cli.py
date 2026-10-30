@@ -18,7 +18,7 @@ def test_fasta_gzip_and_original_order(tmp_path):
     assert rows == [('same header', b'ACGTN'*200), ('same header', b'RYSWKMBDHV'*100)]
 
 
-@pytest.mark.parametrize('body', ['', '>x\n', '>x\nACGT\n', '>x\n'+'X'*1000, 'A'*1000])
+@pytest.mark.parametrize('body', ['', '>x\n', '>x\n'+'X'*1000, 'A'*1000])
 def test_invalid_fasta(tmp_path, body):
     p = tmp_path/'bad.fa'
     p.write_text(body)
@@ -67,10 +67,23 @@ def test_model_setup_rejects_corruption(tmp_path):
 
 def test_release_contract():
     m = metadata()
-    assert __version__ == m['version'] == '0.72'
+    assert __version__ == m['version'] == '0.73'
     assert set(m['tasks']) == {'euk', 'fun'}
     assert m['tasks']['euk']['threshold'] == .5
     assert m['euk_head_thresholds'] == [0.9875542092225127, 0.8710327904902847, 0.9982100708165487]
     assert m['min_input_bp'] == {'euk': 500, 'fun': 1000}
     assert m['tasks']['fun']['threshold'] == 0.9920285346180445
     assert m['models_frozen'] and m['chunk_rows'] == 2048
+
+
+def test_short_contigs_are_emitted_with_na():
+    class Pipeline:
+        def infer_chunk(self, seqs):
+            assert seqs == [b'ACGT'*125]
+            return dict(task='p_euk', scores=np.array([0.9]), lengths=[500])
+    stream = io.StringIO()
+    rows = [('too_short', b'ACGT'*100), ('at_min', b'ACGT'*125)]
+    assert write_predictions(rows, Pipeline(), stream, 'euk', metadata(), min_bp=500) == (2, 1)
+    out = list(csv.DictReader(io.StringIO(stream.getvalue()), delimiter='\t'))
+    assert out[0] == {'contig_id':'too_short','length_bp':'400','p_euk':'NA','label':'NA'}
+    assert out[1]['length_bp'] == '500' and out[1]['label'] == 'Eukaryota'

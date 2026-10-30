@@ -21,7 +21,7 @@ def sha(path):
     return h.hexdigest()
 
 
-def read_fasta(path, min_length=1000):
+def read_fasta(path, min_length=1):
     opener = gzip.open if str(path).endswith('.gz') else open
     header, parts = None, []
     allowed = frozenset(b'ACGTRYSWKMBDHVN')
@@ -46,7 +46,7 @@ def read_fasta(path, min_length=1000):
     yield checked_record(header, parts, min_length)
 
 
-def checked_record(header, parts, min_length=1000):
+def checked_record(header, parts, min_length=1):
     seq = b''.join(parts)
     if len(seq) < min_length:
         raise ValueError(f'Contig {header!r} is shorter than the supported minimum of {min_length} bp')
@@ -117,7 +117,8 @@ def task_scores(raw, lengths, task, meta):
     return scores
 
 
-def write_predictions(records, pipeline, stream, task, meta):
+def write_predictions(records, pipeline, stream, task, meta, min_bp=1000):
+    import numpy as np
     writer = csv.writer(stream, delimiter='\t', lineterminator='\n')
     column = 'p_euk' if task == 'euk' else 'p_fungi'
     positive = 'Eukaryota' if task == 'euk' else 'Fungi'
@@ -125,10 +126,17 @@ def write_predictions(records, pipeline, stream, task, meta):
     writer.writerow(['contig_id', 'length_bp', column, 'label'])
     total = count = 0
     for batch in batches(records):
-        seqs = [seq for _, seq in batch]
-        scores = task_scores(pipeline.infer_chunk(seqs), [len(s) for s in seqs], task, meta)
+        lengths = [len(seq) for _, seq in batch]
+        eligible = [i for i, n in enumerate(lengths) if n >= min_bp]
+        scores = np.full(len(batch), np.nan, dtype=np.float64)
+        if eligible:
+            raw = pipeline.infer_chunk([batch[i][1] for i in eligible])
+            scores[eligible] = task_scores(raw, [lengths[i] for i in eligible], task, meta)
         for (header, seq), score in zip(batch, scores):
-            writer.writerow([header, len(seq), format(float(score), '.17g'), positive if score > threshold else 'Other'])
+            if not np.isfinite(score):
+                writer.writerow([header, len(seq), 'NA', 'NA'])
+            else:
+                writer.writerow([header, len(seq), format(float(score), '.17g'), positive if score > threshold else 'Other'])
         total += len(batch)
         count += 1
         stream.flush()
@@ -140,7 +148,7 @@ def main(argv=None):
     if argv and argv[0] == 'download-models':
         from .setup_models import main as setup
         return setup(argv[1:])
-    parser = argparse.ArgumentParser(description='Classify eukaryotic (>=500 bp) or fungal (>=1000 bp) contigs.')
+    parser = argparse.ArgumentParser(description='Classify euk/fun contigs; euk <500 bp and fun <1000 bp are emitted with NA prediction.')
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     parser.add_argument('fasta', help='DNA FASTA or .fasta.gz')
     parser.add_argument('--task', choices=['euk', 'fun'], default='euk', help='euk (default): eukaryotic origin; fun: fungal origin')
@@ -156,15 +164,14 @@ def main(argv=None):
             parser.error('Output already exists: ' + str(p))
     source = Path(args.fasta).resolve()
     # Parse once before loading models; no partial prediction for malformed inputs.
-    min_length = 500 if args.task == 'euk' else 1000
-    rows_expected = sum(1 for _ in read_fasta(source, min_length))
+    rows_expected = sum(1 for _ in read_fasta(source))
     root, meta = verify_models(args.models)
     before = sha(source)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', CUBLAS_WORKSPACE_CONFIG=':4096:8')
     start = time.monotonic()
     pipeline = load_pipeline(root, meta, args.task, args.device)
     with partial.open('x', newline='') as stream:
-        rows, chunks = write_predictions(read_fasta(source, min_length), pipeline, stream, args.task, meta)
+        rows, chunks = write_predictions(read_fasta(source), pipeline, stream, args.task, meta, meta['min_input_bp'][args.task])
     if rows != rows_expected or sha(source) != before:
         raise ValueError('FASTA changed during inference')
     # Hard-link publishes without overwriting a file created concurrently.

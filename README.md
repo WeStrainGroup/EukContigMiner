@@ -7,7 +7,7 @@ Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent
 Use a fresh Python 3.11 environment:
 
 ```bash
-pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.72/eukcontigminer-0.72-py3-none-any.whl
+pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.73/eukcontigminer-0.73-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -20,7 +20,7 @@ eukcontigminer input.fasta.gz --task euk --models models -o euk.tsv --device cud
 eukcontigminer input.fasta.gz --task fun --models models -o fun.tsv --device cuda:0
 ```
 
-`euk` is the default. Each task outputs contig ID, length, `p_euk` or `p_fungi`, and its binary label. Prediction runs offline on one GPU; `--device cpu` is also supported. `euk` inputs must be at least **500 bp**; `fun` inputs must be at least **1,000 bp**. Output files are never overwritten.
+`euk` is the default. Each task outputs contig ID, length, `p_euk` or `p_fungi`, and its binary label. Prediction runs offline on one GPU; `--device cpu` is also supported. Contigs shorter than the task minimum are still emitted in the output table with `length_bp`, `p_euk`/`p_fungi = NA`, and `label = NA`; they are not silently dropped. The minimum for prediction is **500 bp for euk** and **1,000 bp for fun**. Output files are never overwritten.
 
 ## Validation
 
@@ -43,7 +43,7 @@ Frozen v0.71 models and fixed Validation thresholds; no Test tuning.
 
 489,080 Test contigs; 8-GPU sharded run in about 27 minutes. [Full report](reports/v071_final_test.json).
 
-## Extra Test500 evaluation (v0.72)
+## Extra Test500 evaluation (v0.73)
 
 A separate 500–999 bp Test extension was cut from the frozen Test genomes with the original 32/2 quota, seed 20261001, QC and no-overlap rules. Models, heads, thresholds and gates are unchanged from v0.71; the threshold was fixed at 0.5 and Test was not used for tuning.
 
@@ -53,3 +53,19 @@ A separate 500–999 bp Test extension was cut from the frozen Test genomes with
 | Rows | 127,976 |
 
 [Full report](reports/v072_test500.json). Test500 is a generalization stress test, not a replacement for the 1 kb+ Test.
+
+
+## Fresh-environment install
+
+```bash
+python3.11 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip
+# Install a CUDA-compatible torch build first if needed; local tags such as
+# 2.13.0+cu126 are accepted by the runtime version check.
+python -m pip install "torch>=2.13.0,<2.14"
+python -m pip install eukcontigminer-0.73-py3-none-any.whl
+eukcontigminer download-models --output models
+```
+
+`download-models` fetches the frozen model assets once; inference is then offline.
