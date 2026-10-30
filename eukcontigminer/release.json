@@ -1,5 +1,5 @@
 {
- "version": "0.81",
+ "version": "0.82",
  "tasks": {
   "euk": {
    "model_id": "euk_h1h2h3_early_exit_current",
@@ -33,26 +33,6 @@
   "encoders/assets.json": {
    "sha256": "977bb82da74acff0f5d150287e3aa4d596ac5cb0a016c1aef8ac257150e6dc58",
    "bytes": 8040,
-   "source": "package"
-  },
-  "encoders/runtime/esm_features.py": {
-   "sha256": "351c13c21bd0b1157fdbe08e6bb772cf8f12af8aca8b8e9d2030640844064b12",
-   "bytes": 6932,
-   "source": "package"
-  },
-  "encoders/runtime/esm_inference.py": {
-   "sha256": "6eb784a031a7f56eb69bc1d2f604c6dbeb77c37f91375fcbbb5618187b034e2b",
-   "bytes": 29481,
-   "source": "package"
-  },
-  "encoders/runtime/ntv3_runtime.py": {
-   "sha256": "fe9a28f860b9e49c420691c4ba28fa4c5ee6e259a77d2afbbb2f9124e67489ee",
-   "bytes": 10385,
-   "source": "package"
-  },
-  "encoders/runtime/protein_model.py": {
-   "sha256": "77e556430b582c9c5f7b9db03fde1822c1967fbccc18726e43a6f4cd7e3037da",
-   "bytes": 13097,
    "source": "package"
   },
   "encoders/nt/MODEL-LICENSE.md": {
@@ -163,7 +143,7 @@
  },
  "heads_archive": {
   "sha256": "ae08b0bd1f959a037636c7c50df799cb36bad174829e26bfe03fc9941bea834d",
-  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.81/eukcontigminer-0.81-models.tar.gz"
+  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.82/eukcontigminer-0.82-models.tar.gz"
  },
  "min_input_bp": {
   "euk": 500,

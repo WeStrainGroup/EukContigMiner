@@ -190,7 +190,7 @@ def main(argv=None):
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', CUBLAS_WORKSPACE_CONFIG=':4096:8')
     start = time.monotonic()
     from .runtime.encoders import EncoderBundle
-    encoders = EncoderBundle(root, args.device)
+    encoders = EncoderBundle(root, args.device, verified=True)
     pipelines = {task: load_pipeline(root, meta, task, args.device, encoders) for task in tasks}
     with partial.open('x', newline='') as stream:
         rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta)

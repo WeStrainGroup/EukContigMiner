@@ -11,7 +11,7 @@ python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install "torch==2.13.0"
-python -m pip install eukcontigminer-0.81-py3-none-any.whl
+python -m pip install eukcontigminer-0.82-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -80,3 +80,13 @@ Historical reports remain in `reports/` with their version names.
 - 500 bp is the minimum prediction length for both tasks.
 - The euk and fun paths are independent; `both` runs both and shares no classification decision.
 - The eight-column output, NA behavior, strict `>` threshold and no-overwrite publication are part of the interface contract.
+
+
+## Architecture
+
+- `resources.py`: one manifest/hash/verify/copy entry
+- `runtime/encoders.py`: one lazy `EncoderBundle` for DNA/NT/ESM, shared by euk and fun
+- `runtime/euk.py`: H1 -> H2 -> H3 orchestration
+- `runtime/fun.py`: independent fun path
+- `runtime/routing.py`: one stage/exit decision and final routing
+- `runtime/upstream/`: pinned upstream encoder code imported as a normal package, not copied into the model directory

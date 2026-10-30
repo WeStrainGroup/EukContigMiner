@@ -5,16 +5,14 @@ parity and the installed end-to-end CLI require separate verification.
 """
 import hashlib
 import importlib.metadata
-from pathlib import Path
 import numpy as np
-import importlib.util
 import json
 from pathlib import Path
 import sys
-import types
 import torch
 from torch import nn
 from packaging.version import Version, InvalidVersion
+from .upstream import ntv3_runtime, esm_inference
 
 ASSET_SHA='977bb82da74acff0f5d150287e3aa4d596ac5cb0a016c1aef8ac257150e6dc58'
 def sha(path):
@@ -23,15 +21,16 @@ def sha(path):
         for b in iter(lambda:f.read(8*1024**2),b''):h.update(b)
     return h.hexdigest()
 
-def checked_assets(root):
+def checked_assets(root, verify=True):
     root=Path(root).resolve()
-    if sha(root/'assets.json')!=ASSET_SHA:raise ValueError('Frozen asset manifest differs')
+    if verify and sha(root/'assets.json')!=ASSET_SHA:raise ValueError('Frozen asset manifest differs')
     m=json.loads((root/'assets.json').read_text())
-    for rel,b in m['files'].items():
-        p=(root/rel).resolve()
-        if not p.is_relative_to(root)or p.stat().st_size!=b['bytes']or sha(p)!=b['sha256']:
-            raise ValueError('Frozen asset differs: '+rel)
-    check_manifest_dependencies(m)
+    if verify:
+        for rel,b in m['files'].items():
+            p=(root/rel).resolve()
+            if not p.is_relative_to(root)or p.stat().st_size!=b['bytes']or sha(p)!=b['sha256']:
+                raise ValueError('Frozen asset differs: '+rel)
+        check_manifest_dependencies(m)
     return root,m
 
 
@@ -56,19 +55,6 @@ def check_runtime_dependencies(path=None):
     """Preflight dependency versions before any large model hash scan."""
     path = Path(path) if path else Path(__file__).resolve().parent.parent / 'assets/encoders/assets.json'
     return check_manifest_dependencies(json.loads(path.read_text()))
-
-def runtime_module(root,manifest,name):
-    namespace='_ecm_revised_frozen_'+hashlib.sha256(str(root).encode()).hexdigest()[:20]
-    if namespace not in sys.modules:
-        pkg=types.ModuleType(namespace);pkg.__path__=[str(root/'runtime')];sys.modules[namespace]=pkg
-    for stem in ['protein_model','esm_features','esm_inference','ntv3_runtime']:
-        key=namespace+'.'+stem;path=root/'runtime'/(stem+'.py')
-        if key not in sys.modules:
-            spec=importlib.util.spec_from_file_location(key,path);mod=importlib.util.module_from_spec(spec)
-            sys.modules[key]=mod;spec.loader.exec_module(mod)
-        if sha(Path(sys.modules[key].__file__))!=manifest['files']['runtime/'+stem+'.py']['sha256']:
-            raise ValueError('Loaded runtime differs')
-    return sys.modules[namespace+'.'+name]
 
 def finite_frozen(model):
     model.eval().requires_grad_(False)
@@ -112,10 +98,11 @@ def encode_nt(model, sequences, batch):
 
 class EncoderBundle:
     """Lazy process-local DNA/NT/ESM instances shared by euk and fun."""
-    def __init__(self, model_root, device):
+    def __init__(self, model_root, device, verified=False):
         from .dna_encoder import load_dna_encoder
         self.root = Path(model_root)
         self.device = device
+        self.verified = verified
         self._dna = self._nt = self._esm = None
         self._load_dna = load_dna_encoder
 
@@ -126,19 +113,27 @@ class EncoderBundle:
 
     def nt(self):
         if self._nt is None:
-            self._nt = FrozenNT(self.root / 'encoders', self.device)
+            self._nt = FrozenNT(self.root / 'encoders', self.device, verified=self.verified)
         return self._nt
 
     def esm(self):
         if self._esm is None:
-            self._esm = FrozenESM(self.root / 'encoders', self.device)
+            self._esm = FrozenESM(self.root / 'encoders', self.device, verified=self.verified)
         return self._esm
 
+def digest_lookup(digests):
+    by_name = {Path(k).name: v for k, v in digests.items()}
+    def lookup(path):
+        return by_name[Path(path).name]
+    return lookup
+
+
 class FrozenNT(nn.Module):
-    def __init__(self,assets,device='cpu'):
-        super().__init__();root,self.manifest=checked_assets(assets)
-        self.runtime=runtime_module(root,self.manifest,'ntv3_runtime')
-        self.tokenizer,self.encoder=self.runtime.load_source(root/'nt',self.manifest['NT']['source_digests'],sha)
+    def __init__(self,assets,device='cpu',verified=False):
+        super().__init__();root,self.manifest=checked_assets(assets,verify=not verified)
+        self.runtime=ntv3_runtime
+        loader_sha = sha if not verified else digest_lookup(self.manifest['NT']['source_digests'])
+        self.tokenizer,self.encoder=self.runtime.load_source(root/'nt',self.manifest['NT']['source_digests'],loader_sha)
         self.device=torch.device(device)
         torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
         finite_frozen(self.encoder).to(self.device);self.eval()
@@ -187,9 +182,9 @@ class FrozenNT(nn.Module):
         return f.reshape(-1, 2, 1536).mean(1)
 
 class FrozenESM(nn.Module):
-    def __init__(self,assets,device='cpu'):
-        super().__init__();root,self.manifest=checked_assets(assets)
-        self.runtime=runtime_module(root,self.manifest,'esm_inference')
+    def __init__(self,assets,device='cpu',verified=False):
+        super().__init__();root,self.manifest=checked_assets(assets,verify=not verified)
+        self.runtime=esm_inference
         from esm.models.esmc import ESMC
         from esm.pretrained import get_esmc_model_tokenizers
         self.model=ESMC(d_model=960,n_heads=15,n_layers=30,tokenizer=get_esmc_model_tokenizers(),use_flash_attn=False)
