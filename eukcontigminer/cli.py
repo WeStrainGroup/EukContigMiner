@@ -176,7 +176,8 @@ def main(argv=None):
     if argv and argv[0] == 'download-models':
         from .setup_models import main as setup
         return setup(argv[1:])
-    parser = argparse.ArgumentParser(description='Classify euk/fun contigs; euk <500 bp and fun <1000 bp are emitted with NA prediction.')
+    meta = metadata()
+    parser = argparse.ArgumentParser(description=f"Classify euk/fun contigs; minimum {meta['min_input_bp']['euk']} bp (euk) / {meta['min_input_bp']['fun']} bp (fun); shorter records are emitted with NA.")
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     parser.add_argument('fasta', help='DNA FASTA or .fasta.gz')
     parser.add_argument('--task', action='append', default=None, help='euk (default), fun, both, or euk,fun')

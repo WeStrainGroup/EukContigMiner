@@ -32,7 +32,7 @@ def checked_assets(root):
     for name,version in m['observed_dependency_versions'].items():
         installed=importlib.metadata.version(name)
         try:
-            compatible=Version(installed).base_version==Version(version).base_version
+            compatible=Version(installed).base_version==Version(version).base_version and not Version(installed).is_prerelease and not Version(installed).is_devrelease
         except InvalidVersion:
             compatible=installed==version
         if not compatible:raise ValueError(f'Dependency version differs: {name} required {version}, installed {installed}')
