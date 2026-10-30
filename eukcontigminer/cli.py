@@ -12,6 +12,8 @@ import time
 
 from . import __version__
 
+_TORCH_CONFIGURED = False
+
 
 def sha(path):
     h = hashlib.sha256()
@@ -83,10 +85,13 @@ def load_pipeline(root, meta, task, device):
     import torch
     runtime = root / 'candidate/runtime'
     sys.path.insert(0, str(runtime))
-    torch.set_num_threads(2)
-    torch.set_num_interop_threads(1)
-    torch.backends.cuda.matmul.allow_tf32 = False
-    torch.backends.cudnn.allow_tf32 = False
+    global _TORCH_CONFIGURED
+    if not _TORCH_CONFIGURED:
+        torch.set_num_threads(2)
+        torch.set_num_interop_threads(1)
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
+        _TORCH_CONFIGURED = True
     if task == 'fun':
         torch.use_deterministic_algorithms(True)
         from ecm_fungi_raw_pipeline_20261017 import FungiRawPipeline
@@ -117,30 +122,53 @@ def task_scores(raw, lengths, task, meta):
     return scores
 
 
-def write_predictions(records, pipeline, stream, task, meta, min_bp=1000):
+def write_predictions(records, pipelines, stream, tasks, meta):
     import numpy as np
     writer = csv.writer(stream, delimiter='\t', lineterminator='\n')
-    column = 'p_euk' if task == 'euk' else 'p_fungi'
-    positive = 'Eukaryota' if task == 'euk' else 'Fungi'
-    threshold = meta['tasks'][task]['threshold']
-    writer.writerow(['contig_id', 'length_bp', column, 'label'])
+    writer.writerow(['contig_id', 'length_bp', 'p_euk', 'label_euk', 'p_fun', 'label_fun'])
     total = count = 0
     for batch in batches(records):
         lengths = [len(seq) for _, seq in batch]
-        eligible = [i for i, n in enumerate(lengths) if n >= min_bp]
-        scores = np.full(len(batch), np.nan, dtype=np.float64)
-        if eligible:
-            raw = pipeline.infer_chunk([batch[i][1] for i in eligible])
-            scores[eligible] = task_scores(raw, [lengths[i] for i in eligible], task, meta)
-        for (header, seq), score in zip(batch, scores):
-            if not np.isfinite(score):
-                writer.writerow([header, len(seq), 'NA', 'NA'])
-            else:
-                writer.writerow([header, len(seq), format(float(score), '.17g'), positive if score > threshold else 'Other'])
+        scores = {}
+        for task in tasks:
+            scores[task] = np.full(len(batch), np.nan, dtype=np.float64)
+            min_bp = meta['min_input_bp'][task]
+            eligible = [i for i, n in enumerate(lengths) if n >= min_bp]
+            if eligible:
+                raw = pipelines[task].infer_chunk([batch[i][1] for i in eligible])
+                scores[task][eligible] = task_scores(raw, [lengths[i] for i in eligible], task, meta)
+        for i, (header, seq) in enumerate(batch):
+            row = [header, len(seq)]
+            for task in ('euk', 'fun'):
+                if task not in tasks or not np.isfinite(scores[task][i]):
+                    row.extend(['NA', 'NA'])
+                else:
+                    score = float(scores[task][i])
+                    label = ('eukaryota' if task == 'euk' else 'fungi') if score > meta['tasks'][task]['threshold'] else 'other'
+                    row.extend([format(score, '.17g'), label])
+            writer.writerow(row)
         total += len(batch)
         count += 1
         stream.flush()
     return total, count
+
+def parse_tasks(values):
+    if not values:
+        return ['euk']
+    out = []
+    for value in values:
+        for token in value.split(','):
+            token = token.strip().lower()
+            if token in ('both', 'euk,fun', 'fun,euk'):
+                for task in ('euk', 'fun'):
+                    if task not in out:
+                        out.append(task)
+            elif token in ('euk', 'fun'):
+                if token not in out:
+                    out.append(token)
+            else:
+                raise ValueError('task must be euk, fun, both, or a comma-separated combination')
+    return out
 
 
 def main(argv=None):
@@ -151,11 +179,12 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description='Classify euk/fun contigs; euk <500 bp and fun <1000 bp are emitted with NA prediction.')
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     parser.add_argument('fasta', help='DNA FASTA or .fasta.gz')
-    parser.add_argument('--task', choices=['euk', 'fun'], default='euk', help='euk (default): eukaryotic origin; fun: fungal origin')
+    parser.add_argument('--task', action='append', default=None, help='euk (default), fun, both, or euk,fun')
     parser.add_argument('--models', default=os.environ.get('EUKCONTIGMINER_MODELS', 'models'), help='Directory from download-models')
     parser.add_argument('-o', '--output', required=True, help='New TSV file')
     parser.add_argument('--device', default='cuda:0', help='cuda:0 (default) or cpu')
     args = parser.parse_args(argv)
+    tasks = parse_tasks(args.task)
     output = Path(args.output).resolve()
     summary = Path(str(output) + '.summary.json')
     partial = Path(str(output) + '.partial')
@@ -169,17 +198,17 @@ def main(argv=None):
     before = sha(source)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', CUBLAS_WORKSPACE_CONFIG=':4096:8')
     start = time.monotonic()
-    pipeline = load_pipeline(root, meta, args.task, args.device)
+    pipelines = {task: load_pipeline(root, meta, task, args.device) for task in tasks}
     with partial.open('x', newline='') as stream:
-        rows, chunks = write_predictions(read_fasta(source), pipeline, stream, args.task, meta, meta['min_input_bp'][args.task])
+        rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta)
     if rows != rows_expected or sha(source) != before:
         raise ValueError('FASTA changed during inference')
     # Hard-link publishes without overwriting a file created concurrently.
     os.link(partial, output)
     partial.unlink()
-    result = dict(version=__version__, task=args.task, rows=rows, chunks=chunks,
-                  threshold=meta['tasks'][args.task]['threshold'], strict_greater_than=True,
-                  model_id=meta['tasks'][args.task]['model_id'], device=args.device,
+    result = dict(version=__version__, tasks=tasks, rows=rows, chunks=chunks,
+                  thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True,
+                  model_ids={t: meta['tasks'][t]['model_id'] for t in tasks}, device=args.device,
                   input_sha256=before, output_sha256=sha(output), seconds=time.monotonic()-start)
     with summary.open('x') as f:
         json.dump(result, f, indent=2)
