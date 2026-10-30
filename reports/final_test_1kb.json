@@ -1,0 +1,29 @@
+{
+  "version": "0.71",
+  "scope": "ECM-dataset Test; frozen v0.71 models and fixed Validation thresholds; no Test tuning",
+  "rows": 489080,
+  "labels": {
+    "positive": 197793,
+    "negative": 291287
+  },
+  "short_rows": 128821,
+  "fixed_threshold": 0.5,
+  "at_1_percent_prevalence": {
+    "overall_f1": 0.9915203720345402,
+    "short_f1": 0.9745244547567805
+  },
+  "best_threshold_reference_only": {
+    "overall_f1_at_1_percent": 0.9916304245006631,
+    "short_f1_at_1_percent": 0.9748369970297359,
+    "note": "reference only; not used to change the deployed threshold"
+  },
+  "performance": {
+    "gpus": 8,
+    "shards": 8,
+    "rows_per_shard": 61135,
+    "max_shard_seconds": 1631.6426731091924,
+    "aggregate_rows_per_second": 299.75,
+    "wall_time_minutes_approx": 27
+  },
+  "test_read": true
+}

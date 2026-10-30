@@ -1,8 +1,8 @@
 {
- "version": "0.76",
+ "version": "0.77",
  "tasks": {
   "euk": {
-   "model_id": "H1new_H2new_H3new_earlyexit_v071",
+   "model_id": "euk_h1h2h3_early_exit_current",
    "threshold": 0.5,
    "architecture": "new H1/H2/H3 heads, two-sided H1->H2->H3 early exit"
   },
@@ -14,7 +14,6 @@
  },
  "models_frozen": true,
  "chunk_rows": 2048,
- "candidate_sha256": "b7c0fbb5f2a97993e9576a2a05884421b80b76dea649665ac281071656563b4c",
  "euk_head_thresholds": [
   0.9875542092225127,
   0.8710327904902847,
@@ -22,115 +21,35 @@
  ],
  "euk_gates": {
   "H1": {
-   "0": {
-    "other_below": -100.0,
-    "euk_above": 100.0
-   },
-   "1": {
-    "other_below": -100.0,
-    "euk_above": 100.0
-   },
-   "2": {
-    "other_below": -4.0,
-    "euk_above": 0.0
-   }
+   "0": [
+    -100.0,
+    100.0
+   ],
+   "1": [
+    -100.0,
+    100.0
+   ],
+   "2": [
+    -4.0,
+    0.0
+   ]
   },
   "H2": {
-   "0": {
-    "other_below": -4.0,
-    "euk_above": 1.0
-   },
-   "1": {
-    "other_below": -100.0,
-    "euk_above": 100.0
-   },
-   "2": {
-    "other_below": -100.0,
-    "euk_above": 100.0
-   }
+   "0": [
+    -4.0,
+    1.0
+   ],
+   "1": [
+    -100.0,
+    100.0
+   ],
+   "2": [
+    -100.0,
+    100.0
+   ]
   }
  },
  "files": {
-  "candidate/candidate.json": {
-   "sha256": "b7c0fbb5f2a97993e9576a2a05884421b80b76dea649665ac281071656563b4c",
-   "bytes": 6060,
-   "source": "package"
-  },
-  "candidate/diagnostic_gates.json": {
-   "sha256": "7896eb94b048cb96385f4b9e7ca16784619cab46e89a4c5c75867b279b998c87",
-   "bytes": 615,
-   "source": "package"
-  },
-  "candidate/runtime/dna.py": {
-   "sha256": "e011181b029779f276d70980e118e06dcf90d092a1df13c54725b6199cf1f2f9",
-   "bytes": 11528,
-   "source": "package"
-  },
-  "candidate/runtime/dna_features.py": {
-   "sha256": "9d5369c135e7a629a00505b736a90a76cf9e4ad84aab7caf3b4c3c68729f3f42",
-   "bytes": 5377,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_fungi_compact_runtime_20261017.py": {
-   "sha256": "ac79ab14fbcab60fdb93442521c3239c95b371890e4002c3ec19c4f120b01b3f",
-   "bytes": 3711,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_fungi_raw_pipeline_20261017.py": {
-   "sha256": "ce8808c98efb7cf770311deb611fa0f794983d03f1b925c86f5c1f136414aa8a",
-   "bytes": 2959,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_activation_H3_20261014.py": {
-   "sha256": "943bad00dfd1322693daf12fbf1039688105589a2aad424f8ddf5e6dda6da5b7",
-   "bytes": 1685,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_encoders_20261013.py": {
-   "sha256": "717638d7f30d3c581934ed17c1a65f29762e6e72b90dd57794f008ccd3e6f1fb",
-   "bytes": 7392,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_gateenergy_H2_20261014.py": {
-   "sha256": "b0d3601dcff91c4a1dfae4ff7e0758a730aaf157f8e95d3de334d5e97f2251e3",
-   "bytes": 4910,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_h1_20261013.py": {
-   "sha256": "04d0133a228007819a207ea26e500734bed2e0f7e7226c77e7fb3eed3058acb3",
-   "bytes": 3011,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_heads_20261012.py": {
-   "sha256": "118fc6460c73bd0a7f18c037214e9c9e94690ce66ff2f971a4c04af9b6b28b27",
-   "bytes": 5028,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_pca_head_20261014.py": {
-   "sha256": "250cb0fe496e828864266ae6d18526f068398698bc27ae7fa101d2ee67566f5b",
-   "bytes": 4225,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_pipeline_sharedshape_20261014.py": {
-   "sha256": "4cba0db6fb7befa02bae5e2fc7144aa7b1125847f09d613038479fd146b0d8d4",
-   "bytes": 4890,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_response_H2_20261014.py": {
-   "sha256": "8262da05abb81b6e33da41c4555b5faa02a3fc62ad22f7b64ba3065abf7678fe",
-   "bytes": 1959,
-   "source": "package"
-  },
-  "candidate/runtime/ecm_revised_native_shared_shape_H3_20261014.py": {
-   "sha256": "57def11493a79428d2e8267241dacb8ec2366202fa3ad87a7fe45307088d3440",
-   "bytes": 1830,
-   "source": "package"
-  },
-  "candidate/runtime/sequence.py": {
-   "sha256": "54763388bb2b6ec8f4bc617d0d847e527b94e3fafbb7888dbe8c35c18c61bd4f",
-   "bytes": 2849,
-   "source": "package"
-  },
   "encoders/assets.json": {
    "sha256": "977bb82da74acff0f5d150287e3aa4d596ac5cb0a016c1aef8ac257150e6dc58",
    "bytes": 8040,
@@ -155,26 +74,6 @@
    "sha256": "77e556430b582c9c5f7b9db03fde1822c1967fbccc18726e43a6f4cd7e3037da",
    "bytes": 13097,
    "source": "package"
-  },
-  "candidate/models/H1.pt": {
-   "sha256": "9203718cf7105e7483182f5ad919584369b353fdfd350ed493037fd490cd3bfd",
-   "bytes": 11340301,
-   "source": "heads"
-  },
-  "candidate/models/H2.pt": {
-   "sha256": "3932cca88c0df913861ff9fff8ea1d89aa9e841bf307471be40ed599d721b7a5",
-   "bytes": 1913733,
-   "source": "heads"
-  },
-  "candidate/models/H3.pt": {
-   "sha256": "b3da6f6ca06751c2e99cd9bf8c3a1405df3adba770d4deec053ef6c3cf146d80",
-   "bytes": 2991189,
-   "source": "heads"
-  },
-  "fun/head.pt": {
-   "sha256": "48cacacd78329a6d31c8e1bfbee8d3bc7bbf57cd4c0bc4b9815dcb6469adb49b",
-   "bytes": 4610693,
-   "source": "heads"
   },
   "encoders/nt/MODEL-LICENSE.md": {
    "sha256": "2c0ac3efbf59efbdfdf15bd0ac99d3093dfa87d50748d4635aef563cd46f76cb",
@@ -256,50 +155,35 @@
    "revision": "7f10b20ae75017b2dbc884070e03434515709a8d",
    "filename": "data/weights/esmc_300m_2024_12_v0.pth"
   },
-  "v071/calibration.json": {
-   "sha256": "f901d7178fc3410242cb09c53d164334acb167bbecc3950a68385b9dd0e66184",
-   "bytes": 1004,
-   "source": "package"
+  "euk/h1_dna.pt": {
+   "sha256": "9203718cf7105e7483182f5ad919584369b353fdfd350ed493037fd490cd3bfd",
+   "bytes": null,
+   "source": "heads"
   },
-  "v071/v071_runtime.py": {
-   "sha256": "beca7f898a93dc17da1f944a21d1624a6bcadf232cf67d5b5e066192a8c75849",
-   "bytes": 2103,
-   "source": "package"
-  },
-  "v071/v071_heads.py": {
-   "sha256": "9f7de41d3263120b02f59dde106a45f02955d643088ff9b27de251a6391aa718",
-   "bytes": 4676,
-   "source": "package"
-  },
-  "v071/v071_raw_lazy.py": {
-   "sha256": "e539ef403ad10dff73070a8ee1116f9bcbf7c7fda3140971c0e18295893d3421",
-   "bytes": 4370,
-   "source": "package"
-  },
-  "v071/H1_selected.pt": {
+  "euk/h1.pt": {
    "sha256": "00c042e76b5d21e816e9b45c57aeadfbe7687e3b6f93798f9c79db1c459204dc",
    "bytes": null,
    "source": "heads"
   },
-  "v071/H2_selected.pt": {
+  "euk/h2.pt": {
    "sha256": "0e152ce02fb9f847fcfa5ac70fc758a86f5b2d031a857aa234bd041471eb0251",
    "bytes": null,
    "source": "heads"
   },
-  "v071/H3_selected.pt": {
+  "euk/h3.pt": {
    "sha256": "a24b6b9ab4f008ca13c463181ee7794f2c3aec340669b131b9db70d35c522004",
    "bytes": null,
    "source": "heads"
   },
-  "v071/routing.py": {
-   "sha256": "a27be6a1ea554ad04dd983af86fa90284ab05723dfeb85e338e8135f68230ea6",
-   "bytes": 1101,
-   "source": "package"
+  "fun/head.pt": {
+   "sha256": "48cacacd78329a6d31c8e1bfbee8d3bc7bbf57cd4c0bc4b9815dcb6469adb49b",
+   "bytes": null,
+   "source": "heads"
   }
  },
  "heads_archive": {
-  "sha256": "b260af4f99e33a70f943a1b6cdcfd6df317e543cf13273852d18c9f226a8d308",
-  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.71/eukcontigminer-0.71-models.tar.gz"
+  "sha256": "ae08b0bd1f959a037636c7c50df799cb36bad174829e26bfe03fc9941bea834d",
+  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.77/eukcontigminer-0.77-models.tar.gz"
  },
  "min_input_bp": {
   "euk": 500,

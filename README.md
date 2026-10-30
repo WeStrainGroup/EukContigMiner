@@ -7,7 +7,7 @@ Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent
 Use a fresh Python 3.11 environment:
 
 ```bash
-pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.76/eukcontigminer-0.76-py3-none-any.whl
+pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.77/eukcontigminer-0.77-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -41,9 +41,9 @@ Frozen v0.71 models and fixed Validation thresholds; no Test tuning.
 |---|---:|---:|
 | F1 @ 1% prevalence | **0.991520** | **0.974524** |
 
-489,080 Test contigs; 8-GPU sharded run in about 27 minutes. [Full report](reports/v071_final_test.json).
+489,080 Test contigs; 8-GPU sharded run in about 27 minutes. [Full report](reports/final_test_1kb.json).
 
-## Extra Test500 evaluation (v0.76)
+## Extra Test500 evaluation
 
 A separate 500–999 bp Test extension was cut from the frozen Test genomes with the original 32/2 quota, seed 20261001, QC and no-overlap rules. Models, heads, thresholds and gates are unchanged from v0.71; the threshold was fixed at 0.5 and Test was not used for tuning.
 
@@ -52,7 +52,7 @@ A separate 500–999 bp Test extension was cut from the frozen Test genomes with
 | F1 @ 1% prevalence | **0.904923** |
 | Rows | 127,976 |
 
-[Full report](reports/v072_test500.json). Test500 is a generalization stress test, not a replacement for the 1 kb+ Test.
+[Full report](reports/test500.json). Test500 is a generalization stress test, not a replacement for the 1 kb+ Test.
 
 
 ## Fresh-environment install
@@ -64,7 +64,7 @@ python -m pip install --upgrade pip
 # Install a CUDA-compatible torch build first if needed; local tags such as
 # 2.13.0+cu126 are accepted by the runtime version check.
 python -m pip install "torch>=2.13.0,<2.14"
-python -m pip install eukcontigminer-0.76-py3-none-any.whl
+python -m pip install eukcontigminer-0.77-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 

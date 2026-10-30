@@ -81,10 +81,7 @@ def verify_models(root):
 
 
 def load_pipeline(root, meta, task, device):
-    import importlib
     import torch
-    runtime = root / 'candidate/runtime'
-    sys.path.insert(0, str(runtime))
     global _TORCH_CONFIGURED
     if not _TORCH_CONFIGURED:
         torch.set_num_threads(2)
@@ -93,13 +90,10 @@ def load_pipeline(root, meta, task, device):
         torch.backends.cudnn.allow_tf32 = False
         _TORCH_CONFIGURED = True
     if task == 'fun':
-        torch.use_deterministic_algorithms(True)
-        from ecm_fungi_raw_pipeline_20261017 import FungiRawPipeline
-        return FungiRawPipeline(root/'candidate', meta['candidate_sha256'], root/'encoders',
-                                root/'fun/head.pt', meta['files']['fun/head.pt']['sha256'], device)
-    sys.path.insert(0, str(root/'v071'))
-    from v071_raw_lazy import V071LazyRuntime
-    return V071LazyRuntime(root, device)
+        from .runtime.fun import FunPipeline
+        return FunPipeline(root, meta['files']['fun/head.pt']['sha256'], device)
+    from .runtime.euk import EukPipeline
+    return EukPipeline(root, meta['euk_head_thresholds'], meta['euk_gates'], device)
 
 
 def task_scores(raw, lengths, task, meta):
@@ -111,12 +105,9 @@ def task_scores(raw, lengths, task, meta):
             raise ValueError('Incorrect task runtime')
         scores = np.asarray(raw['scores'])
     else:
-        if 'scores' in raw:
-            scores = np.asarray(raw['scores'])
-        else:
-            from .gate import predict
-            scores = predict([raw['probabilities'][s] for s in ['H1', 'H2', 'H3']],
-                             meta['euk_head_thresholds'], lengths, meta['euk_gates'])['scores']
+        if 'scores' not in raw:
+            raise ValueError('Euk runtime did not return scores')
+        scores = np.asarray(raw['scores'])
     if scores.shape != (len(lengths),) or not np.isfinite(scores).all() or not ((scores >= 0) & (scores <= 1)).all():
         raise ValueError('Invalid prediction scores')
     return scores
