@@ -1,5 +1,5 @@
 {
- "version": "0.74",
+ "version": "0.75",
  "tasks": {
   "euk": {
    "model_id": "H1new_H2new_H3new_earlyexit_v071",
@@ -308,6 +308,6 @@
  },
  "min_input_bp": {
   "euk": 500,
-  "fun": 1000
+  "fun": 500
  }
 }
