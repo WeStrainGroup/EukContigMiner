@@ -29,14 +29,31 @@ def checked_assets(root):
         p=(root/rel).resolve()
         if not p.is_relative_to(root)or p.stat().st_size!=b['bytes']or sha(p)!=b['sha256']:
             raise ValueError('Frozen asset differs: '+rel)
-    for name,version in m['observed_dependency_versions'].items():
-        installed=importlib.metadata.version(name)
-        try:
-            compatible=Version(installed).base_version==Version(version).base_version and not Version(installed).is_prerelease and not Version(installed).is_devrelease
-        except InvalidVersion:
-            compatible=installed==version
-        if not compatible:raise ValueError(f'Dependency version differs: {name} required {version}, installed {installed}')
+    check_manifest_dependencies(m)
     return root,m
+
+
+def _compatible(installed, required):
+    try:
+        v = Version(installed)
+        required = Version(required)
+        return (v.base_version == required.base_version
+                and not v.is_prerelease and not v.is_devrelease and not v.is_postrelease)
+    except InvalidVersion:
+        return installed == str(required)
+
+
+def check_manifest_dependencies(manifest):
+    for name, version in manifest['observed_dependency_versions'].items():
+        installed = importlib.metadata.version(name)
+        if not _compatible(installed, version):
+            raise ValueError(f'Dependency version differs: {name} required {version}, installed {installed}')
+
+
+def check_runtime_dependencies(path=None):
+    """Preflight dependency versions before any large model hash scan."""
+    path = Path(path) if path else Path(__file__).resolve().parent.parent / 'assets/encoders/assets.json'
+    return check_manifest_dependencies(json.loads(path.read_text()))
 
 def runtime_module(root,manifest,name):
     namespace='_ecm_revised_frozen_'+hashlib.sha256(str(root).encode()).hexdigest()[:20]

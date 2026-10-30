@@ -131,7 +131,15 @@ def write_predictions(records, pipelines, stream, tasks, meta):
                 raw = pipelines[task].infer_chunk([batch[i][1] for i in eligible])
                 scores[task][eligible] = task_scores(raw, [lengths[i] for i in eligible], task, meta)
                 if task == 'euk':
-                    for j, route in zip(eligible, raw.get('routes', [])):
+                    routes = raw.get('routes')
+                    if routes is None:
+                        raise ValueError('Euk runtime did not return routes')
+                    routes = np.asarray(routes)
+                    if routes.shape != (len(eligible),):
+                        raise ValueError('Euk routes must match eligible rows')
+                    if not np.issubdtype(routes.dtype, np.integer) or not np.isin(routes, (0, 1, 2)).all():
+                        raise ValueError('Euk routes must be integers 0/1/2')
+                    for j, route in zip(eligible, routes):
                         heads['euk'][j] = ('1', '2', '3')[int(route)]
                 else:
                     heads['fun'][eligible] = '1'
@@ -193,6 +201,8 @@ def main(argv=None):
     source = Path(args.fasta).resolve()
     # Parse once before loading models; no partial prediction for malformed inputs.
     rows_expected = sum(1 for _ in read_fasta(source))
+    from .runtime.encoders import check_runtime_dependencies
+    check_runtime_dependencies()
     root, meta = verify_models(args.models)
     before = sha(source)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', CUBLAS_WORKSPACE_CONFIG=':4096:8')

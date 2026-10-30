@@ -4,97 +4,79 @@ Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent
 
 ## Install
 
-Use a fresh Python 3.11 environment:
+Use Python 3.11 or 3.12:
 
 ```bash
-pip install https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.79/eukcontigminer-0.79-py3-none-any.whl
+python3.11 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install "torch==2.13.0"
+python -m pip install eukcontigminer-0.80-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
-The one-time setup downloads the new v0.71 heads, legacy encoder-compatible heads, and original NTv3/ESM-C backbones (about 2.0 GB). [Upstream model terms](THIRD_PARTY_NOTICES.md) apply; Hugging Face authentication may be required. Existing backbones can be supplied with `--nt-dir` and `--esm-weights`.
+Local PyTorch builds such as `2.13.0+cu126` are accepted. Unsupported prerelease,
+postrelease and different base versions are rejected before model hashes are scanned.
+`download-models` fetches the frozen heads and upstream NTv3/ESM-C backbones once; inference is then offline.
 
 ## Run
 
 ```bash
 eukcontigminer input.fasta.gz --task euk --models models -o euk.tsv --device cuda:0
 eukcontigminer input.fasta.gz --task fun --models models -o fun.tsv --device cuda:0
+eukcontigminer input.fasta.gz --task both --models models -o both.tsv --device cuda:0
 ```
 
-`euk` is the default; use `--task fun`, `--task both`, or `--task euk,fun`. The output schema is always `contig_id, length_bp, p_euk, label_euk, head_euk, p_fun, label_fun, head_fun`; an unspecified task is NA. Prediction runs offline on one GPU; `--device cpu` is also supported. Contigs shorter than the task minimum are still emitted in the output table with `length_bp`, `p_euk`/`p_fungi = NA`, and `label = NA`; they are not silently dropped. The minimum for prediction is **500 bp for both euk and fun**. Output files are never overwritten.
+`--task` accepts `euk` (default), `fun`, `both`, `euk,fun`, or repeated `--task euk --task fun`.
+Prediction is offline on one GPU; `--device cpu` is also supported.
 
-## Validation
+## Output
 
-F1 at **1% target prevalence**, on the same 487,870-contig Validation set:
+The output table always has the same eight columns:
 
-| Task | Overall | 1–2 kb |
-|---|---:|---:|
-| `euk` | **0.992477** | **0.980114** |
-| `fun` | 0.911217 | 0.803682 |
+```text
+contig_id  length_bp  p_euk  label_euk  head_euk  p_fun  label_fun  head_fun
+```
 
-Train fits the models; Validation selects models and thresholds. The new euk v0.71 heads use newly fitted thresholds and two-sided early-exit gates. Scores are not calibrated posterior probabilities. [Evaluation details](reports/v07_evaluation.json) include auxiliary prevalences and verification scope. The earlier [v0.62](https://github.com/WeStrainGroup/EukContigMiner/releases/tag/v0.62) remains available as the retrained reference baseline.
+- `head_euk`: `1` = H1, `2` = H2, `3` = H3
+- `head_fun`: `1` = independent fun head
+- `label_euk`: `eukaryota` or `other`
+- `label_fun`: `fungi` or `other`
+- Unselected tasks are `NA`
+- Contigs shorter than 500 bp keep their row and `length_bp`, with prediction, label and head = `NA`
+- Inputs must be nonempty IUPAC DNA FASTA; original order and duplicate headers are preserved
+- Output files are never overwritten
 
-## Final Test (v0.71)
-
-Frozen v0.71 models and fixed Validation thresholds; no Test tuning.
-
-| Metric | Overall | 1–2 kb |
-|---|---:|---:|
-| F1 @ 1% prevalence | **0.991520** | **0.974524** |
-
-489,080 Test contigs; 8-GPU sharded run in about 27 minutes. [Full report](reports/final_test_1kb.json).
+`p_euk` is the unified decision score for euk and must not be read as a calibrated posterior probability.
 
 ## Early exit
 
-H1 and H2 each use one pair of two-sided cuts for every contig of at least 500 bp; H3 is the fallback. There are no length groups. Validation routes: H1 80.4%, H2 15.3%, H3 4.3%.
-
-## Extra Test500 evaluation
-
-A separate 500–999 bp Test extension was cut from the frozen Test genomes with the original 32/2 quota, seed 20261001, QC and no-overlap rules. Models, heads, thresholds and gates are unchanged from v0.71; the threshold was fixed at 0.5 and Test was not used for tuning.
-
-| Metric | Overall |
-|---|---:|
-| F1 @ 1% prevalence | **0.904923** |
-| Rows | 127,976 |
-
-[Full report](reports/test500.json). Test500 is a generalization stress test, not a replacement for the 1 kb+ Test.
-
-
-## Fresh-environment install
-
-```bash
-python3.11 -m venv .venv
-. .venv/bin/activate
-python -m pip install --upgrade pip
-# Install a CUDA-compatible torch build first if needed; local tags such as
-# 2.13.0+cu126 are accepted by the runtime version check.
-python -m pip install "torch>=2.13.0,<2.14"
-python -m pip install eukcontigminer-0.79-py3-none-any.whl
-eukcontigminer download-models --output models
-```
-
-`download-models` fetches the frozen model assets once; inference is then offline.
-
-## Unified output
-
-All task selections use the same six columns:
+The euk path evaluates H1, then H2, then H3:
 
 ```text
-contig_id  length_bp  p_euk  label_euk  p_fun  label_fun
+H1:  score outside [-10, 8] -> exit
+H2:  score outside [ -4, 1] -> exit
+H3:  fallback
 ```
 
-- `--task euk` (default): `p_fun/label_fun = NA`
-- `--task fun`: `p_euk/label_euk = NA`
-- `--task both` or `--task euk,fun`: both tasks in one pass
-- `label_euk` is `eukaryota` or `other`
-- `label_fun` is `fungi` or `other`
-- below-minimum contigs keep their row and `length_bp`, with NA prediction/label
+There are no length groups. The cuts were selected on Validation only. Validation routing: H1 80.4%, H2 15.3%, H3 4.3%.
 
+## Metrics
 
-## v0.79 early-exit Test
+F1 at 1% target prevalence:
 
-Fixed uniform gates selected on Validation; no Test tuning.
+| Dataset | euk overall | euk 1–2 kb | fun overall | fun 1–2 kb |
+|---|---:|---:|---:|---:|
+| Validation | **0.992503** | **0.980114** | 0.911217 | 0.803682 |
+| 1 kb+ Test | **0.991364** | **0.974514** | — | — |
+| Test500 (500–999 bp) | **0.904923** | — | — | — |
 
-| Dataset | F1 @ 1% | 1–2 kb F1 @ 1% |
-|---|---:|---:|
-| 1 kb+ Test | **0.991364** | **0.974514** |
-| Validation | **0.992503** | **0.980114** |
+The Test numbers use fixed Validation-selected heads and thresholds; Test was not used for tuning.
+Current reports: [Validation early exit](reports/early_exit_uniform.json), [1 kb+ Test](reports/test_1kb_v078.json), [Test500](reports/test500.json).
+Historical reports remain in `reports/` with their version names.
+
+## Notes
+
+- 500 bp is the minimum prediction length for both tasks.
+- The euk and fun paths are independent; `both` runs both and shares no classification decision.
+- The eight-column output, NA behavior, strict `>` threshold and no-overwrite publication are part of the interface contract.
