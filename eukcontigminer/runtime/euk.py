@@ -3,9 +3,8 @@ from pathlib import Path
 import numpy as np
 import torch
 from .heads import H1Flex, HeadFlex
-from .routing import centered, route as route_scores
-from .dna_encoder import load_dna_encoder
-from .encoders import FrozenNT, FrozenESM
+from .routing import centered, route as route_scores, stage_exit
+from .encoders import EncoderBundle, encode_dna, encode_nt
 
 
 class EukRuntime:
@@ -43,63 +42,31 @@ class EukRuntime:
 
 
 class EukPipeline:
-    def __init__(self, model_root, thresholds, gates, device='cuda:0'):
+    def __init__(self, model_root, thresholds, gates, device='cuda:0', encoders=None):
         self.root = Path(model_root)
         self.device = torch.device(device)
         self.heads = EukRuntime(model_root, thresholds, gates, device)
-        self._dna = self._nt_enc = self._esm_enc = None
-
-    def _dna_model(self):
-        if self._dna is None:
-            self._dna = load_dna_encoder(self.root / 'euk/h1_dna.pt', self.device)
-        return self._dna
-
-    def _nt_model(self):
-        if self._nt_enc is None:
-            self._nt_enc = FrozenNT(self.root / 'encoders', self.device)
-        return self._nt_enc
-
-    def _esm_model(self):
-        if self._esm_enc is None:
-            self._esm_enc = FrozenESM(self.root / 'encoders', self.device)
-        return self._esm_enc
+        self.encoders = encoders or EncoderBundle(self.root, self.device)
 
     @torch.inference_mode()
     def infer_chunk(self, sequences):
         n = len(sequences)
         lengths = np.array([len(s) for s in sequences], np.int64)
-        dna = np.empty((n, 942), np.float32)
-        lut = np.full(256, 4, np.uint8)
-        for j, c in enumerate(b'ACGT'):
-            lut[c] = j
-        lo = 0
-        while lo < n:
-            hi = lo + 1
-            longest = int(lengths[lo])
-            while hi < n and (hi - lo + 1) * max(longest, int(lengths[hi])) <= 512000:
-                longest = max(longest, int(lengths[hi])); hi += 1
-            token = np.full((hi - lo, longest), 5, np.uint8)
-            for j, s in enumerate(sequences[lo:hi]):
-                token[j, :len(s)] = lut[np.frombuffer(s, dtype=np.uint8)]
-            r = self._dna_model().infer(torch.from_numpy(token).to(self.device, dtype=torch.long),
-                                        torch.from_numpy(lengths[lo:hi]).to(self.device))
-            dna[lo:hi] = r['dna'].cpu().numpy(); lo = hi
+        dna = encode_dna(self.encoders.dna(), sequences, 512000)
         loglen = np.log10(lengths.astype(np.float64)).astype(np.float32)[:, None]
         p1 = self.heads.head_prob('H1', np.concatenate([dna, loglen], 1))
         p2 = np.full(n, np.nan); p3 = np.full(n, np.nan)
         nt_all = np.full((n, 1536), np.nan, np.float32)
         z = np.full((n, 3), np.nan); z[:, 0] = centered(p1, self.heads.t[0])
         routes = np.full(n, 2, dtype=np.int8)
-        lo, hi = self.heads.gates['H1']
-        routes = np.where((routes == 2) & ((z[:, 0] < lo) | (z[:, 0] > hi)), 0, routes).astype(np.int8)
+        routes = stage_exit(routes, z, 0, *self.heads.gates['H1'])
         need = np.where(routes != 0)[0]
         if len(need):
             nt = self._nt([sequences[i] for i in need]); nt_all[need] = nt
             h2 = np.concatenate([dna[need], nt, loglen[need]], 1)
             p2[need] = self.heads.head_prob('H2', h2)
             z[need, 1] = centered(p2[need], self.heads.t[1])
-            lo, hi = self.heads.gates['H2']
-            routes = np.where((routes == 2) & ((z[:, 1] < lo) | (z[:, 1] > hi)), 1, routes).astype(np.int8)
+            routes = stage_exit(routes, z, 1, *self.heads.gates['H2'])
         need = np.where(routes == 2)[0]
         if len(need):
             esm = self._esm([sequences[i] for i in need])
@@ -111,13 +78,9 @@ class EukPipeline:
                 'labels': scores > 0.5, 'lengths': lengths}
 
     def _nt(self, seqs):
-        model = self._nt_model(); out = []
-        for lo in range(0, len(seqs), 32):
-            views = model.views(seqs[lo:lo + 32]); ids, mask = model.tokens(views, self.device)
-            out.append(model.features(ids, mask).float().cpu().numpy())
-        return np.concatenate(out, 0)
+        return encode_nt(self.encoders.nt(), seqs, 32)
 
     def _esm(self, seqs):
-        model = self._esm_model()
+        model = self.encoders.esm()
         return np.concatenate([model.infer_block(seqs[i:i + 1024]).cpu().numpy()
                                for i in range(0, len(seqs), 1024)])

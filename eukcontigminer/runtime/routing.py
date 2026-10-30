@@ -9,13 +9,17 @@ def centered(probabilities, thresholds):
     return z - np.log(t / (1 - t))
 
 
+def stage_exit(routes, z, stage, lo, hi):
+    take = (routes == 2) & ((z[:, stage] < lo) | (z[:, stage] > hi))
+    return np.where(take, stage, routes).astype(np.int8)
+
+
 def route(probabilities, thresholds, gates):
     """Return final centered scores and routes; H1/H2 have one pair of cuts each."""
     z = centered(probabilities, thresholds)
     routes = np.full(len(z), 2, dtype=np.int8)
     for stage, name in enumerate(('H1', 'H2')):
         lo, hi = gates[name]
-        take = (routes == 2) & ((z[:, stage] < lo) | (z[:, stage] > hi))
-        routes = np.where(take, stage, routes).astype(np.int8)
+        routes = stage_exit(routes, z, stage, lo, hi)
     selected = z[np.arange(len(z)), routes]
     return 1.0 / (1.0 + np.exp(-selected)), routes

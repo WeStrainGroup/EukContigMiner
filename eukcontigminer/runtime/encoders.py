@@ -5,6 +5,8 @@ parity and the installed end-to-end CLI require separate verification.
 """
 import hashlib
 import importlib.metadata
+from pathlib import Path
+import numpy as np
 import importlib.util
 import json
 from pathlib import Path
@@ -73,6 +75,64 @@ def finite_frozen(model):
     if any(not torch.isfinite(v).all()for v in model.state_dict().values()):raise ValueError('Nonfinite model')
     if any(v.requires_grad for v in model.parameters()):raise ValueError('Encoder must be frozen')
     return model
+
+
+
+def encode_dna(encoder, sequences, token_budget):
+    """Encode whole-contig DNA to the frozen 942-dim features."""
+    lengths = np.array([len(s) for s in sequences], np.int64)
+    dna = np.empty((len(sequences), 942), np.float32)
+    lut = np.full(256, 4, np.uint8)
+    for j, c in enumerate(b'ACGT'):
+        lut[c] = j
+    lo = 0
+    while lo < len(sequences):
+        hi = lo + 1
+        longest = int(lengths[lo])
+        while hi < len(sequences) and (hi - lo + 1) * max(longest, int(lengths[hi])) <= token_budget:
+            longest = max(longest, int(lengths[hi])); hi += 1
+        token = np.full((hi - lo, longest), 5, np.uint8)
+        for j, seq in enumerate(sequences[lo:hi]):
+            token[j, :len(seq)] = lut[np.frombuffer(seq, dtype=np.uint8)]
+        result = encoder.infer(torch.from_numpy(token).to(encoder.device, dtype=torch.long),
+                               torch.from_numpy(lengths[lo:hi]).to(encoder.device))
+        dna[lo:hi] = result['dna'].cpu().numpy()
+        lo = hi
+    return dna
+
+
+def encode_nt(model, sequences, batch):
+    out = []
+    for lo in range(0, len(sequences), batch):
+        views = model.views(sequences[lo:lo + batch])
+        ids, mask = model.tokens(views, model.device)
+        out.append(model.features(ids, mask).float().cpu().numpy())
+    return np.concatenate(out, 0)
+
+
+class EncoderBundle:
+    """Lazy process-local DNA/NT/ESM instances shared by euk and fun."""
+    def __init__(self, model_root, device):
+        from .dna_encoder import load_dna_encoder
+        self.root = Path(model_root)
+        self.device = device
+        self._dna = self._nt = self._esm = None
+        self._load_dna = load_dna_encoder
+
+    def dna(self):
+        if self._dna is None:
+            self._dna = self._load_dna(self.root / 'euk/h1_dna.pt', self.device)
+        return self._dna
+
+    def nt(self):
+        if self._nt is None:
+            self._nt = FrozenNT(self.root / 'encoders', self.device)
+        return self._nt
+
+    def esm(self):
+        if self._esm is None:
+            self._esm = FrozenESM(self.root / 'encoders', self.device)
+        return self._esm
 
 class FrozenNT(nn.Module):
     def __init__(self,assets,device='cpu'):

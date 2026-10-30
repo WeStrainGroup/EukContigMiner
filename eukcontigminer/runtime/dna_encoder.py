@@ -30,4 +30,5 @@ def load_dna_encoder(path, device='cpu'):
     if not all(torch.isfinite(v).all() for v in model.state_dict().values()):
         raise ValueError('Nonfinite DNA encoder state')
     model.requires_grad_(False).eval()
+    model.device = torch.device(device)
     return model.to(device)

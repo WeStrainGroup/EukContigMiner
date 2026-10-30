@@ -1,52 +1,21 @@
 """Fetch pinned model assets once; prediction itself is offline."""
 import argparse
 import json
-import os
 from pathlib import Path
 import shutil
-import tarfile
 import tempfile
+import tarfile
 import urllib.request
 
-from .cli import metadata, sha, verify_models
-
-
-def copy_checked(source, target, expected):
-    source, target = Path(source), Path(target)
-    if not source.is_file() or sha(source) != expected:
-        raise ValueError('Model checksum mismatch: ' + str(source))
-    target.parent.mkdir(parents=True, exist_ok=True)
-    if target.exists():
-        if sha(target) != expected:
-            raise ValueError('Existing model differs: ' + str(target))
-        return
-    fd, temp_name = tempfile.mkstemp(prefix=target.name + '.', suffix='.partial', dir=target.parent)
-    temp = Path(temp_name)
-    try:
-        with source.open('rb') as src, os.fdopen(fd, 'wb') as dst:
-            shutil.copyfileobj(src, dst, 8 << 20)
-            dst.flush()
-            os.fsync(dst.fileno())
-        if sha(temp) != expected:
-            raise ValueError('Copied model checksum mismatch')
-        try:
-            os.link(temp, target)
-        except FileExistsError:
-            if sha(target) != expected:
-                raise ValueError('Existing model differs: ' + str(target))
-    finally:
-        try:
-            temp.unlink()
-        except FileNotFoundError:
-            pass
+from .resources import copy_checked, metadata, sha, verify_models
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description='Prepare v0.80.1 assets; downloads are checksum-verified.')
+    p = argparse.ArgumentParser(description='Prepare v0.81 assets; downloads are checksum-verified.')
     p.add_argument('--output', default='models')
     p.add_argument('--nt-dir', help='Use an existing original NTv3_100M_pre directory')
     p.add_argument('--esm-weights', help='Use the original esmc_300m_2024_12_v0.pth')
-    p.add_argument('--heads-archive', help='Use a local v0.80.1 models archive')
+    p.add_argument('--heads-archive', help='Use a local v0.81 models archive')
     args = p.parse_args(argv)
     root = Path(args.output).resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -88,4 +57,4 @@ def main(argv=None):
             src = hf_hub_download(repo_id=item['repository'], filename=item['filename'], revision=item['revision'])
         copy_checked(src, root/name, item['sha256'])
     verify_models(root)
-    print(json.dumps(dict(version='0.80.1', models=str(root), verified=True)))
+    print(json.dumps(dict(version='0.81', models=str(root), verified=True)))

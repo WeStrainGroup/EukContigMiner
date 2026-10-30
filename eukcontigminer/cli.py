@@ -11,16 +11,9 @@ import sys
 import time
 
 from . import __version__
+from .resources import metadata, sha, verify_models
 
 _TORCH_CONFIGURED = False
-
-
-def sha(path):
-    h = hashlib.sha256()
-    with Path(path).open('rb') as f:
-        for block in iter(lambda: f.read(8 << 20), b''):
-            h.update(block)
-    return h.hexdigest()
 
 
 def read_fasta(path, min_length=1):
@@ -66,21 +59,7 @@ def batches(records):
         yield batch
 
 
-def metadata():
-    return json.loads((Path(__file__).parent / 'release.json').read_text())
-
-
-def verify_models(root):
-    root = Path(root).resolve()
-    meta = metadata()
-    for name, item in meta['files'].items():
-        p = (root / name).resolve()
-        if not p.is_relative_to(root) or not p.is_file() or sha(p) != item['sha256']:
-            raise ValueError('Missing or changed model file: ' + name + '. Run eukcontigminer download-models.')
-    return root, meta
-
-
-def load_pipeline(root, meta, task, device):
+def load_pipeline(root, meta, task, device, encoders=None):
     import torch
     global _TORCH_CONFIGURED
     if not _TORCH_CONFIGURED:
@@ -91,9 +70,9 @@ def load_pipeline(root, meta, task, device):
         _TORCH_CONFIGURED = True
     if task == 'fun':
         from .runtime.fun import FunPipeline
-        return FunPipeline(root, meta['files']['fun/head.pt']['sha256'], device)
+        return FunPipeline(root, meta['files']['fun/head.pt']['sha256'], device, encoders=encoders)
     from .runtime.euk import EukPipeline
-    return EukPipeline(root, meta['euk_head_thresholds'], meta['euk_gates'], device)
+    return EukPipeline(root, meta['euk_head_thresholds'], meta['euk_gates'], device, encoders=encoders)
 
 
 def task_scores(raw, lengths, task, meta):
@@ -210,7 +189,9 @@ def main(argv=None):
     before = sha(source)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', CUBLAS_WORKSPACE_CONFIG=':4096:8')
     start = time.monotonic()
-    pipelines = {task: load_pipeline(root, meta, task, args.device) for task in tasks}
+    from .runtime.encoders import EncoderBundle
+    encoders = EncoderBundle(root, args.device)
+    pipelines = {task: load_pipeline(root, meta, task, args.device, encoders) for task in tasks}
     with partial.open('x', newline='') as stream:
         rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta)
     if rows != rows_expected or sha(source) != before:
