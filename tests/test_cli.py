@@ -68,7 +68,7 @@ def test_model_setup_rejects_corruption(tmp_path):
 
 def test_release_contract():
     m = metadata()
-    assert __version__ == m['version'] == '0.80'
+    assert __version__ == m['version'] == '0.80.1'
     assert set(m['tasks']) == {'euk', 'fun'}
     assert m['tasks']['euk']['threshold'] == .5
     assert m['euk_head_thresholds'] == [0.9875542092225127, 0.8710327904902847, 0.9982100708165487]

@@ -191,7 +191,10 @@ def main(argv=None):
     parser.add_argument('-o', '--output', required=True, help='New TSV file')
     parser.add_argument('--device', default='cuda:0', help='cuda:0 (default) or cpu')
     args = parser.parse_args(argv)
-    tasks = parse_tasks(args.task)
+    try:
+        tasks = parse_tasks(args.task)
+    except ValueError as exc:
+        parser.error(str(exc))
     output = Path(args.output).resolve()
     summary = Path(str(output) + '.summary.json')
     partial = Path(str(output) + '.partial')
