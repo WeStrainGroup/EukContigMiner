@@ -70,7 +70,7 @@ def load_pipeline(root, meta, task, device, encoders=None):
         _TORCH_CONFIGURED = True
     if task == 'fun':
         from .runtime.fun import FunPipeline
-        return FunPipeline(root, meta['files']['fun/head.pt']['sha256'], device, encoders=encoders)
+        return FunPipeline(root, meta['fun_head_thresholds'], meta['fun_gates'], device, encoders=encoders)
     from .runtime.euk import EukPipeline
     return EukPipeline(root, meta['euk_head_thresholds'], meta['euk_gates'], device, encoders=encoders)
 
@@ -79,14 +79,9 @@ def task_scores(raw, lengths, task, meta):
     import numpy as np
     if not np.array_equal(raw['lengths'], lengths):
         raise ValueError('Sequence lengths changed')
-    if task == 'fun':
-        if raw.get('task') != 'p_fungi':
-            raise ValueError('Incorrect task runtime')
-        scores = np.asarray(raw['scores'])
-    else:
-        if 'scores' not in raw:
-            raise ValueError('Euk runtime did not return scores')
-        scores = np.asarray(raw['scores'])
+    if 'scores' not in raw:
+        raise ValueError('Runtime did not return scores')
+    scores = np.asarray(raw['scores'])
     if scores.shape != (len(lengths),) or not np.isfinite(scores).all() or not ((scores >= 0) & (scores <= 1)).all():
         raise ValueError('Invalid prediction scores')
     return scores
@@ -109,19 +104,16 @@ def write_predictions(records, pipelines, stream, tasks, meta):
             if eligible:
                 raw = pipelines[task].infer_chunk([batch[i][1] for i in eligible])
                 scores[task][eligible] = task_scores(raw, [lengths[i] for i in eligible], task, meta)
-                if task == 'euk':
-                    routes = raw.get('routes')
-                    if routes is None:
-                        raise ValueError('Euk runtime did not return routes')
-                    routes = np.asarray(routes)
-                    if routes.shape != (len(eligible),):
-                        raise ValueError('Euk routes must match eligible rows')
-                    if not np.issubdtype(routes.dtype, np.integer) or not np.isin(routes, (0, 1, 2)).all():
-                        raise ValueError('Euk routes must be integers 0/1/2')
-                    for j, route in zip(eligible, routes):
-                        heads['euk'][j] = ('1', '2', '3')[int(route)]
-                else:
-                    heads['fun'][eligible] = '1'
+                routes = raw.get('routes')
+                if routes is None:
+                    raise ValueError(task + ' runtime did not return routes')
+                routes = np.asarray(routes)
+                if routes.shape != (len(eligible),):
+                    raise ValueError(task + ' routes must match eligible rows')
+                if not np.issubdtype(routes.dtype, np.integer) or not np.isin(routes, (0, 1, 2)).all():
+                    raise ValueError(task + ' routes must be integers 0/1/2')
+                for j, route in zip(eligible, routes):
+                    heads[task][j] = ('1', '2', '3')[int(route)]
         for i, (header, seq) in enumerate(batch):
             row = [header, len(seq)]
             for task in ('euk', 'fun'):

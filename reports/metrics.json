@@ -22,8 +22,8 @@
    "short_f1_at_1pct": 0.9801140993382603
   },
   "fun": {
-   "f1_at_1pct": 0.911217,
-   "short_f1_at_1pct": 0.803682
+   "f1_at_1pct": 0.9361819368966843,
+   "short_f1_at_1pct": 0.8519670329003782
   }
  },
  "test_1kb": {
@@ -39,5 +39,29 @@
    "rows": 127976
   }
  },
- "note": "F1 at 1% target prevalence. Test did not tune thresholds."
+ "note": "F1 at 1% target prevalence. Test did not tune thresholds.",
+ "fun": {
+  "thresholds": [
+   0.8458039623619491,
+   0.7291609814859857,
+   0.9406436094742676
+  ],
+  "gates": {
+   "H1": [
+    -4.0,
+    2.5
+   ],
+   "H2": [
+    -2.0,
+    1.0
+   ]
+  },
+  "validation_gated_f1_at_1pct": 0.9361819368966843,
+  "validation_gated_short_f1_at_1pct": 0.8519670329003782,
+  "routes": {
+   "H1": 460899,
+   "H2": 17035,
+   "H3": 9936
+  }
+ }
 }

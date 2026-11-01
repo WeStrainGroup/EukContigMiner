@@ -1,5 +1,5 @@
 {
- "version": "0.84.2",
+ "version": "0.85",
  "tasks": {
   "euk": {
    "model_id": "euk_h1h2h3_early_exit_current",
@@ -7,9 +7,9 @@
    "architecture": "H1/H2 two-sided uniform early exit -> H3"
   },
   "fun": {
-   "model_id": "fungi_compact_seed2026101801_refine_epoch1",
-   "threshold": 0.9920285346180445,
-   "architecture": "DNA942 + NT1536 + ESM1920 + loglength -> 256 GELU -> 64 GELU -> 1"
+   "model_id": "fun_h1h2h3_early_exit_current",
+   "threshold": 0.5,
+   "architecture": "H1/H2/H3 two-sided uniform early exit -> H3"
   }
  },
  "models_frozen": true,
@@ -135,18 +135,43 @@
    "bytes": null,
    "source": "heads"
   },
-  "fun/head.pt": {
-   "sha256": "48cacacd78329a6d31c8e1bfbee8d3bc7bbf57cd4c0bc4b9815dcb6469adb49b",
-   "bytes": null,
+  "fun/h1.pt": {
+   "sha256": "1158a99791e127352ed638248867cea810af9e38e418fcd9f03de0f5fc13f180",
+   "bytes": 108495557,
+   "source": "heads"
+  },
+  "fun/h2.pt": {
+   "sha256": "66b709fb1d7277416408674b0a44dcfc467471b210fcd085eb0bfc47cf4d22ac",
+   "bytes": 2548190,
+   "source": "heads"
+  },
+  "fun/h3.pt": {
+   "sha256": "7520fe9da11418bd78d4db76fd4f2c2c5a217659e0c2c206a47643090b9f328e",
+   "bytes": 4053470,
    "source": "heads"
   }
  },
  "heads_archive": {
-  "sha256": "ae08b0bd1f959a037636c7c50df799cb36bad174829e26bfe03fc9941bea834d",
-  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.84/eukcontigminer-0.84.2-models.tar.gz"
+  "sha256": "98a3013e0c77192d143d34035567260505a856a028e3c3d8d75b2480ced02fef",
+  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.85/eukcontigminer-0.85-models.tar.gz"
  },
  "min_input_bp": {
   "euk": 500,
   "fun": 500
+ },
+ "fun_head_thresholds": [
+  0.8458039623619491,
+  0.7291609814859857,
+  0.9406436094742676
+ ],
+ "fun_gates": {
+  "H1": [
+   -4.0,
+   2.5
+  ],
+  "H2": [
+   -2.0,
+   1.0
+  ]
  }
 }

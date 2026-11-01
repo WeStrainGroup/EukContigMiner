@@ -1,6 +1,6 @@
 # EukContigMiner
 
-Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent models. Host-derived organelle DNA is included in the corresponding positive class.
+Classify DNA contigs by **eukaryotic** or **fungal** origin with two independent H1/H2/H3 early-exit models. Host-derived organelle DNA is included in the corresponding positive class.
 
 ## Install
 
@@ -9,7 +9,7 @@ python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install "torch==2.13.0"
-python -m pip install eukcontigminer-0.84.2-py3-none-any.whl
+python -m pip install eukcontigminer-0.85-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -32,7 +32,7 @@ contig_id  length_bp  p_euk  label_euk  head_euk  p_fun  label_fun  head_fun
 ```
 
 - `head_euk`: `1/2/3` = H1/H2/H3
-- `head_fun`: `1` = fun head
+- `head_fun`: `1/2/3` = H1/H2/H3 of the fun model
 - `label_euk`: `eukaryota` / `other`
 - `label_fun`: `fungi` / `other`
 - Unselected tasks and contigs shorter than 500 bp keep their row and `length_bp`, with `NA`
@@ -41,27 +41,31 @@ contig_id  length_bp  p_euk  label_euk  head_euk  p_fun  label_fun  head_fun
 
 ## Early exit
 
-H1 and H2 each use one pair of two-sided cuts; H3 is the fallback. There are no length groups.
+Both tasks use H1 -> H2 -> H3, with one pair of two-sided cuts per head and no length groups.
 
 ```text
-H1: score outside [-10, 8] -> exit
-H2: score outside [ -4, 1] -> exit
-H3: fallback
+euk: H1 [-10, 8], H2 [-4, 1], H3 fallback
+fun: H1 [ -4, 2.5], H2 [-2,  1], H3 fallback
 ```
 
-Validation routing: H1 80.4%, H2 15.3%, H3 4.3%.
+Validation routing:
+
+| task | H1 | H2 | H3 |
+|---|---:|---:|---:|
+| euk | 80.4% | 15.3% | 4.3% |
+| fun | 94.5% | 3.5% | 2.0% |
 
 ## Metrics
 
 F1 at 1% target prevalence:
 
-| Dataset | euk overall | euk 1–2 kb |
-|---|---:|---:|
-| Validation | **0.992503** | **0.980114** |
-| 1 kb+ Test | **0.991364** | **0.974514** |
-| Test500 (500–999 bp) | **0.904923** | — |
+| Dataset | euk overall | euk 1–2 kb | fun overall | fun 1–2 kb |
+|---|---:|---:|---:|---:|
+| Validation | **0.992503** | **0.980114** | **0.936182** | **0.851967** |
+| 1 kb+ Test | **0.991364** | **0.974514** | — | — |
+| Test500 (500–999 bp) | **0.904923** | — | — | — |
 
-See [reports/metrics.json](reports/metrics.json). Test results use fixed Validation-selected models and thresholds; Test was not used for tuning.
+See [reports/metrics.json](reports/metrics.json). Test results use fixed Validation-selected models and thresholds; Test was not used for tuning. `p_euk` and `p_fun` are unified decision scores, not calibrated posteriors.
 
 ## License
 

@@ -8,8 +8,8 @@ from .encoders import EncoderBundle, encode_dna, encode_nt
 
 
 class EukRuntime:
-    def __init__(self, model_root, thresholds, gates, device='cpu'):
-        self.dir = Path(model_root) / 'euk'
+    def __init__(self, model_root, thresholds, gates, device='cpu', head_dir='euk'):
+        self.dir = Path(model_root) / head_dir
         self.device = device
         self.t = np.asarray(thresholds, dtype=np.float64)
         self.gates = gates
@@ -42,17 +42,18 @@ class EukRuntime:
 
 
 class EukPipeline:
-    def __init__(self, model_root, thresholds, gates, device='cuda:0', encoders=None):
+    def __init__(self, model_root, thresholds, gates, device='cuda:0', encoders=None, head_dir='euk', token_budget=512000):
         self.root = Path(model_root)
         self.device = torch.device(device)
-        self.heads = EukRuntime(model_root, thresholds, gates, device)
+        self.heads = EukRuntime(model_root, thresholds, gates, device, head_dir=head_dir)
         self.encoders = encoders or EncoderBundle(self.root, self.device)
+        self.token_budget = token_budget
 
     @torch.inference_mode()
     def infer_chunk(self, sequences):
         n = len(sequences)
         lengths = np.array([len(s) for s in sequences], np.int64)
-        dna = encode_dna(self.encoders.dna(), sequences, 512000)
+        dna = encode_dna(self.encoders.dna(), sequences, self.token_budget)
         loglen = np.log10(lengths.astype(np.float64)).astype(np.float32)[:, None]
         p1 = self.heads.head_prob('H1', np.concatenate([dna, loglen], 1))
         p2 = np.full(n, np.nan); p3 = np.full(n, np.nan)

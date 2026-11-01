@@ -35,7 +35,7 @@ def test_task_decision_boundary_and_batches():
             self.sizes.append(len(seq))
             scores = np.full(len(seq), threshold)
             scores[-1] = np.nextafter(threshold, 1.)
-            return dict(task='p_fungi', lengths=[len(x) for x in seq], scores=scores)
+            return dict(lengths=[len(x) for x in seq], scores=scores, routes=np.zeros(len(seq), dtype=np.int8))
     pipeline = Pipeline()
     stream = io.StringIO()
     assert write_predictions(((str(i), b'A'*1000) for i in range(2050)), {'fun': pipeline}, stream, ['fun'], meta) == (2050, 2)
@@ -45,7 +45,7 @@ def test_task_decision_boundary_and_batches():
     assert rows[0]['label_fun'] == 'other' and rows[0]['head_fun'] == '1' and rows[2047]['label_fun'] == rows[-1]['label_fun'] == 'fungi'
     assert rows[2048]['label_fun'] == 'other' and rows[-1]['contig_id'] == '2049'
     with pytest.raises(ValueError):
-        task_scores(dict(task='p_euk', scores=np.ones(1), lengths=[1000]), [1000], 'fun', meta)
+        task_scores(dict(scores=np.ones(2), lengths=[1000]), [1000], 'fun', meta)
 
 
 def test_no_overwrite_or_silent_bad_task(tmp_path):
@@ -68,12 +68,14 @@ def test_model_setup_rejects_corruption(tmp_path):
 
 def test_release_contract():
     m = metadata()
-    assert __version__ == m['version'] == '0.84.2'
+    assert __version__ == m['version'] == '0.85'
     assert set(m['tasks']) == {'euk', 'fun'}
     assert m['tasks']['euk']['threshold'] == .5
     assert m['euk_head_thresholds'] == [0.9875542092225127, 0.8710327904902847, 0.9982100708165487]
     assert m['min_input_bp'] == {'euk': 500, 'fun': 500}
-    assert m['tasks']['fun']['threshold'] == 0.9920285346180445
+    assert m['tasks']['fun']['threshold'] == .5
+    assert m['fun_head_thresholds'] == [0.8458039623619491, 0.7291609814859857, 0.9406436094742676]
+    assert m['fun_gates'] == {'H1': [-4.0, 2.5], 'H2': [-2.0, 1.0]}
     assert m['models_frozen'] and m['chunk_rows'] == 2048
 
 
