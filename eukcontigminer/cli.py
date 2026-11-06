@@ -87,7 +87,7 @@ def task_scores(raw, lengths, task, meta):
     return scores
 
 
-def write_predictions(records, pipelines, stream, tasks, meta):
+def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None):
     import numpy as np
     writer = csv.writer(stream, delimiter='\t', lineterminator='\n')
     writer.writerow(['contig_id', 'length_bp', 'p_euk', 'label_euk', 'head_euk', 'p_fun', 'label_fun', 'head_fun'])
@@ -99,8 +99,8 @@ def write_predictions(records, pipelines, stream, tasks, meta):
         for task in tasks:
             scores[task] = np.full(len(batch), np.nan, dtype=np.float64)
             heads[task] = np.full(len(batch), 'NA', dtype=object)
-            min_bp = meta['min_input_bp'][task]
-            eligible = [i for i, n in enumerate(lengths) if n >= min_bp]
+            task_min = min_bp if min_bp is not None else meta['min_input_bp'][task]
+            eligible = [i for i, n in enumerate(lengths) if n >= task_min]
             if eligible:
                 raw = pipelines[task].infer_chunk([batch[i][1] for i in eligible])
                 scores[task][eligible] = task_scores(raw, [lengths[i] for i in eligible], task, meta)
@@ -161,11 +161,14 @@ def main(argv=None):
     parser.add_argument('--models', default=os.environ.get('EUKCONTIGMINER_MODELS', 'models'), help='Directory from download-models')
     parser.add_argument('-o', '--output', required=True, help='New TSV file')
     parser.add_argument('--device', default='cuda:0', help='cuda:0 (default) or cpu')
+    parser.add_argument('--min-length', type=int, default=None, help='minimum input length in bp; shorter rows are emitted with NA (default: release minimum, 500)')
     args = parser.parse_args(argv)
     try:
         tasks = parse_tasks(args.task)
     except ValueError as exc:
         parser.error(str(exc))
+    if args.min_length is not None and args.min_length < 500:
+        parser.error('--min-length must be at least 500 bp')
     output = Path(args.output).resolve()
     summary = Path(str(output) + '.summary.json')
     partial = Path(str(output) + '.partial')
@@ -173,8 +176,6 @@ def main(argv=None):
         if p.exists():
             parser.error('Output already exists: ' + str(p))
     source = Path(args.fasta).resolve()
-    # Parse once before loading models; no partial prediction for malformed inputs.
-    rows_expected = sum(1 for _ in read_fasta(source))
     from .runtime.encoders import check_runtime_dependencies
     check_runtime_dependencies()
     root, meta = verify_models(args.models)
@@ -184,9 +185,14 @@ def main(argv=None):
     from .runtime.encoders import EncoderBundle
     encoders = EncoderBundle(root, args.device, verified=True)
     pipelines = {task: load_pipeline(root, meta, task, args.device, encoders) for task in tasks}
-    with partial.open('x', newline='') as stream:
-        rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta)
-    if rows != rows_expected or sha(source) != before:
+    try:
+        with partial.open('x', newline='') as stream:
+            rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta, args.min_length)
+    except BaseException:
+        partial.unlink(missing_ok=True)
+        raise
+    if sha(source) != before:
+        partial.unlink(missing_ok=True)
         raise ValueError('FASTA changed during inference')
     # Hard-link publishes without overwriting a file created concurrently.
     os.link(partial, output)
@@ -194,6 +200,7 @@ def main(argv=None):
     result = dict(version=__version__, tasks=tasks, rows=rows, chunks=chunks,
                   thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True,
                   model_ids={t: meta['tasks'][t]['model_id'] for t in tasks}, device=args.device,
+                  min_input_bp=(args.min_length if args.min_length is not None else meta['min_input_bp']),
                   input_sha256=before, output_sha256=sha(output), seconds=time.monotonic()-start)
     with summary.open('x') as f:
         json.dump(result, f, indent=2)
