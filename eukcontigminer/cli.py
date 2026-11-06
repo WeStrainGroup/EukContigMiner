@@ -76,11 +76,22 @@ def batches(records, chunk_size=2048):
         yield batch
 
 
-def load_pipeline(root, meta, task, device, encoders=None):
+def resolve_cpu_threads(requested):
+    if requested != 'auto':
+        return int(requested)
+    allocated = os.environ.get('SLURM_CPUS_PER_TASK') or os.environ.get('OMP_NUM_THREADS')
+    try:
+        n = int(allocated) if allocated else (os.cpu_count() or 1)
+    except ValueError:
+        n = os.cpu_count() or 1
+    return max(1, min(8, n))
+
+
+def load_pipeline(root, meta, task, device, encoders=None, cpu_threads=2):
     import torch
     global _TORCH_CONFIGURED
     if not _TORCH_CONFIGURED:
-        torch.set_num_threads(2)
+        torch.set_num_threads(cpu_threads)
         torch.set_num_interop_threads(1)
         torch.backends.cuda.matmul.allow_tf32 = False
         torch.backends.cudnn.allow_tf32 = False
@@ -180,6 +191,7 @@ def main(argv=None):
     parser.add_argument('--device', default='cuda:0', help='cuda:0 (default) or cpu')
     parser.add_argument('--min-length', type=int, default=None, help='minimum input length in bp; shorter rows are emitted with NA (default: release minimum, 500)')
     parser.add_argument('--chunk-size', default='2048', help='records per inference chunk: integer or auto (default: 2048; auto changes scores slightly)')
+    parser.add_argument('--cpu-threads', default='2', help='PyTorch CPU threads: integer or auto (default: 2; auto uses allocated CPUs, capped at 8)')
     args = parser.parse_args(argv)
     try:
         tasks = parse_tasks(args.task)
@@ -189,10 +201,11 @@ def main(argv=None):
         parser.error('--min-length must be at least 500 bp')
     try:
         chunk_size = resolve_chunk_size(args.chunk_size, args.device)
+        cpu_threads = resolve_cpu_threads(args.cpu_threads)
     except ValueError:
-        parser.error('--chunk-size must be a positive integer or auto')
-    if chunk_size < 1:
-        parser.error('--chunk-size must be positive')
+        parser.error('--chunk-size/--cpu-threads must be a positive integer or auto')
+    if chunk_size < 1 or cpu_threads < 1:
+        parser.error('--chunk-size and --cpu-threads must be positive')
     output = Path(args.output).resolve()
     summary = Path(str(output) + '.summary.json')
     partial = Path(str(output) + '.partial')
@@ -209,7 +222,7 @@ def main(argv=None):
     start = time.monotonic()
     from .runtime.encoders import EncoderBundle
     encoders = EncoderBundle(root, args.device, verified=True)
-    pipelines = {task: load_pipeline(root, meta, task, args.device, encoders) for task in tasks}
+    pipelines = {task: load_pipeline(root, meta, task, args.device, encoders, cpu_threads) for task in tasks}
     try:
         with partial.open('x', newline='') as stream:
             rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta, args.min_length, chunk_size)
@@ -225,7 +238,7 @@ def main(argv=None):
     os.link(partial, output)
     partial.unlink()
     result = dict(version=__version__, tasks=tasks, rows=rows, chunks=chunks,
-                  thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True, chunk_rows=chunk_size,
+                  thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True, chunk_rows=chunk_size, cpu_threads=cpu_threads,
                   model_ids={t: meta['tasks'][t]['model_id'] for t in tasks}, device=args.device,
                   min_input_bp=(args.min_length if args.min_length is not None else meta['min_input_bp']),
                   input_sha256=before, output_sha256=sha(output), seconds=time.monotonic()-start)
