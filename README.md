@@ -9,7 +9,7 @@ python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install "torch==2.13.0"
-python -m pip install eukcontigminer-0.86-py3-none-any.whl
+python -m pip install eukcontigminer-0.87-py3-none-any.whl
 eukcontigminer download-models --output models
 ```
 
@@ -23,7 +23,7 @@ eukcontigminer input.fasta.gz --task fun --models models -o result.tsv --device 
 eukcontigminer input.fasta.gz --task both --models models -o result.tsv --device cuda:0
 ```
 
-`--task` accepts `euk` (default), `fun`, `both`, `euk,fun`, or repeated `--task` flags. `--min-length BP` raises the NA cutoff above the default 500 bp (minimum 500). Prediction is offline on one GPU; `--device cpu` is supported.
+`--task` accepts `euk` (default), `fun`, `both`, `euk,fun`, or repeated `--task` flags. `--min-length BP` raises the NA cutoff above the default 500 bp (minimum 500). Prediction is offline on one GPU; `--device cpu` is supported. `--chunk-size auto` selects 1024/2048/4096 from GPU memory for throughput experiments; it changes floating-point batching slightly, so the default remains fixed 2048 for reproducible outputs.
 
 ## Output
 

@@ -48,11 +48,28 @@ def checked_record(header, parts, min_length=1):
     return header, seq
 
 
-def batches(records):
+def resolve_chunk_size(requested, device):
+    if requested != 'auto':
+        return int(requested)
+    if str(device).startswith('cpu'):
+        return 2048
+    try:
+        import torch
+        total = torch.cuda.get_device_properties(torch.device(device)).total_memory
+        if total < 12 * 1024**3:
+            return 1024
+        if total < 22 * 1024**3:
+            return 2048
+        return 4096
+    except Exception:
+        return 2048
+
+
+def batches(records, chunk_size=2048):
     batch = []
     for record in records:
         batch.append(record)
-        if len(batch) == 2048:
+        if len(batch) == chunk_size:
             yield batch
             batch = []
     if batch:
@@ -87,12 +104,12 @@ def task_scores(raw, lengths, task, meta):
     return scores
 
 
-def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None):
+def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None, chunk_size=2048):
     import numpy as np
     writer = csv.writer(stream, delimiter='\t', lineterminator='\n')
     writer.writerow(['contig_id', 'length_bp', 'p_euk', 'label_euk', 'head_euk', 'p_fun', 'label_fun', 'head_fun'])
     total = count = 0
-    for batch in batches(records):
+    for batch in batches(records, chunk_size):
         lengths = [len(seq) for _, seq in batch]
         scores = {}
         heads = {}
@@ -162,6 +179,7 @@ def main(argv=None):
     parser.add_argument('-o', '--output', required=True, help='New TSV file')
     parser.add_argument('--device', default='cuda:0', help='cuda:0 (default) or cpu')
     parser.add_argument('--min-length', type=int, default=None, help='minimum input length in bp; shorter rows are emitted with NA (default: release minimum, 500)')
+    parser.add_argument('--chunk-size', default='2048', help='records per inference chunk: integer or auto (default: 2048; auto changes scores slightly)')
     args = parser.parse_args(argv)
     try:
         tasks = parse_tasks(args.task)
@@ -169,6 +187,12 @@ def main(argv=None):
         parser.error(str(exc))
     if args.min_length is not None and args.min_length < 500:
         parser.error('--min-length must be at least 500 bp')
+    try:
+        chunk_size = resolve_chunk_size(args.chunk_size, args.device)
+    except ValueError:
+        parser.error('--chunk-size must be a positive integer or auto')
+    if chunk_size < 1:
+        parser.error('--chunk-size must be positive')
     output = Path(args.output).resolve()
     summary = Path(str(output) + '.summary.json')
     partial = Path(str(output) + '.partial')
@@ -180,6 +204,7 @@ def main(argv=None):
     check_runtime_dependencies()
     root, meta = verify_models(args.models)
     before = sha(source)
+    before_stat = os.stat(source)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', CUBLAS_WORKSPACE_CONFIG=':4096:8')
     start = time.monotonic()
     from .runtime.encoders import EncoderBundle
@@ -187,18 +212,20 @@ def main(argv=None):
     pipelines = {task: load_pipeline(root, meta, task, args.device, encoders) for task in tasks}
     try:
         with partial.open('x', newline='') as stream:
-            rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta, args.min_length)
+            rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta, args.min_length, chunk_size)
     except BaseException:
         partial.unlink(missing_ok=True)
         raise
-    if sha(source) != before:
-        partial.unlink(missing_ok=True)
-        raise ValueError('FASTA changed during inference')
+    after_stat = os.stat(source)
+    if (after_stat.st_dev, after_stat.st_ino, after_stat.st_size, after_stat.st_mtime_ns) != (before_stat.st_dev, before_stat.st_ino, before_stat.st_size, before_stat.st_mtime_ns):
+        if sha(source) != before:
+            partial.unlink(missing_ok=True)
+            raise ValueError('FASTA changed during inference')
     # Hard-link publishes without overwriting a file created concurrently.
     os.link(partial, output)
     partial.unlink()
     result = dict(version=__version__, tasks=tasks, rows=rows, chunks=chunks,
-                  thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True,
+                  thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True, chunk_rows=chunk_size,
                   model_ids={t: meta['tasks'][t]['model_id'] for t in tasks}, device=args.device,
                   min_input_bp=(args.min_length if args.min_length is not None else meta['min_input_bp']),
                   input_sha256=before, output_sha256=sha(output), seconds=time.monotonic()-start)
