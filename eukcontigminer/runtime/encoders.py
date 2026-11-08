@@ -52,9 +52,13 @@ def check_manifest_dependencies(manifest):
 
 
 def check_runtime_dependencies(path=None):
-    """Preflight dependency versions before any large model hash scan."""
+    """Preflight versions and the actual NT/ESM imports before model hashing."""
     path = Path(path) if path else Path(__file__).resolve().parent.parent / 'assets/encoders/assets.json'
-    return check_manifest_dependencies(json.loads(path.read_text()))
+    check_manifest_dependencies(json.loads(path.read_text()))
+    import httpx  # noqa: F401 - imported by esm.sdk
+    from transformers import PretrainedConfig  # noqa: F401 - NTv3 config base
+    from esm.models.esmc import ESMC  # noqa: F401 - actual ESM-C runtime
+    from esm.pretrained import get_esmc_model_tokenizers  # noqa: F401
 
 def finite_frozen(model):
     model.eval().requires_grad_(False)

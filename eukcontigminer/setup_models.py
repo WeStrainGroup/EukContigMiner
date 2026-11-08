@@ -5,17 +5,18 @@ from pathlib import Path
 import shutil
 import tempfile
 import tarfile
+from pathlib import PurePosixPath
 import urllib.request
 
 from .resources import copy_checked, copy_package_checked, metadata, sha, verify_models
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description='Prepare v0.88 assets; downloads are checksum-verified.')
+    p = argparse.ArgumentParser(description='Prepare v0.89 assets; downloads are checksum-verified.')
     p.add_argument('--output', default='models')
     p.add_argument('--nt-dir', help='Use an existing original NTv3_100M_pre directory')
     p.add_argument('--esm-weights', help='Use the original esmc_300m_2024_12_v0.pth')
-    p.add_argument('--heads-archive', help='Use a local v0.88 models archive')
+    p.add_argument('--heads-archive', help='Use a local v0.89 models archive')
     args = p.parse_args(argv)
     root = Path(args.output).resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -32,17 +33,36 @@ def main(argv=None):
                 urllib.request.urlretrieve(meta['heads_archive']['url'], archive)
             if sha(archive) != meta['heads_archive']['sha256']:
                 raise ValueError('Model archive checksum mismatch')
+            expected = set(head_files)
+            allowed_dirs = {str(PurePosixPath(name).parent) for name in expected}
+            seen = set()
             with tarfile.open(archive) as tar:
-                members = tar.getmembers()
-                if {m.name for m in members} != set(head_files) or len(members) != len(head_files):
-                    raise ValueError('Unexpected model archive entries')
-                for member in members:
+                for member in tar.getmembers():
+                    name = member.name
+                    parts = PurePosixPath(name).parts
+                    if any(part.startswith('._') for part in parts):
+                        continue
+                    if member.isdir():
+                        if name.rstrip('/') in allowed_dirs:
+                            continue
+                        raise ValueError('Unexpected model archive directory: ' + name)
                     if not member.isfile():
                         raise ValueError('Only regular model files allowed')
-                    src = Path(tmp)/Path(member.name).name
+                    if PurePosixPath(name).is_absolute() or '..' in parts:
+                        raise ValueError('Unsafe model archive path: ' + name)
+                    if name not in expected:
+                        raise ValueError('Unexpected model archive entry: ' + name)
+                    if name in seen:
+                        raise ValueError('Duplicate model archive entry: ' + name)
+                    src = Path(tmp)/PurePosixPath(name)
+                    src.parent.mkdir(parents=True, exist_ok=True)
                     with tar.extractfile(member) as stream, src.open('xb') as dest:
                         shutil.copyfileobj(stream, dest)
-                    copy_checked(src, root/member.name, head_files[member.name]['sha256'])
+                    copy_checked(src, root/name, head_files[name]['sha256'])
+                    seen.add(name)
+            if seen != expected:
+                raise ValueError('Model archive is missing entries')
+
     for name, item in meta['files'].items():
         if item['source'] != 'upstream':
             continue
@@ -57,4 +77,4 @@ def main(argv=None):
             src = hf_hub_download(repo_id=item['repository'], filename=item['filename'], revision=item['revision'])
         copy_checked(src, root/name, item['sha256'])
     verify_models(root)
-    print(json.dumps(dict(version='0.88', models=str(root), verified=True)))
+    print(json.dumps(dict(version='0.89', models=str(root), verified=True)))
