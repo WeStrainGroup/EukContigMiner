@@ -2,13 +2,13 @@
 import argparse
 import csv
 import gzip
-import hashlib
 import json
-import math
 import os
 from pathlib import Path
 import sys
 import time
+import tempfile
+from contextlib import ExitStack
 
 from . import __version__
 from .resources import metadata, sha, verify_models
@@ -115,7 +115,7 @@ def task_scores(raw, lengths, task, meta):
     return scores
 
 
-def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None, chunk_size=2048):
+def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None, chunk_size=2048, fasta_streams=None, selected_counts=None):
     import numpy as np
     writer = csv.writer(stream, delimiter='\t', lineterminator='\n')
     writer.writerow(['contig_id', 'length_bp', 'p_euk', 'label_euk', 'head_euk', 'p_fun', 'label_fun', 'head_fun'])
@@ -127,7 +127,7 @@ def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None, chun
         for task in tasks:
             scores[task] = np.full(len(batch), np.nan, dtype=np.float64)
             heads[task] = np.full(len(batch), 'NA', dtype=object)
-            task_min = min_bp if min_bp is not None else meta['min_input_bp'][task]
+            task_min = min_bp if min_bp is not None else meta['default_min_length_bp']
             eligible = [i for i, n in enumerate(lengths) if n >= task_min]
             if eligible:
                 raw = pipelines[task].infer_chunk([batch[i][1] for i in eligible])
@@ -151,6 +151,14 @@ def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None, chun
                     score = float(scores[task][i])
                     label = ('eukaryota' if task == 'euk' else 'fungi') if score > meta['tasks'][task]['threshold'] else 'other'
                     row.extend([format(score, '.17g'), label, heads[task][i]])
+                    if label != 'other':
+                        if selected_counts is not None:
+                            selected_counts[task] += 1
+                        if fasta_streams is not None:
+                            fasta = fasta_streams[task]
+                            fasta.write('>' + header + '\n')
+                            for start in range(0, len(seq), 80):
+                                fasta.write(seq[start:start + 80].decode('ascii') + '\n')
             writer.writerow(row)
         total += len(batch)
         count += 1
@@ -164,7 +172,7 @@ def parse_tasks(values):
     for value in values:
         for token in value.split(','):
             token = token.strip().lower()
-            if token in ('both', 'euk,fun', 'fun,euk'):
+            if token in ('all', 'both'):
                 for task in ('euk', 'fun'):
                     if task not in out:
                         out.append(task)
@@ -172,7 +180,7 @@ def parse_tasks(values):
                 if token not in out:
                     out.append(token)
             else:
-                raise ValueError('task must be euk, fun, both, or a comma-separated combination')
+                raise ValueError('task must be euk, fun, all, or a comma-separated combination')
     return out
 
 
@@ -182,69 +190,86 @@ def main(argv=None):
         from .setup_models import main as setup
         return setup(argv[1:])
     meta = metadata()
-    parser = argparse.ArgumentParser(description=f"Classify euk/fun contigs; minimum {meta['min_input_bp']['euk']} bp (euk) / {meta['min_input_bp']['fun']} bp (fun); shorter records are emitted with NA.")
+    parser = argparse.ArgumentParser(description="Classify euk/fun contigs and export positive FASTA records; default minimum 1000 bp, supported minimum 500 bp.")
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
-    parser.add_argument('fasta', help='DNA FASTA or .fasta.gz')
-    parser.add_argument('--task', action='append', default=None, help='euk (default), fun, both, or euk,fun')
+    parser.add_argument('--input', required=True, help='DNA FASTA or gzip-compressed FASTA')
+    parser.add_argument('--task', action='append', default=None, help='euk (default), fun, all, or euk,fun')
     parser.add_argument('--models', default=os.environ.get('EUKCONTIGMINER_MODELS', 'models'), help='Directory from download-models')
-    parser.add_argument('-o', '--output', required=True, help='New TSV file')
-    parser.add_argument('--device', default='cuda:0', help='cuda:0 (default) or cpu')
-    parser.add_argument('--min-length', type=int, default=None, help='minimum input length in bp; shorter rows are emitted with NA (default: release minimum, 500)')
-    parser.add_argument('--chunk-size', default='2048', help='records per inference chunk: integer or auto (default: 2048; auto changes scores slightly)')
-    parser.add_argument('--cpu-threads', default='2', help='PyTorch CPU threads: integer or auto (default: 2; auto uses allocated CPUs, capped at 8)')
+    parser.add_argument('-o', '--output', required=True, help='New output directory for predictions.tsv, run.json and task FASTA files')
+    parser.add_argument('--device', choices=('gpu', 'cpu'), default='gpu', help='gpu (default) or cpu; select a GPU with CUDA_VISIBLE_DEVICES')
+    parser.add_argument('--min-length', type=int, default=meta['default_min_length_bp'], help='Minimum input length in bp (default: 1000; minimum: 500); shorter rows have NA predictions')
+    parser.add_argument('--chunk-size', default=meta['chunk_rows'], help='Records per inference chunk: positive integer or auto (default: auto)')
+    parser.add_argument('--cpu-threads', default='2', help='PyTorch CPU threads: positive integer or auto (default: 2; auto capped at 8)')
     args = parser.parse_args(argv)
     try:
         tasks = parse_tasks(args.task)
     except ValueError as exc:
         parser.error(str(exc))
-    if args.min_length is not None and args.min_length < 500:
+    if args.min_length < 500:
         parser.error('--min-length must be at least 500 bp')
+    device = 'cuda:0' if args.device == 'gpu' else 'cpu'
     try:
-        chunk_size = resolve_chunk_size(args.chunk_size, args.device)
+        chunk_size = resolve_chunk_size(args.chunk_size, device)
         cpu_threads = resolve_cpu_threads(args.cpu_threads)
     except ValueError:
         parser.error('--chunk-size/--cpu-threads must be a positive integer or auto')
     if chunk_size < 1 or cpu_threads < 1:
         parser.error('--chunk-size and --cpu-threads must be positive')
-    output = Path(args.output).resolve()
-    summary = Path(str(output) + '.summary.json')
-    partial = Path(str(output) + '.partial')
-    for p in [output, summary, partial]:
-        if p.exists():
-            parser.error('Output already exists: ' + str(p))
-    source = Path(args.fasta).resolve()
-    from .runtime.encoders import check_runtime_dependencies
+    output = Path(args.output).absolute()
+    if os.path.lexists(output):
+        parser.error('Output directory already exists: ' + str(output))
+    source = Path(args.input).resolve()
+    from .runtime.encoders import check_runtime_dependencies, EncoderBundle
     check_runtime_dependencies()
     root, meta = verify_models(args.models)
     before = sha(source)
     before_stat = os.stat(source)
     os.environ.update(HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', CUBLAS_WORKSPACE_CONFIG=':4096:8')
     start = time.monotonic()
-    from .runtime.encoders import EncoderBundle
-    encoders = EncoderBundle(root, args.device, verified=True)
-    pipelines = {task: load_pipeline(root, meta, task, args.device, encoders, cpu_threads) for task in tasks}
+    encoders = EncoderBundle(root, device, verified=True)
+    pipelines = {task: load_pipeline(root, meta, task, device, encoders, cpu_threads) for task in tasks}
+    # Claim the new directory exclusively; existing results are never reused.
+    output.mkdir(parents=True, exist_ok=False)
+    published = []
+    selected_counts = {task: 0 for task in tasks}
     try:
-        with partial.open('x', newline='') as stream:
-            rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta, args.min_length, chunk_size)
+        with tempfile.TemporaryDirectory(prefix='.partial-', dir=output) as temporary:
+            staging = Path(temporary)
+            tsv = staging / 'predictions.tsv'
+            with ExitStack() as stack:
+                stream = stack.enter_context(tsv.open('x', encoding='utf-8', newline=''))
+                fastas = {task: stack.enter_context((staging / f'{task}.fa').open('x', encoding='utf-8', newline='')) for task in tasks}
+                rows, chunks = write_predictions(read_fasta(source), pipelines, stream, tasks, meta,
+                                                 args.min_length, chunk_size, fastas, selected_counts)
+            after_stat = os.stat(source)
+            if (after_stat.st_dev, after_stat.st_ino, after_stat.st_size, after_stat.st_mtime_ns) != (before_stat.st_dev, before_stat.st_ino, before_stat.st_size, before_stat.st_mtime_ns):
+                if sha(source) != before:
+                    raise ValueError('FASTA changed during inference')
+            names = ['predictions.tsv'] + [f'{task}.fa' for task in tasks]
+            outputs = {name: {'sha256': sha(staging / name), 'bytes': (staging / name).stat().st_size} for name in names}
+            result = dict(version=__version__, status='completed', tasks=tasks, rows=rows, chunks=chunks,
+                          thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True,
+                          chunk_size_requested=args.chunk_size, chunk_rows=chunk_size, cpu_threads=cpu_threads,
+                          model_ids={t: meta['tasks'][t]['model_id'] for t in tasks},
+                          device=device, device_requested=args.device, min_input_bp=args.min_length,
+                          input_sha256=before, output_sha256=outputs['predictions.tsv']['sha256'],
+                          selected_contigs=selected_counts, outputs=outputs, seconds=time.monotonic()-start)
+            with (staging / 'run.json').open('x', encoding='utf-8') as f:
+                json.dump(result, f, indent=2)
+                f.write('\n')
+            # Publish the completion summary last. Clean up this run's files on failure.
+            for name in names + ['run.json']:
+                destination = output / name
+                os.link(staging / name, destination)
+                published.append(destination)
     except BaseException:
-        partial.unlink(missing_ok=True)
+        for path in published:
+            path.unlink(missing_ok=True)
+        try:
+            output.rmdir()
+        except OSError:
+            pass
         raise
-    after_stat = os.stat(source)
-    if (after_stat.st_dev, after_stat.st_ino, after_stat.st_size, after_stat.st_mtime_ns) != (before_stat.st_dev, before_stat.st_ino, before_stat.st_size, before_stat.st_mtime_ns):
-        if sha(source) != before:
-            partial.unlink(missing_ok=True)
-            raise ValueError('FASTA changed during inference')
-    # Hard-link publishes without overwriting a file created concurrently.
-    os.link(partial, output)
-    partial.unlink()
-    result = dict(version=__version__, tasks=tasks, rows=rows, chunks=chunks,
-                  thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True, chunk_rows=chunk_size, cpu_threads=cpu_threads,
-                  model_ids={t: meta['tasks'][t]['model_id'] for t in tasks}, device=args.device,
-                  min_input_bp=(args.min_length if args.min_length is not None else meta['min_input_bp']),
-                  input_sha256=before, output_sha256=sha(output), seconds=time.monotonic()-start)
-    with summary.open('x') as f:
-        json.dump(result, f, indent=2)
-        f.write('\n')
     print(json.dumps(result))
 
 

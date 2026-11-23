@@ -1,5 +1,5 @@
 {
- "version": "0.89",
+ "version": "0.90",
  "tasks": {
   "euk": {
    "model_id": "euk_h1h2h3_early_exit_current",
@@ -13,7 +13,8 @@
   }
  },
  "models_frozen": true,
- "chunk_rows": 2048,
+ "chunk_rows": "auto",
+ "default_min_length_bp": 1000,
  "euk_head_thresholds": [
   0.9875542092225127,
   0.8710327904902847,
@@ -153,7 +154,7 @@
  },
  "heads_archive": {
   "sha256": "a428e37453a45950c1ca5da73d32eb7e5351f46b19623cb1de6fe54652b39fc1",
-  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.89/eukcontigminer-0.89-models.tar.gz"
+  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.90/eukcontigminer-0.90-models.tar.gz"
  },
  "min_input_bp": {
   "euk": 500,

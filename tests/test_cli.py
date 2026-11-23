@@ -52,10 +52,10 @@ def test_no_overwrite_or_silent_bad_task(tmp_path):
     out = tmp_path/'exists.tsv'
     out.write_text('keep')
     with pytest.raises(SystemExit):
-        main(['absent.fa', '--task', 'fun', '-o', str(out)])
+        main(['--input', 'absent.fa', '--task', 'fun', '-o', str(out)])
     assert out.read_text() == 'keep'
     with pytest.raises(SystemExit):
-        main(['absent.fa', '--task', 'fungi', '-o', str(out)])
+        main(['--input', 'absent.fa', '--task', 'fungi', '-o', str(out)])
 
 
 def test_model_setup_rejects_corruption(tmp_path):
@@ -68,7 +68,7 @@ def test_model_setup_rejects_corruption(tmp_path):
 
 def test_release_contract():
     m = metadata()
-    assert __version__ == m['version'] == '0.89'
+    assert __version__ == m['version'] == '0.90'
     assert set(m['tasks']) == {'euk', 'fun'}
     assert m['tasks']['euk']['threshold'] == .5
     assert m['euk_head_thresholds'] == [0.9875542092225127, 0.8710327904902847, 0.9982100708165487]
@@ -76,7 +76,8 @@ def test_release_contract():
     assert m['tasks']['fun']['threshold'] == .5
     assert m['fun_head_thresholds'] == [0.8458039623619491, 0.7291609814859857, 0.9406436094742676]
     assert m['fun_gates'] == {'H1': [-4.0, 2.5], 'H2': [-2.0, 1.0]}
-    assert m['models_frozen'] and m['chunk_rows'] == 2048
+    assert m['models_frozen'] and m['chunk_rows'] == 'auto'
+    assert m['default_min_length_bp'] == 1000
 
 
 def test_short_contigs_are_emitted_with_na():
@@ -86,7 +87,7 @@ def test_short_contigs_are_emitted_with_na():
             return dict(task='p_euk', scores=np.array([0.9]), lengths=[500], routes=np.array([0]))
     stream = io.StringIO()
     rows = [('too_short', b'ACGT'*100), ('at_min', b'ACGT'*125)]
-    assert write_predictions(rows, {'euk': Pipeline()}, stream, ['euk'], metadata()) == (2, 1)
+    assert write_predictions(rows, {'euk': Pipeline()}, stream, ['euk'], metadata(), min_bp=500) == (2, 1)
     out = list(csv.DictReader(io.StringIO(stream.getvalue()), delimiter='\t'))
     assert out[0] == {'contig_id':'too_short','length_bp':'400','p_euk':'NA','label_euk':'NA','head_euk':'NA','p_fun':'NA','label_fun':'NA','head_fun':'NA'}
     assert out[1]['length_bp'] == '500' and out[1]['label_euk'] == 'eukaryota' and out[1]['head_euk'] == '1'
@@ -99,4 +100,4 @@ def test_invalid_euk_routes_are_rejected():
             return dict(task='p_euk', scores=np.array([0.9]), lengths=[500], routes=np.array([4]))
     stream = io.StringIO()
     with pytest.raises(ValueError):
-        write_predictions([('x', b'ACGT'*125)], {'euk': Pipeline()}, stream, ['euk'], metadata())
+        write_predictions([('x', b'ACGT'*125)], {'euk': Pipeline()}, stream, ['euk'], metadata(), min_bp=500)
