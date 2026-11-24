@@ -8,11 +8,7 @@ Recovering eukaryotic genomes from metagenomes begins with identifying their con
 
 EukContigMiner (ECM) takes DNA contigs as input and returns a score and a binary label for eukaryotic origin. It also provides an independent fungal classification task. Each task combines DNA sequence and composition features with nucleotide and protein language-model representations through three successive prediction heads. Contigs with decisive predictions exit early, so later, more expensive representations are computed only when needed. This reduces the amount of language-model computation relative to running every stage on every contig.
 
-ECM requires only a DNA FASTA file. Once its models are prepared, prediction runs offline without reference-database searches, sequence alignment, taxonomic queries or coverage profiles. It supports a single NVIDIA GPU or CPU execution.
-
-In the [previously reported v0.89 evaluation](https://github.com/WeStrainGroup/EukContigMiner/blob/v0.89/reports/metrics.json), the euk model achieved F1 scores of 0.9914 on the 1 kb+ Test set and 0.9745 on its 1–2 kb subset at 1% eukaryotic prevalence. v0.91 retains those model weights; these values describe that evaluation rather than a new benchmark of the current defaults.
-
-The euk task targets Metazoa, Viridiplantae, Fungi and other eukaryotes. The fun task targets Fungi against other eukaryotes and prokaryotes. **Host-derived organelle DNA is included in the corresponding positive class**: eukaryotic organelles are euk positives, and fungal organelles are fun positives. ECM does not provide separate nuclear, mitochondrial or plastid labels.
+ECM requires only a DNA FASTA file. Once its models are prepared, prediction runs offline without reference-database searches, sequence alignment, taxonomic queries or coverage profiles. It supports a single GPU or CPU execution.
 
 ## Installation
 
@@ -52,18 +48,16 @@ Download and prepare all required models:
 eukcontigminer download-models --output /path/to/ecm_models
 ```
 
-Replace `/path/to/ecm_models` with your model directory. This command downloads the ECM-trained DNA encoder and task heads from GitHub, and the pinned NTv3 and ESM-C assets from Hugging Face. It checks their SHA-256 values and arranges them in the required directory layout. v0.91 uses the unchanged v0.90 ECM model archive.
+Replace `/path/to/ecm_models` with your model directory. This command downloads the ECM-trained DNA encoder and task heads from GitHub, and the pinned NTv3 and ESM-C assets from Hugging Face. It checks their SHA-256 values and arranges them in the required directory layout.
 
 The language models retain their upstream licenses and access requirements. Once setup finishes, keep the entire directory and pass it with `--models`, or set `EUKCONTIGMINER_MODELS`. Prediction then runs offline.
-
-### Manual model preparation
 
 You can download the files on another computer and transfer the completed directory to an offline machine:
 
 1. Download the [ECM model archive](https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.90/eukcontigminer-0.90-models.tar.gz) and extract it into your model directory. It provides the `euk/` and `fun/` files shown below.
 2. From the pinned [NTv3 100M revision](https://huggingface.co/InstaDeepAI/NTv3_100M_pre/tree/5c685dca15891f5c5b80e0c930e23b87a217e441), download the nine files listed under `encoders/nt/` below. Keep their original filenames.
 3. Download the pinned [ESM-C 300M weights](https://huggingface.co/EvolutionaryScale/esmc-300m-2024-12/resolve/7f10b20ae75017b2dbc884070e03434515709a8d/data/weights/esmc_300m_2024_12_v0.pth) into `encoders/esm/`.
-4. Download ECM's [encoder manifest](https://raw.githubusercontent.com/WeStrainGroup/EukContigMiner/v0.91/eukcontigminer/assets/encoders/assets.json) as `encoders/assets.json`.
+4. Download ECM's [encoder manifest](https://raw.githubusercontent.com/WeStrainGroup/EukContigMiner/v0.91/eukcontigminer/assets/encoders/assets.json) as `encoders/assets.json`. This manifest records the expected files, checksums and loading settings for both NTv3 and ESM-C. It belongs in their shared `encoders/` directory, alongside `nt/` and `esm/`. It is also bundled with the ECM software and copied here automatically by `download-models`.
 
 ```text
 /path/to/ecm_models/
@@ -102,6 +96,8 @@ Verification checks every required file against the release manifest. It does no
 
 ## Quick start
 
+The examples below classify contigs in `assembly.fasta.gz` using prepared models in `/path/to/ecm_models`. Each command writes to a new directory specified by `--output`. For example, `assembly_euk/` will contain `ecm.tsv`, `euk.fa` and `run.json`, a structured summary of the run.
+
 Identify eukaryotic contigs:
 
 ```bash
@@ -116,7 +112,8 @@ eukcontigminer \
 Identify fungal contigs directly from the assembly:
 
 ```bash
-eukcontigminer --input assembly.fasta.gz \
+eukcontigminer \
+  --input assembly.fasta.gz \
   --task fun \
   --models /path/to/ecm_models \
   --device gpu \
@@ -126,22 +123,15 @@ eukcontigminer --input assembly.fasta.gz \
 Run both tasks:
 
 ```bash
-eukcontigminer --input assembly.fasta.gz \
+eukcontigminer \
+  --input assembly.fasta.gz \
   --task all \
   --models /path/to/ecm_models \
   --device gpu \
   --output assembly_ecm
 ```
 
-The fun task does not require a preceding euk prediction. With `--task all`, both tasks classify each eligible input contig independently; euk labels do not gate fun predictions, and agreement between the two labels is not enforced.
-
-Use `--device cpu` for CPU execution. Each command creates an output directory containing the classification table, a run summary and the positive FASTA records for each selected task. The default minimum contig length is 1,000 bp; add `--min-length 500` to include 500–999 bp contigs.
-
 ## Parameters
-
-Defaults below refer to v0.91. **—** means no preset value.
-
-### Prediction
 
 | Parameter | Default | Description |
 | --- | --- | --- |
@@ -156,21 +146,26 @@ Defaults below refer to v0.91. **—** means no preset value.
 | `--help` | — | Show command-line options. |
 | `--version` | — | Print the installed version. |
 
-Use the full option names shown above. Short flags and abbreviated long options are not accepted.
-
 Input sequences must be nonempty IUPAC DNA. Lowercase bases are accepted. ECM retains input order and the full FASTA header after `>`, including duplicate headers. Use unique contig identifiers when connecting predictions to downstream coverage tables or binning workflows.
 
-By default, contigs shorter than 1 kb are retained in the table with `NA` predictions and are excluded from exported FASTA files. Set `--min-length 500` to classify contigs down to the supported minimum. This option changes eligibility; it does not change the model or its classification threshold.
+The `fun` task classifies fungal contigs directly and does not require a preceding euk prediction. With `--task all`, both tasks classify each eligible contig independently; euk labels do not gate fun predictions, and agreement between the labels is not enforced. Use `all` when both predictions are needed: the tasks share loaded encoder models in one process, avoiding a second model-loading step. Feature computation and early-exit routing remain separate for each task, so the runtime benefit depends on the input.
 
-To select a particular GPU, set `CUDA_VISIBLE_DEVICES`, for example:
+The default minimum contig length is 1,000 bp. Shorter records remain in `ecm.tsv` with `NA` predictions and are excluded from exported FASTA files. Use `--min-length 500` to include 500–999 bp contigs. This changes eligibility without changing model weights or classification thresholds.
+
+Use `--device cpu` for CPU execution or `--device gpu` for a CUDA-capable NVIDIA GPU. GPU execution uses the first visible CUDA device. To select a particular GPU, set `CUDA_VISIBLE_DEVICES`, for example:
 
 ```bash
 CUDA_VISIBLE_DEVICES=1 eukcontigminer \
-  --input assembly.fasta.gz --task all --models /path/to/ecm_models \
-  --device gpu --output assembly_ecm_gpu1
+  --input assembly.fasta.gz \
+  --task all \
+  --models /path/to/ecm_models \
+  --device gpu \
+  --output assembly_ecm_gpu1
 ```
 
-`--chunk-size auto` chooses 1024, 2048 or 4096 records from GPU memory capacity; on CPU it uses 2048. `--cpu-threads auto` uses `SLURM_CPUS_PER_TASK`, then `OMP_NUM_THREADS`, then the host CPU count, capped at eight. Batch changes can slightly alter floating-point scores. For comparisons that require the v0.89 execution settings, explicitly use `--chunk-size 2048 --cpu-threads 2` and match the length cutoff. The run summary records the effective settings.
+`--chunk-size auto` uses 1,024 records per chunk for GPUs with less than 12 GiB of memory, 2,048 for 12–<22 GiB, and 4,096 for at least 22 GiB; on CPU it uses 2,048. Set a positive integer explicitly to control the input chunk size.
+
+`--cpu-threads` defaults to two. With `auto`, it uses `SLURM_CPUS_PER_TASK`, then `OMP_NUM_THREADS`, then the host CPU count, capped at eight. The run summary records the effective chunk size and CPU thread count. Batch changes can slightly alter floating-point scores. For comparisons using the v0.89 execution settings, specify `--chunk-size 2048 --cpu-threads 2` and match the length cutoff.
 
 ## How classification works
 
@@ -188,7 +183,7 @@ At H1 and H2, a two-sided gate accepts predictions sufficiently far from the hea
 
 Head-specific thresholds are incorporated into a unified decision score. For each selected task:
 
-```txt
+```text
 score > 0.5   → eukaryota (euk) or fungi (fun)
 score <= 0.5  → other
 ```
@@ -199,7 +194,7 @@ The output fields `p_euk` and `p_fun` lie between 0 and 1, but **they are decisi
 
 For `--task all --output assembly_ecm`, a successful run writes:
 
-```txt
+```text
 assembly_ecm/
 ├── ecm.tsv            # All input contigs and their classification results
 ├── euk.fa             # Contigs labelled eukaryota
@@ -232,12 +227,9 @@ The output directory must not already exist, even if empty. ECM stages outputs w
 
 Use `euk.fa` for eukaryotic candidate sequences or `fun.fa` for fungal candidates. These files contain exactly the records with `label_euk = eukaryota` or `label_fun = fungi`, respectively; shorter, `NA` and negative records are excluded.
 
-These sequences can be supplied to [EukBinPicker](https://github.com/WeStrainGroup/EukBinPicker) with compatible coverage profiles for genome binning. Map reads to the complete assembly before selecting coverage entries for the retained contigs.
-
-The full `ecm.tsv` can also be supplied to [EukAsmChecker](https://github.com/WeStrainGroup/EukAsmChecker) (EAC), together with the original assembly and its coverage table, for interactive assembly inspection and filtering. Run ECM with `--task euk` or `--task all` for EAC's eukaryotic labels. EAC requires the same unique contig IDs in all three inputs and matching FASTA/ECM lengths. Because EAC uses the first whitespace-delimited FASTA identifier while ECM preserves the full header, prepare matching identifiers before analysis when headers contain descriptions; duplicate IDs must be resolved before EAC import.
+These sequences can be supplied to [EukBinPicker](https://github.com/WeStrainGroup/EukBinPicker) with compatible coverage profiles for genome binning. Map reads to the complete assembly before selecting coverage entries for the retained contigs. The full `ecm.tsv` can also be supplied to [EukAsmChecker](https://github.com/WeStrainGroup/EukAsmChecker) (EAC), together with the original assembly and its coverage table, for interactive assembly inspection and filtering.
 
 ECM predicts sequence origin. A positive label alone does not establish a species assignment, a complete genome, contamination, or residency in the sampled environment. Because organelles are included among the positive targets, workflows requiring nuclear contigs need an additional organelle assessment.
-
 
 ## Contact
 
