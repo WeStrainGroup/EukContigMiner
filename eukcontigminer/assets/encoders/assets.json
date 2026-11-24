@@ -90,6 +90,14 @@
     "bytes": 1332095738,
     "sha256": "323dff9fbf3fef297a74f4f18b6528e6f2e599b0bcf72b6927516804015becea"
    }
+  },
+  "base/encoder.pt": {
+   "bytes": 11340301,
+   "sha256": "9203718cf7105e7483182f5ad919584369b353fdfd350ed493037fd490cd3bfd",
+   "source": {
+    "path": "euk/h1_dna.pt",
+    "sha256": "9203718cf7105e7483182f5ad919584369b353fdfd350ed493037fd490cd3bfd"
+   }
   }
  },
  "NT": {

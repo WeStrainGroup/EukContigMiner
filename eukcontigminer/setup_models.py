@@ -36,7 +36,8 @@ def main(argv=None):
             if sha(archive) != meta['heads_archive']['sha256']:
                 raise ValueError('Model archive checksum mismatch')
             expected = set(head_files)
-            allowed_dirs = {str(PurePosixPath(name).parent) for name in expected}
+            allowed_dirs = {str(parent) for name in expected
+                            for parent in PurePosixPath(name).parents if str(parent) != '.'}
             seen = set()
             with tarfile.open(archive) as tar:
                 for member in tar.getmembers():

@@ -32,6 +32,8 @@ def fake_runtime(monkeypatch):
                         lengths=[len(seq) for seq in seqs], routes=np.zeros(len(seqs), dtype=int))
 
     monkeypatch.setattr(cli, 'load_pipeline', lambda root, meta, task, device, encoders, threads: Pipeline(task))
+    monkeypatch.setattr(cli, 'infer_pipelines',
+                        lambda pipelines, seqs: {task: pipe.infer_chunk(seqs) for task, pipe in pipelines.items()})
     return state
 
 
@@ -63,6 +65,7 @@ def test_directory_outputs_match_labels_and_duplicate_records(tmp_path, fake_run
         assert all(row[f'label_{task}'] == 'NA' for row in rows[:3])
     summary = json.loads((output / 'run.json').read_text())
     assert summary['version'] == '0.91' and summary['status'] == 'completed'
+    assert summary['shared_features'] == (len(files) == 2)
     assert summary['min_input_bp'] == 1000 and summary['chunk_size_requested'] == 'auto'
     assert summary['chunk_rows'] == 2048 and summary['device'] == 'cpu'
     assert fake_runtime['devices'] == ['cpu']

@@ -14,7 +14,7 @@ from torch import nn
 from packaging.version import Version, InvalidVersion
 from .upstream import ntv3_runtime, esm_inference
 
-ASSET_SHA='8c4e0324f3fc96e08640e9fbb2def4f9538db9c8d0e9286182937511b3274c6e'
+ASSET_SHA='f70c2ddd818c3f27842c16d31a48aa5573b628736cb75b69bcc5f1798eb4f66d'
 def sha(path):
     h=hashlib.sha256()
     with Path(path).open('rb')as f:
@@ -112,7 +112,7 @@ class EncoderBundle:
 
     def dna(self):
         if self._dna is None:
-            self._dna = self._load_dna(self.root / 'euk/h1_dna.pt', self.device)
+            self._dna = self._load_dna(self.root / 'encoders/base/encoder.pt', self.device)
         return self._dna
 
     def nt(self):

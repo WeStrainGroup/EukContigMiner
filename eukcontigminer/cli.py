@@ -115,6 +115,14 @@ def task_scores(raw, lengths, task, meta):
     return scores
 
 
+def infer_pipelines(pipelines, sequences):
+    if len(pipelines) == 1:
+        task, pipeline = next(iter(pipelines.items()))
+        return {task: pipeline.infer_chunk(sequences)}
+    from .runtime.euk import infer_shared
+    return infer_shared(pipelines, sequences)
+
+
 def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None, chunk_size=2048, fasta_streams=None, selected_counts=None):
     import numpy as np
     writer = csv.writer(stream, delimiter='\t', lineterminator='\n')
@@ -124,13 +132,15 @@ def write_predictions(records, pipelines, stream, tasks, meta, min_bp=None, chun
         lengths = [len(seq) for _, seq in batch]
         scores = {}
         heads = {}
+        task_min = min_bp if min_bp is not None else meta['default_min_length_bp']
+        eligible = [i for i, n in enumerate(lengths) if n >= task_min]
+        predictions = (infer_pipelines({task: pipelines[task] for task in tasks},
+                                       [batch[i][1] for i in eligible]) if eligible else {})
         for task in tasks:
             scores[task] = np.full(len(batch), np.nan, dtype=np.float64)
             heads[task] = np.full(len(batch), 'NA', dtype=object)
-            task_min = min_bp if min_bp is not None else meta['default_min_length_bp']
-            eligible = [i for i, n in enumerate(lengths) if n >= task_min]
             if eligible:
-                raw = pipelines[task].infer_chunk([batch[i][1] for i in eligible])
+                raw = predictions[task]
                 scores[task][eligible] = task_scores(raw, [lengths[i] for i in eligible], task, meta)
                 routes = raw.get('routes')
                 if routes is None:
@@ -252,6 +262,7 @@ def main(argv=None):
             names = ['ecm.tsv'] + [f'{task}.fa' for task in tasks]
             outputs = {name: {'sha256': sha(staging / name), 'bytes': (staging / name).stat().st_size} for name in names}
             result = dict(version=__version__, status='completed', tasks=tasks, rows=rows, chunks=chunks,
+                          shared_features=len(tasks) > 1,
                           thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True,
                           chunk_size_requested=args.chunk_size, chunk_rows=chunk_size, cpu_threads=cpu_threads,
                           model_ids={t: meta['tasks'][t]['model_id'] for t in tasks},

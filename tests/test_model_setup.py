@@ -50,3 +50,30 @@ def test_verify_models_validates_every_file_without_network(tmp_path, monkeypatc
     (tmp_path/'euk/h1.pt').unlink()
     with pytest.raises(ValueError, match='Missing or changed model'):
         cli.main(['verify-models', '--models', str(tmp_path)])
+
+
+def test_download_new_base_layout_and_nested_archive_directories(tmp_path, monkeypatch):
+    import io
+    import tarfile
+    payloads = {'encoders/base/encoder.pt': b'base', 'euk/h1.pt': b'euk', 'fun/h1.pt': b'fun'}
+    archive = tmp_path/'models.tar.gz'
+    with tarfile.open(archive, 'w:gz') as tar:
+        for name in ('encoders', 'encoders/base', 'euk', 'fun'):
+            item=tarfile.TarInfo(name); item.type=tarfile.DIRTYPE
+            tar.addfile(item)
+        for name, data in payloads.items():
+            item=tarfile.TarInfo(name); item.size=len(data)
+            tar.addfile(item, io.BytesIO(data))
+    manifest={'files': {name: {'source':'heads', 'sha256':hashlib.sha256(data).hexdigest()}
+                        for name,data in payloads.items()},
+              'heads_archive': {'sha256':resources.sha(archive)}}
+    monkeypatch.setattr(setup_models, 'metadata', lambda:manifest)
+    monkeypatch.setattr(resources, 'metadata', lambda:manifest)
+    root=tmp_path/'prepared'
+    setup_models.main(['--output',str(root),'--heads-archive',str(archive)])
+    assert (root/'encoders/base/encoder.pt').read_bytes()==b'base'
+    assert not (root/'euk/h1_dna.pt').exists()
+    resources.verify_models(root)
+    (root/'encoders/base/encoder.pt').write_bytes(b'bad')
+    with pytest.raises(ValueError,match='encoders/base/encoder.pt'):
+        resources.verify_models(root)

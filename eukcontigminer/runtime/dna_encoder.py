@@ -1,4 +1,4 @@
-"""Whole-contig DNA encoder shared by euk and fun; loads euk/h1_dna.pt."""
+"""Whole-contig DNA encoder shared by euk and fun; loads encoders/base/encoder.pt."""
 import torch
 from torch import nn
 from . import dna_features, sequence

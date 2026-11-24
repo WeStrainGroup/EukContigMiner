@@ -52,17 +52,16 @@ Replace `/path/to/ecm_models` with your model directory. This command downloads 
 
 The language models retain their upstream licenses and access requirements. Once setup finishes, keep the entire directory and pass it with `--models`, or set `EUKCONTIGMINER_MODELS`. Prediction then runs offline.
 
-You can download the files on another computer and transfer the completed directory to an offline machine:
+Use a new model directory for the v0.91 layout, keeping earlier model directories for their corresponding releases. The trained weights are unchanged. You can also download the files on another computer and transfer the completed directory to an offline machine:
 
-1. Download the [ECM model archive](https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.90/eukcontigminer-0.90-models.tar.gz) and extract it into your model directory. It provides the `euk/` and `fun/` files shown below.
+1. Download the [ECM model archive](https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.91/eukcontigminer-0.91-models.tar.gz) and extract it into your model directory. It provides the shared base encoder in `encoders/base/encoder.pt` and the task-specific heads in `euk/` and `fun/`.
 2. From the pinned [NTv3 100M revision](https://huggingface.co/InstaDeepAI/NTv3_100M_pre/tree/5c685dca15891f5c5b80e0c930e23b87a217e441), download the nine files listed under `encoders/nt/` below. Keep their original filenames.
 3. Download the pinned [ESM-C 300M weights](https://huggingface.co/EvolutionaryScale/esmc-300m-2024-12/resolve/7f10b20ae75017b2dbc884070e03434515709a8d/data/weights/esmc_300m_2024_12_v0.pth) into `encoders/esm/`.
-4. Download ECM's [encoder manifest](https://raw.githubusercontent.com/WeStrainGroup/EukContigMiner/v0.91/eukcontigminer/assets/encoders/assets.json) as `encoders/assets.json`. This manifest records the expected files, checksums and loading settings for both NTv3 and ESM-C. It belongs in their shared `encoders/` directory, alongside `nt/` and `esm/`. It is also bundled with the ECM software and copied here automatically by `download-models`.
+4. Download ECM's [encoder manifest](https://raw.githubusercontent.com/WeStrainGroup/EukContigMiner/v0.91/eukcontigminer/assets/encoders/assets.json) as `encoders/assets.json`. This manifest records the expected files, checksums and loading settings for the shared base, NTv3 and ESM-C encoders. It belongs in their shared `encoders/` directory, alongside `base/`, `nt/` and `esm/`. It is also bundled with the ECM software and copied here automatically by `download-models`.
 
 ```text
 /path/to/ecm_models/
 ├── euk/
-│   ├── h1_dna.pt
 │   ├── h1.pt
 │   ├── h2.pt
 │   └── h3.pt
@@ -72,6 +71,8 @@ You can download the files on another computer and transfer the completed direct
 │   └── h3.pt
 └── encoders/
     ├── assets.json
+    ├── base/
+    │   └── encoder.pt
     ├── nt/
     │   ├── MODEL-LICENSE.md
     │   ├── special_tokens_map.json
@@ -148,7 +149,7 @@ eukcontigminer \
 
 Input sequences must be nonempty IUPAC DNA. Lowercase bases are accepted. ECM retains input order and the full FASTA header after `>`, including duplicate headers. Use unique contig identifiers when connecting predictions to downstream coverage tables or binning workflows.
 
-The `fun` task classifies fungal contigs directly and does not require a preceding euk prediction. With `--task all`, both tasks classify each eligible contig independently; euk labels do not gate fun predictions, and agreement between the labels is not enforced. Use `all` when both predictions are needed: the tasks share loaded encoder models in one process, avoiding a second model-loading step. Feature computation and early-exit routing remain separate for each task, so the runtime benefit depends on the input.
+The `fun` task classifies fungal contigs directly and does not require a preceding euk prediction. With `--task all`, both tasks classify each eligible contig independently; euk labels do not gate fun predictions, and agreement between the labels is not enforced. Use `all` when both predictions are needed: ECM loads the shared encoders once and reuses their features across tasks. DNA features are computed once per input chunk. NTv3 and ESM-C retain each task’s original contig batches to preserve their numerical behavior; identical batches share their computed features. Each task keeps its own classification heads, thresholds and early-exit decisions. The runtime benefit depends on how much later-stage work the two tasks share.
 
 The default minimum contig length is 1,000 bp. Shorter records remain in `ecm.tsv` with `NA` predictions and are excluded from exported FASTA files. Use `--min-length 500` to include 500–999 bp contigs. This changes eligibility without changing model weights or classification thresholds.
 
@@ -219,7 +220,7 @@ The TSV always has eight columns:
 
 Unselected tasks and contigs below `--min-length` have `NA` in the relevant score, label and head fields. Their identifiers and lengths remain in the table. These rows were not classified; `NA` is neither a negative call nor a confidence-based rejection. Eligible contigs receive a binary label without an `unknown` class.
 
-`run.json` records completion status, software version, selected tasks, model identifiers, thresholds, requested and resolved device, requested and effective chunk size, CPU thread count, minimum length, input row count, selected contig counts, elapsed time, and input/TSV/FASTA SHA-256 checksums.
+`run.json` records completion status, software version, selected tasks, model identifiers, thresholds, requested and resolved device, requested and effective chunk size, CPU thread count, cross-task feature sharing, minimum length, input row count, selected contig counts, elapsed time, and input/TSV/FASTA SHA-256 checksums.
 
 The output directory must not already exist, even if empty. ECM stages outputs while processing and writes `run.json` last. If a handled failure occurs, it removes this run's staged and published files. After an interrupted run, use a new directory or inspect any incomplete output before removing it. Retain the classification table, FASTA files and run summary together.
 

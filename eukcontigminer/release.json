@@ -32,8 +32,8 @@
  },
  "files": {
   "encoders/assets.json": {
-   "sha256": "8c4e0324f3fc96e08640e9fbb2def4f9538db9c8d0e9286182937511b3274c6e",
-   "bytes": 6250,
+   "sha256": "f70c2ddd818c3f27842c16d31a48aa5573b628736cb75b69bcc5f1798eb4f66d",
+   "bytes": 6511,
    "source": "package"
   },
   "encoders/nt/MODEL-LICENSE.md": {
@@ -116,24 +116,24 @@
    "revision": "7f10b20ae75017b2dbc884070e03434515709a8d",
    "filename": "data/weights/esmc_300m_2024_12_v0.pth"
   },
-  "euk/h1_dna.pt": {
+  "encoders/base/encoder.pt": {
    "sha256": "9203718cf7105e7483182f5ad919584369b353fdfd350ed493037fd490cd3bfd",
-   "bytes": null,
+   "bytes": 11340301,
    "source": "heads"
   },
   "euk/h1.pt": {
    "sha256": "00c042e76b5d21e816e9b45c57aeadfbe7687e3b6f93798f9c79db1c459204dc",
-   "bytes": null,
+   "bytes": 49413356,
    "source": "heads"
   },
   "euk/h2.pt": {
    "sha256": "0e152ce02fb9f847fcfa5ac70fc758a86f5b2d031a857aa234bd041471eb0251",
-   "bytes": null,
+   "bytes": 70726518,
    "source": "heads"
   },
   "euk/h3.pt": {
    "sha256": "a24b6b9ab4f008ca13c463181ee7794f2c3aec340669b131b9db70d35c522004",
-   "bytes": null,
+   "bytes": 36569735,
    "source": "heads"
   },
   "fun/h1.pt": {
@@ -153,8 +153,8 @@
   }
  },
  "heads_archive": {
-  "sha256": "a428e37453a45950c1ca5da73d32eb7e5351f46b19623cb1de6fe54652b39fc1",
-  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.90/eukcontigminer-0.90-models.tar.gz"
+  "sha256": "fa1340ab53d19672275ecd0c8815efd9abf994ce6d19fe2f682526d6af78985c",
+  "url": "https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.91/eukcontigminer-0.91-models.tar.gz"
  },
  "min_input_bp": {
   "euk": 500,
