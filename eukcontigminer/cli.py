@@ -186,16 +186,20 @@ def parse_tasks(values):
 
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] == 'verify-models':
+        from .setup_models import verify_main
+        return verify_main(argv[1:])
     if argv and argv[0] == 'download-models':
         from .setup_models import main as setup
         return setup(argv[1:])
     meta = metadata()
-    parser = argparse.ArgumentParser(description="Classify euk/fun contigs and export positive FASTA records; default minimum 1000 bp, supported minimum 500 bp.")
+    parser = argparse.ArgumentParser(allow_abbrev=False, add_help=False, description="Classify euk/fun contigs and export positive FASTA records; default minimum 1000 bp, supported minimum 500 bp.")
+    parser.add_argument('--help', action='help', help='Show command-line options')
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     parser.add_argument('--input', required=True, help='DNA FASTA or gzip-compressed FASTA')
     parser.add_argument('--task', action='append', default=None, help='euk (default), fun, all, or euk,fun')
     parser.add_argument('--models', default=os.environ.get('EUKCONTIGMINER_MODELS', 'models'), help='Directory from download-models')
-    parser.add_argument('-o', '--output', required=True, help='New output directory for predictions.tsv, run.json and task FASTA files')
+    parser.add_argument('--output', required=True, help='New output directory for ecm.tsv, run.json and task FASTA files')
     parser.add_argument('--device', choices=('gpu', 'cpu'), default='gpu', help='gpu (default) or cpu; select a GPU with CUDA_VISIBLE_DEVICES')
     parser.add_argument('--min-length', type=int, default=meta['default_min_length_bp'], help='Minimum input length in bp (default: 1000; minimum: 500); shorter rows have NA predictions')
     parser.add_argument('--chunk-size', default=meta['chunk_rows'], help='Records per inference chunk: positive integer or auto (default: auto)')
@@ -235,7 +239,7 @@ def main(argv=None):
     try:
         with tempfile.TemporaryDirectory(prefix='.partial-', dir=output) as temporary:
             staging = Path(temporary)
-            tsv = staging / 'predictions.tsv'
+            tsv = staging / 'ecm.tsv'
             with ExitStack() as stack:
                 stream = stack.enter_context(tsv.open('x', encoding='utf-8', newline=''))
                 fastas = {task: stack.enter_context((staging / f'{task}.fa').open('x', encoding='utf-8', newline='')) for task in tasks}
@@ -245,14 +249,14 @@ def main(argv=None):
             if (after_stat.st_dev, after_stat.st_ino, after_stat.st_size, after_stat.st_mtime_ns) != (before_stat.st_dev, before_stat.st_ino, before_stat.st_size, before_stat.st_mtime_ns):
                 if sha(source) != before:
                     raise ValueError('FASTA changed during inference')
-            names = ['predictions.tsv'] + [f'{task}.fa' for task in tasks]
+            names = ['ecm.tsv'] + [f'{task}.fa' for task in tasks]
             outputs = {name: {'sha256': sha(staging / name), 'bytes': (staging / name).stat().st_size} for name in names}
             result = dict(version=__version__, status='completed', tasks=tasks, rows=rows, chunks=chunks,
                           thresholds={t: meta['tasks'][t]['threshold'] for t in tasks}, strict_greater_than=True,
                           chunk_size_requested=args.chunk_size, chunk_rows=chunk_size, cpu_threads=cpu_threads,
                           model_ids={t: meta['tasks'][t]['model_id'] for t in tasks},
                           device=device, device_requested=args.device, min_input_bp=args.min_length,
-                          input_sha256=before, output_sha256=outputs['predictions.tsv']['sha256'],
+                          input_sha256=before, output_sha256=outputs['ecm.tsv']['sha256'],
                           selected_contigs=selected_counts, outputs=outputs, seconds=time.monotonic()-start)
             with (staging / 'run.json').open('x', encoding='utf-8') as f:
                 json.dump(result, f, indent=2)

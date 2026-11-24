@@ -8,15 +8,17 @@ import tarfile
 from pathlib import PurePosixPath
 import urllib.request
 
+from . import __version__
 from .resources import copy_checked, copy_package_checked, metadata, sha, verify_models
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description='Prepare v0.90 assets; downloads are checksum-verified.')
+    p = argparse.ArgumentParser(allow_abbrev=False, add_help=False, description='Prepare ECM models; downloads are checksum-verified.')
+    p.add_argument('--help', action='help', help='Show model preparation options')
     p.add_argument('--output', default='models')
     p.add_argument('--nt-dir', help='Use an existing original NTv3_100M_pre directory')
     p.add_argument('--esm-weights', help='Use the original esmc_300m_2024_12_v0.pth')
-    p.add_argument('--heads-archive', help='Use a local v0.90 models archive')
+    p.add_argument('--heads-archive', help='Use a local ECM models archive matching the release manifest')
     args = p.parse_args(argv)
     root = Path(args.output).resolve()
     root.mkdir(parents=True, exist_ok=True)
@@ -77,4 +79,16 @@ def main(argv=None):
             src = hf_hub_download(repo_id=item['repository'], filename=item['filename'], revision=item['revision'])
         copy_checked(src, root/name, item['sha256'])
     verify_models(root)
-    print(json.dumps(dict(version='0.90', models=str(root), verified=True)))
+    print(json.dumps(dict(version=__version__, models=str(root), verified=True)))
+
+
+def verify_main(argv=None):
+    """Check a manually prepared model directory without network or model loading."""
+    p = argparse.ArgumentParser(allow_abbrev=False, add_help=False,
+                                description='Verify all model checksums offline; no downloads or inference.')
+    p.add_argument('--help', action='help', help='Show model verification options')
+    p.add_argument('--models', required=True, help='Prepared model directory')
+    args = p.parse_args(argv)
+    root, meta = verify_models(args.models)
+    print(json.dumps(dict(version=__version__, models=str(root),
+                          verified=True, files=len(meta['files']))))

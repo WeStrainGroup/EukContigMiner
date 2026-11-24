@@ -50,8 +50,8 @@ def test_directory_outputs_match_labels_and_duplicate_records(tmp_path, fake_run
     source = make_input(tmp_path)
     output = tmp_path / 'nested' / 'results'
     cli.main(['--input', str(source), '--output', str(output), '--task', tasks, '--device', 'cpu'])
-    assert {p.name for p in output.iterdir()} == files | {'predictions.tsv', 'run.json'}
-    with (output / 'predictions.tsv').open() as stream:
+    assert {p.name for p in output.iterdir()} == files | {'ecm.tsv', 'run.json'}
+    with (output / 'ecm.tsv').open() as stream:
         rows = list(csv.DictReader(stream, delimiter='\t'))
     original = list(cli.read_fasta(source))
     assert [row['contig_id'] for row in rows] == [name for name, seq in original]
@@ -62,7 +62,7 @@ def test_directory_outputs_match_labels_and_duplicate_records(tmp_path, fake_run
         assert list(cli.read_fasta(output / filename)) == expected
         assert all(row[f'label_{task}'] == 'NA' for row in rows[:3])
     summary = json.loads((output / 'run.json').read_text())
-    assert summary['version'] == '0.90' and summary['status'] == 'completed'
+    assert summary['version'] == '0.91' and summary['status'] == 'completed'
     assert summary['min_input_bp'] == 1000 and summary['chunk_size_requested'] == 'auto'
     assert summary['chunk_rows'] == 2048 and summary['device'] == 'cpu'
     assert fake_runtime['devices'] == ['cpu']

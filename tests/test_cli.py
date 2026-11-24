@@ -52,10 +52,10 @@ def test_no_overwrite_or_silent_bad_task(tmp_path):
     out = tmp_path/'exists.tsv'
     out.write_text('keep')
     with pytest.raises(SystemExit):
-        main(['--input', 'absent.fa', '--task', 'fun', '-o', str(out)])
+        main(['--input', 'absent.fa', '--task', 'fun', '--output', str(out)])
     assert out.read_text() == 'keep'
     with pytest.raises(SystemExit):
-        main(['--input', 'absent.fa', '--task', 'fungi', '-o', str(out)])
+        main(['--input', 'absent.fa', '--task', 'fungi', '--output', str(out)])
 
 
 def test_model_setup_rejects_corruption(tmp_path):
@@ -68,7 +68,7 @@ def test_model_setup_rejects_corruption(tmp_path):
 
 def test_release_contract():
     m = metadata()
-    assert __version__ == m['version'] == '0.90'
+    assert __version__ == m['version'] == '0.91'
     assert set(m['tasks']) == {'euk', 'fun'}
     assert m['tasks']['euk']['threshold'] == .5
     assert m['euk_head_thresholds'] == [0.9875542092225127, 0.8710327904902847, 0.9982100708165487]

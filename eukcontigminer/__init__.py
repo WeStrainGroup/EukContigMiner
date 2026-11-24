@@ -1,2 +1,2 @@
 """EukContigMiner: independent eukaryotic and fungal sequence classifiers."""
-__version__ = "0.90"
+__version__ = "0.91"

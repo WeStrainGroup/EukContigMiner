@@ -1,0 +1,26 @@
+{% set version = "0.91" %}
+package:
+  name: eukcontigminer
+  version: {{ version }}
+source:
+  path: ..
+build:
+  number: 0
+  noarch: generic
+requirements:
+  run:
+    - __linux
+    - python >=3.11,<3.13
+    - bash
+about:
+  home: https://github.com/WeStrainGroup/EukContigMiner
+  license: CC-BY-NC-SA-4.0
+  license_file: LICENSE
+  summary: Identify eukaryotic and fungal contigs using DNA and language-model features
+  description: |
+    Installs the release wheel and pinned dependencies in a private runtime.
+    Installation requires internet access and Linux x86-64. Model weights
+    are prepared separately with eukcontigminer download-models.
+extra:
+  recipe-maintainers:
+    - WeStrainGroup
