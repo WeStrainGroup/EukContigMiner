@@ -4,17 +4,15 @@ Identify eukaryotic contigs using convolutional and k-mer sequence features toge
 
 ## Introduction
 
-Recovering eukaryotic genomes from metagenomes begins with identifying their contigs. Eukaryotic sequences often occur at low prevalence, and fragmented assemblies can contain many short contigs. Low prevalence makes false-positive calls particularly costly, while short sequences provide less information for classification. ECM was developed to address these challenges.
+Recovering eukaryotic genomes from metagenomes begins with identifying their contigs. Eukaryotic sequences often occur at low prevalence, and fragmented assemblies can contain many short contigs. Low prevalence makes false-positive calls particularly costly, while short sequences provide less information for classification. EukContigMiner (ECM) was developed to address these challenges.
 
-EukContigMiner (ECM) takes DNA contigs as input and returns a score and a binary label for eukaryotic origin. It also provides an independent fungal classification task. Each task combines DNA sequence and composition features with nucleotide and protein language-model representations through three successive prediction heads. Contigs with decisive predictions exit early, so later, more expensive representations are computed only when needed. This reduces the amount of language-model computation relative to running every stage on every contig.
-
-ECM requires only a DNA FASTA file. Once its models are prepared, prediction runs offline without reference-database searches, sequence alignment, taxonomic queries or coverage profiles. It supports a single GPU or CPU execution.
+ECM takes DNA contigs as input and provides independent eukaryotic and fungal classifications, each with a score and a binary label. Once its models are prepared, ECM runs offline on a single GPU or CPU, without reference-database searches, sequence alignment, taxonomic queries or coverage profiles. Each task combines DNA sequence and composition features with nucleotide and protein language-model representations through three successive prediction heads. Contigs with decisive predictions exit early, so the more expensive representations are computed only when needed.
 
 ## Installation
 
 ### Software
 
-Install v0.91 with Conda on Linux x86-64:
+Install with Conda on Linux x86-64:
 
 ```bash
 conda create -n eukcontigminer --override-channels \
@@ -52,12 +50,12 @@ Replace `/path/to/ecm_models` with your model directory. This command downloads 
 
 The language models retain their upstream licenses and access requirements. Once setup finishes, keep the entire directory and pass it with `--models`, or set `EUKCONTIGMINER_MODELS`. Prediction then runs offline.
 
-Use a new model directory for the v0.91 layout, keeping earlier model directories for their corresponding releases. The trained weights are unchanged. You can also download the files on another computer and transfer the completed directory to an offline machine:
+You can also download the files on another computer and transfer the completed directory to an offline machine:
 
 1. Download the [ECM model archive](https://github.com/WeStrainGroup/EukContigMiner/releases/download/v0.91/eukcontigminer-0.91-models.tar.gz) and extract it into your model directory. It provides the shared base encoder in `encoders/base/encoder.pt` and the task-specific heads in `euk/` and `fun/`.
 2. From the pinned [NTv3 100M revision](https://huggingface.co/InstaDeepAI/NTv3_100M_pre/tree/5c685dca15891f5c5b80e0c930e23b87a217e441), download the nine files listed under `encoders/nt/` below. Keep their original filenames.
 3. Download the pinned [ESM-C 300M weights](https://huggingface.co/EvolutionaryScale/esmc-300m-2024-12/resolve/7f10b20ae75017b2dbc884070e03434515709a8d/data/weights/esmc_300m_2024_12_v0.pth) into `encoders/esm/`.
-4. Download ECM's [encoder manifest](https://raw.githubusercontent.com/WeStrainGroup/EukContigMiner/v0.91/eukcontigminer/assets/encoders/assets.json) as `encoders/assets.json`. This manifest records the expected files, checksums and loading settings for the shared base, NTv3 and ESM-C encoders. It belongs in their shared `encoders/` directory, alongside `base/`, `nt/` and `esm/`. It is also bundled with the ECM software and copied here automatically by `download-models`.
+4. Download ECM's [encoder manifest](https://raw.githubusercontent.com/WeStrainGroup/EukContigMiner/v0.91/eukcontigminer/assets/encoders/assets.json) as `encoders/assets.json`. This manifest records the expected files, checksums and loading settings for the shared base, NTv3 and ESM-C encoders.
 
 ```text
 /path/to/ecm_models/
@@ -110,7 +108,7 @@ eukcontigminer \
   --output assembly_euk
 ```
 
-Identify fungal contigs directly from the assembly:
+Identify fungal contigs:
 
 ```bash
 eukcontigminer \
